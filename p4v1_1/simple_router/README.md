@@ -7,9 +7,9 @@ according to the P4 v1.1 specification. In addition to the original
 simple_router, this version can keep track of the number of IPv4 packets dropped
 because of an expired TTL. This was added to illustrate some of P4 v1.1 more
 advanced capabilities.
-For more information on P4 v1.1, please refer to [p4.org] (http://p4.org/spec/).
+For more information on P4 v1.1, please refer to [p4.org](http://p4.org/spec/).
 
-Look at the [P4 program] (p4src/simple_router.p4) and observe some of the P4
+Look at the [P4 program](p4src/simple_router.p4) and observe some of the P4
 v1.1 additions:
 - strong typing in header type definitions and action declarations
 - assignment with `=` instead of `modify_field` (extension to the v1.1 spec)
@@ -19,7 +19,7 @@ v1.1 additions:
 ### Running the demo
 
 We provide a small demo to let you test the program. Before trying to run the
-demo, please make sure that your [env.sh] (../env.sh) file is up-to-date.
+demo, please make sure that your [env.sh](../env.sh) file is up-to-date.
 
 To run the demo:
 - start the switch in Mininet with `./run_switch.sh`
