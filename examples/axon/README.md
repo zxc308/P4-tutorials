@@ -69,12 +69,11 @@ entries.
 
 We provide a small demo to let you test the program. It consists of the
 following scripts:
-- [run_demo.sh] (run_demo.sh): compiles the P4 program, starts the switch,
-  configures the data plane by running the CLI [commands]
-  (commands.txt), and starts the mininet console.
-- [receive.py] (receive.py): listens for Axon formatted packets.  This
+- [run_demo.sh](run_demo.sh): compiles the P4 program, starts the switch,
+  configures the data plane by running the CLI [commands](commands.txt), and starts the mininet console.
+- [receive.py](receive.py): listens for Axon formatted packets.  This
   command is intended to be run by a mininet host.
-- [send.py] (send.py): sends Axon formatted packets from one host to
+- [send.py](send.py): sends Axon formatted packets from one host to
   another.  This command is intended to be run by a mininet host.
 
 To run the demo:
