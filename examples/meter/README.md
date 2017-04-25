@@ -3,7 +3,8 @@
 ## Description
 
 This program illustrates as simply as possible how to use meters in P4 with
-bmv2. bmv2 uses two-rate three-color meters as described [here](https://tools.ietf.org/html/rfc2698).
+bmv2. bmv2 uses two-rate three-color meters as described 
+[here](https://tools.ietf.org/html/rfc2698).
 
 For each incoming packet the `m_table` table is applied and the appropriate
 meter (based on the packet's source MAC address) is executed. Based on the
