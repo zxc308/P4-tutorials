@@ -33,7 +33,7 @@ $P4C_BM_SCRIPT p4src/copy_to_cpu.p4 --json copy_to_cpu.json
 # This gets root permissions, and gives libtool the opportunity to "warm-up"
 sudo $SWITCH_PATH >/dev/null 2>&1
 sudo $SWITCH_PATH copy_to_cpu.json \
-    -i 0@veth0 -i 1@veth2 -i 2@veth4 -i 3@veth6 -i 4@veth8 \
+    -i 0@veth0 -i 1@veth2 -i 2@veth4 -i 3@veth7 -i 4@veth8 \
     --nanolog ipc:///tmp/bm-0-log.ipc \
     --pcap &
 sleep 2
