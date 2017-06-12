@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from scapy.all import *
-import subprocess
+from subprocess import Popen, PIPE
 import os
 
 CLI_PATH = None
