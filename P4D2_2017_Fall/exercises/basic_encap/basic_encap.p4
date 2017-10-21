@@ -13,6 +13,8 @@ typedef bit<9>  egressSpec_t;
 typedef bit<48> macAddr_t;
 typedef bit<32> ip4Addr_t;
 
+direct_counter(CounterType.packets_and_bytes) validCount;
+
 header ethernet_t {
     macAddr_t dstAddr;
     macAddr_t srcAddr;
@@ -124,9 +126,9 @@ control MyIngress(inout headers hdr,
         default_action = NoAction();
     }
     
-//    action count() {
-//        validCount.count();
-//    }
+    action count() {
+        validCount.count();
+    }
 
     table myEncap_check {
         key = {
@@ -134,10 +136,9 @@ control MyIngress(inout headers hdr,
         }
         actions = {
             drop;
-            NoAction;
-//            count;
+            count;
         }
-//        direct_counter = validCount;
+        counters = validCount;
     }
 
     apply {
