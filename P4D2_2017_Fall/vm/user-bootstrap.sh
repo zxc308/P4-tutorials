@@ -36,14 +36,17 @@ cd ..
 
 # Tutorials
 pip install crcmod
-git clone https://github.com/p4lang/tutorials
-cd tutorials
-cd ..
-sudo mv tutorials /home/p4
-sudo chown -R p4:p4 /home/p4/tutorials
+sudo runuser -l p4 -c "git clone https://github.com/p4lang/tutorials tutorials"
 
 # Emacs
 sudo cp p4_16-mode.el /usr/share/emacs/site-lisp/
-echo "(add-to-list 'auto-mode-alist '(\"\\.p4\\'\" . p4_16-mode))" | sudo tee /home/p4/.emacs
-sudo chown p4:p4 /home/p4/.emacs
+sudo runuser -l p4 -c "echo \"(add-to-list 'auto-mode-alist '(\"\\.p4\\'\" . p4_16-mode))\" 
+>> /home/p4/.emacs"
 
+# Vim
+sudo su p4
+mkdir -p /home/p4/.vim/ftdetect
+mkdir -p /home/p4/.vim/syntax
+echo 'au BufRead,BufNewFile \*.p4      set filetype=p4' >> /home/p4/.vim/ftdetect/p4.vim
+cp p4.vim /home/p4/.vim/syntax/
+exit
