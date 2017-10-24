@@ -2,8 +2,8 @@
 #include <core.p4>
 #include <v1model.p4>
 
+const bit<16> TYPE_MYENCAP = 0x1212;
 const bit<16> TYPE_IPV4 = 0x800;
-const bit<8>  PROTO_MYENCAP = 253;
 
 /*************************************************************************
 *********************** H E A D E R S  ***********************************
@@ -13,12 +13,17 @@ typedef bit<9>  egressSpec_t;
 typedef bit<48> macAddr_t;
 typedef bit<32> ip4Addr_t;
 
-direct_counter(CounterType.packets_and_bytes) validCount;
+direct_counter(CounterType.packets_and_bytes) myEncapCount;
 
 header ethernet_t {
     macAddr_t dstAddr;
     macAddr_t srcAddr;
     bit<16>   etherType;
+}
+
+header myEncap_t {
+    bit<16> pid;
+    bit<16> dst_nid;
 }
 
 header ipv4_t {
@@ -36,18 +41,14 @@ header ipv4_t {
     ip4Addr_t dstAddr;
 }
 
-header myEncap_t {
-    bit<8> valid;
-}
-
 struct metadata {
     /* empty */
 }
 
 struct headers {
     ethernet_t   ethernet;
-    ipv4_t       ipv4;
     myEncap_t    myEncap;
+    ipv4_t       ipv4;
 }
 
 /*************************************************************************
@@ -66,6 +67,15 @@ parser MyParser(packet_in packet,
     state parse_ethernet {
         packet.extract(hdr.ethernet);
         transition select(hdr.ethernet.etherType) {
+            TYPE_MYENCAP: parse_myEncap;
+            TYPE_IPV4: parse_ipv4;
+            default: accept;
+        }
+    }
+
+    state parse_myEncap {
+        packet.extract(hdr.myEncap);
+        transition select(hdr.myEncap.pid) {
             TYPE_IPV4: parse_ipv4;
             default: accept;
         }
@@ -73,14 +83,6 @@ parser MyParser(packet_in packet,
 
     state parse_ipv4 {
         packet.extract(hdr.ipv4);
-        transition select(hdr.ipv4.protocol) {
-            PROTO_MYENCAP: parse_myEncap;
-            default: accept;
-        }
-    }
-
-    state parse_myEncap {
-        packet.extract(hdr.myEncap);
         transition accept;
     }
 
@@ -126,27 +128,29 @@ control MyIngress(inout headers hdr,
         default_action = NoAction();
     }
     
-    action count() {
-        validCount.count();
+    action myEncap_forward(egressSpec_t port) {
+        standard_metadata.egress_spec = port;
+        myEncapCount.count();
     }
 
-    table myEncap_check {
+    table myEncap_exact {
         key = {
-            hdr.myEncap.valid: exact;
+            hdr.myEncap.dst_nid: exact;
         }
         actions = {
+            myEncap_forward;
             drop;
-            count;
         }
-        counters = validCount;
+        size = 1024;
+        default_action = drop();
+        counters = myEncapCount;
     }
 
     apply {
-        if (hdr.ipv4.isValid()) {
-            ipv4_lpm.apply();
-        }
         if (hdr.myEncap.isValid()) {
-            myEncap_check.apply();
+            myEncap_exact.apply();
+        } else if (hdr.ipv4.isValid()) {
+            ipv4_lpm.apply();
         }
     }
 }
@@ -192,8 +196,8 @@ control MyComputeChecksum(inout headers  hdr, inout metadata meta) {
 control MyDeparser(packet_out packet, in headers hdr) {
     apply {
         packet.emit(hdr.ethernet);
-        packet.emit(hdr.ipv4);
         packet.emit(hdr.myEncap);
+        packet.emit(hdr.ipv4);
     }
 }
 

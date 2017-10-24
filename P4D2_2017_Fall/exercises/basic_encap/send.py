@@ -25,16 +25,16 @@ def get_if():
 def main():
 
     if len(sys.argv)<4:
-        print 'pass 2 arguments: <destination> <valid> "<message>"'
+        print 'pass 2 arguments: <ip_addr> <dst_nid> "<message>"'
         exit(1)
 
     addr = socket.gethostbyname(sys.argv[1])
-    valid = int(sys.argv[2])
+    dst_nid = int(sys.argv[2])
     iface = get_if()
 
-    print "sending on interface %s to %s" % (iface, str(addr))
+    print "sending on interface %s to nid %s" % (iface, str(dst_nid))
     pkt =  Ether(src=get_if_hwaddr(iface), dst='ff:ff:ff:ff:ff:ff')
-    pkt = pkt /IP(dst=addr) / MyEncap(valid=valid) / sys.argv[3]
+    pkt = pkt / MyEncap(dst_nid=dst_nid) / IP(dst=addr) / sys.argv[3]
     pkt.show2()
     hexdump(pkt)
     print "len(pkt) = ", len(pkt)

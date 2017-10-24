@@ -2,17 +2,19 @@
 from scapy.all import *
 import sys, os
 
-PROTO_MYENCAP = 253
+TYPE_MYENCAP = 0x1212
+TYPE_IPV4 = 0x0800
 
 class MyEncap(Packet):
     name = "MyEncap"
     fields_desc = [
-        ByteField("valid", 0)
+        ShortField("pid", 0),
+        ShortField("dst_nid", 0)
     ]
     def mysummary(self):
-        return self.sprintf("valid=%valid%")
+        return self.sprintf("pid=%pid%, dst_nid=%dst_nid%")
 
 
-bind_layers(IP, MyEncap, proto=PROTO_MYENCAP)
-bind_layers(MyEncap, Raw)
+bind_layers(Ether, MyEncap, type=TYPE_MYENCAP)
+bind_layers(MyEncap, IP, pid=TYPE_IPV4)
 

@@ -3,5 +3,7 @@ table_add ipv4_lpm ipv4_forward 10.0.1.1/32 => 00:00:00:00:01:01 1
 table_add ipv4_lpm ipv4_forward 10.0.2.2/32 => 00:00:00:02:02:00 2
 table_add ipv4_lpm ipv4_forward 10.0.3.3/32 => 00:00:00:03:03:00 3
 
-table_add myEncap_check drop 0 => 
-table_add myEncap_check count 1 => 
+table_set_default myEncap_exact drop
+table_add myEncap_exact myEncap_forward 1 => 1
+table_add myEncap_exact myEncap_forward 2 => 2
+table_add myEncap_exact myEncap_forward 3 => 3
