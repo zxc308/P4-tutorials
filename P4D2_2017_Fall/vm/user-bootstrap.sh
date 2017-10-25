@@ -5,8 +5,8 @@ set -x
 # Exit on errors.
 set -e
 
-BMV2_COMMIT="44ac9c21636b00fed660ae8590889d85b5d4df4c"
-PI_COMMIT="7325a0eac23dbabd276fedb4dc6cc83447eddc3b"
+BMV2_COMMIT="ae84c2f6d5bc3dd6873a62e351f26c39038804da"
+PI_COMMIT="f06a4df7d56413849dbe9ab8f9441321ff140bca"
 P4C_COMMIT="3ad8d93f334a34d181e8d9d83100d797bac3f65a"
 PROTOBUF_COMMIT="tags/v3.0.2"
 GRPC_COMMIT="tags/v1.3.0"
@@ -111,6 +111,6 @@ sudo chown -R p4:p4 /home/p4/tutorials
 
 # Emacs
 sudo cp p4_16-mode.el /usr/share/emacs/site-lisp/
-sudo echo "(add-to-list 'auto-mode-alist '(\"\\.p4\\'\" . p4_16-mode))" >> /home/p4/.emacs
+echo "(add-to-list 'auto-mode-alist '(\"\\.p4\\'\" . p4_16-mode))" | sudo tee /home/p4/.emacs
 sudo chown p4:p4 /home/p4/.emacs
 
