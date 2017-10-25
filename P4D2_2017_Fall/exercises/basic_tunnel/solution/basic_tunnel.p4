@@ -2,7 +2,7 @@
 #include <core.p4>
 #include <v1model.p4>
 
-const bit<16> TYPE_MYENCAP = 0x1212;
+const bit<16> TYPE_MYTUNNEL = 0x1212;
 const bit<16> TYPE_IPV4 = 0x800;
 
 /*************************************************************************
@@ -13,17 +13,15 @@ typedef bit<9>  egressSpec_t;
 typedef bit<48> macAddr_t;
 typedef bit<32> ip4Addr_t;
 
-direct_counter(CounterType.packets_and_bytes) myEncapCount;
-
 header ethernet_t {
     macAddr_t dstAddr;
     macAddr_t srcAddr;
     bit<16>   etherType;
 }
 
-header myEncap_t {
-    bit<16> pid;
-    bit<16> dst_nid;
+header myTunnel_t {
+    bit<16> proto_id;
+    bit<16> dst_id;
 }
 
 header ipv4_t {
@@ -47,7 +45,7 @@ struct metadata {
 
 struct headers {
     ethernet_t   ethernet;
-    myEncap_t    myEncap;
+    myTunnel_t   myTunnel;
     ipv4_t       ipv4;
 }
 
@@ -67,15 +65,15 @@ parser MyParser(packet_in packet,
     state parse_ethernet {
         packet.extract(hdr.ethernet);
         transition select(hdr.ethernet.etherType) {
-            TYPE_MYENCAP: parse_myEncap;
+            TYPE_MYTUNNEL: parse_myTunnel;
             TYPE_IPV4: parse_ipv4;
             default: accept;
         }
     }
 
-    state parse_myEncap {
-        packet.extract(hdr.myEncap);
-        transition select(hdr.myEncap.pid) {
+    state parse_myTunnel {
+        packet.extract(hdr.myTunnel);
+        transition select(hdr.myTunnel.proto_id) {
             TYPE_IPV4: parse_ipv4;
             default: accept;
         }
@@ -128,27 +126,25 @@ control MyIngress(inout headers hdr,
         default_action = NoAction();
     }
     
-    action myEncap_forward(egressSpec_t port) {
+    action myTunnel_forward(egressSpec_t port) {
         standard_metadata.egress_spec = port;
-        myEncapCount.count();
     }
 
-    table myEncap_exact {
+    table myTunnel_exact {
         key = {
-            hdr.myEncap.dst_nid: exact;
+            hdr.myTunnel.dst_id: exact;
         }
         actions = {
-            myEncap_forward;
+            myTunnel_forward;
             drop;
         }
         size = 1024;
         default_action = drop();
-        counters = myEncapCount;
     }
 
     apply {
-        if (hdr.myEncap.isValid()) {
-            myEncap_exact.apply();
+        if (hdr.myTunnel.isValid()) {
+            myTunnel_exact.apply();
         } else if (hdr.ipv4.isValid()) {
             ipv4_lpm.apply();
         }
@@ -196,7 +192,7 @@ control MyComputeChecksum(inout headers  hdr, inout metadata meta) {
 control MyDeparser(packet_out packet, in headers hdr) {
     apply {
         packet.emit(hdr.ethernet);
-        packet.emit(hdr.myEncap);
+        packet.emit(hdr.myTunnel);
         packet.emit(hdr.ipv4);
     }
 }

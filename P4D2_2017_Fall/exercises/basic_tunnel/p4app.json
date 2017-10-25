@@ -1,5 +1,5 @@
 {
-    "program": "basic_encap.p4",
+    "program": "basic_tunnel.p4",
     "language": "p4-16",
     "targets": {
       "multiswitch": {

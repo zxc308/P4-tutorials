@@ -8,7 +8,7 @@ import struct
 from scapy.all import sendp, send, get_if_list, get_if_hwaddr, hexdump
 from scapy.all import Packet
 from scapy.all import Ether, IP, UDP, TCP
-from myEncap_header import MyEncap
+from myTunnel_header import MyTunnel
 
 def get_if():
     ifs=get_if_list()
@@ -29,15 +29,15 @@ def main():
         exit(1)
 
     addr = socket.gethostbyname(sys.argv[1])
-    dst_nid = int(sys.argv[2])
+    dst_id = int(sys.argv[2])
     iface = get_if()
 
-    print "sending on interface %s to nid %s" % (iface, str(dst_nid))
+    print "sending on interface %s to id %s" % (iface, str(dst_id))
     pkt =  Ether(src=get_if_hwaddr(iface), dst='ff:ff:ff:ff:ff:ff')
-    pkt = pkt / MyEncap(dst_nid=dst_nid) / IP(dst=addr) / sys.argv[3]
+    pkt = pkt / MyTunnel(dst_id=dst_id) / IP(dst=addr) / sys.argv[3]
     pkt.show2()
-    hexdump(pkt)
-    print "len(pkt) = ", len(pkt)
+#    hexdump(pkt)
+#    print "len(pkt) = ", len(pkt)
     sendp(pkt, iface=iface, verbose=False)
 
 

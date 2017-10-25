@@ -8,7 +8,7 @@ from scapy.all import Packet, IPOption
 from scapy.all import ShortField, IntField, LongField, BitField, FieldListField, FieldLenField
 from scapy.all import IP, UDP, Raw
 from scapy.layers.inet import _IPOption_HDR
-from myEncap_header import MyEncap
+from myTunnel_header import MyTunnel
 
 def get_if():
     ifs=get_if_list()
@@ -23,11 +23,11 @@ def get_if():
     return iface
 
 def handle_pkt(pkt):
-    if MyEncap in pkt:
+    if MyTunnel in pkt:
         print "got a packet"
         pkt.show2()
-        hexdump(pkt)
-        print "len(pkt) = ", len(pkt)
+#        hexdump(pkt)
+#        print "len(pkt) = ", len(pkt)
         sys.stdout.flush()
 
 
