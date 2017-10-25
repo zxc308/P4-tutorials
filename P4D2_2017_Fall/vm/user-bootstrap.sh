@@ -62,7 +62,7 @@ cd PI
 git checkout ${PI_COMMIT}
 git submodule update --init --recursive
 ./autogen.sh
-./configure --with-proto 'CXXFLAGS=-O0 -g'
+./configure --with-proto
 make -j${NUM_CORES}
 sudo make install
 sudo ldconfig
