@@ -245,7 +245,6 @@ class ExerciseRunner:
         cli = 'simple_switch_CLI'
         for sw_name, sw_dict in self.switches.iteritems():
             if 'cli_input' not in sw_dict: continue
-            self.logger("Programming switch %s" % sw_name)
             # get the port for this particular switch's thrift server
             sw_obj = self.net.get(sw_name)
             thrift_port = sw_obj.thrift_port
@@ -275,6 +274,10 @@ class ExerciseRunner:
             host_id = int(host_name[1:])
             sw_ip = '10.0.%d.254' % host_id
 
+            # Ensure each host's interface name is unique, or else
+            # mininet cannot shutdown gracefully
+            h.defaultIntf().rename('%s-eth0' % host_name)
+            # static arp entries and default routes
             h.cmd('arp -i %s -s %s %s' % (h_iface.name, sw_ip, sw_iface.mac))
             h.cmd('ethtool --offload %s rx off tx off' % h_iface.name)
             h.cmd('ip route add %s dev %s' % (sw_ip, h_iface.name))
