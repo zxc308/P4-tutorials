@@ -254,7 +254,7 @@ class ExerciseRunner:
             self.logger('Configuring switch %s with file %s' % (sw_name, cli_input_commands))
             with open(cli_input_commands, 'r') as fin:
                 cli_outfile = '%s/%s_cli_output.log'%(self.log_dir, sw_name)
-                with open(cli_outfile, 'w') as fout
+                with open(cli_outfile, 'w') as fout:
                     subprocess.Popen([cli, '--thrift-port', str(thrift_port)],
                                      stdin=fin, stdout=fout)
 
