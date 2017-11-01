@@ -28,5 +28,5 @@ dirs:
 	mkdir -p $(BUILD_DIR) $(PCAP_DIR) $(LOG_DIR)
 
 clean: stop
-	rm -r *.pcap
+	rm -f *.pcap
 	rm -rf $(BUILD_DIR) $(PCAP_DIR) $(LOG_DIR)
