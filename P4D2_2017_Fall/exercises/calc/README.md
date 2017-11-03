@@ -19,14 +19,14 @@ switch in Mininet to test its behavior.
 
 1. In your shell, run:
    ```bash
-   ./run.sh
+   make
    ```
    This will:
    * compile `calc.p4`, and
   
    * start a Mininet instance with one switches (`s1`) connected to
      two hosts (`h1`, `h2`).
-   * The hosts are assigned IPs of `10.0.1.1` and `10.0.2.2`.
+   * The hosts are assigned IPs of `10.0.1.1` and `10.0.1.2`.
 
 2. We've written a small Python-based driver program that will allow
 you to test your calculator. You can run the driver program directly

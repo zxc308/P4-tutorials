@@ -102,6 +102,7 @@ control MyVerifyChecksum(inout headers hdr, inout metadata meta) {
 control MyIngress(inout headers hdr,
                   inout metadata meta,
                   inout standard_metadata_t standard_metadata) {
+
     action drop() {
         mark_to_drop();
     }
@@ -112,6 +113,13 @@ control MyIngress(inout headers hdr,
         hdr.ethernet.dstAddr = dstAddr;
         hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
+
+    action myTunnel_ingress(bit<16> dst_id) {
+        hdr.myTunnel.setValid();
+        hdr.myTunnel.dst_id = dst_id;
+        hdr.myTunnel.proto_id = hdr.ethernet.etherType;
+        hdr.ethernet.etherType = TYPE_MYTUNNEL;
+    }
     
     table ipv4_lpm {
         key = {
@@ -119,15 +127,25 @@ control MyIngress(inout headers hdr,
         }
         actions = {
             ipv4_forward;
+            myTunnel_ingress;
             drop;
             NoAction;
         }
         size = 1024;
         default_action = NoAction();
     }
-    
+
+    direct_counter(CounterType.packets_and_bytes) tunnelCount;
+
     action myTunnel_forward(egressSpec_t port) {
         standard_metadata.egress_spec = port;
+        tunnelCount.count();
+    }
+
+    action myTunnel_egress(egressSpec_t port) {
+        standard_metadata.egress_spec = port;
+        hdr.myTunnel.setInvalid();
+        tunnelCount.count();
     }
 
     table myTunnel_exact {
@@ -136,17 +154,24 @@ control MyIngress(inout headers hdr,
         }
         actions = {
             myTunnel_forward;
+            myTunnel_egress;
             drop;
         }
         size = 1024;
+        counters = tunnelCount;
         default_action = drop();
     }
 
     apply {
-        if (hdr.myTunnel.isValid()) {
-            myTunnel_exact.apply();
-        } else if (hdr.ipv4.isValid()) {
+
+        if (hdr.ipv4.isValid() && !hdr.myTunnel.isValid()) {
+            // Process only non-tunneled IPv4 packets.
             ipv4_lpm.apply();
+        }
+
+        if (hdr.myTunnel.isValid()) {
+            // Process all tunneled packets.
+            myTunnel_exact.apply();
         }
     }
 }

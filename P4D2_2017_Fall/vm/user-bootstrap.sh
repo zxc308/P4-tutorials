@@ -13,6 +13,12 @@ GRPC_COMMIT="tags/v1.3.0"
 
 NUM_CORES=`grep -c ^processor /proc/cpuinfo`
 
+# Mininet
+git clone git://github.com/mininet/mininet mininet
+cd mininet
+sudo ./util/install.sh -nwv
+cd ..
+
 # Protobuf
 git clone https://github.com/google/protobuf.git
 cd protobuf
@@ -39,6 +45,9 @@ sudo make install
 sudo ldconfig
 unset LDFLAGS
 cd ..
+# Install gRPC Python Package
+sudo pip install grpcio
+sudo pip install crcmod
 
 # BMv2 deps (needed by PI)
 git clone https://github.com/p4lang/behavioral-model.git
