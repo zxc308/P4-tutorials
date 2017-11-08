@@ -39,7 +39,7 @@ up a switch in Mininet to test its behavior.
    * start a Mininet instance with three switches (`s1`, `s2`, `s3`)
      configured in a triangle, each connected to one host (`h1`, `h2`,
      and `h3`).
-   * The hosts are assigned IPs of `10.0.1.1`, `10.0.2.2`, etc.
+   * The hosts are assigned IPs of `10.0.1.1`, `10.0.2.2`, and `10.0.3.3`.
 
 2. You should now see a Mininet command prompt. Open two terminals
 for `h1` and `h2`, respectively:
@@ -79,7 +79,7 @@ the control plane as part of the rule.
 
 In this exercise, we have already implemented the the control plane
 logic for you. As part of bringing up the Mininet instance, the
-`run.sh` script will install packet-processing rules in the tables of
+`make run` command will install packet-processing rules in the tables of
 each switch. These are defined in the `sX-commands.txt` files, where
 `X` corresponds to the switch number.
 
@@ -140,24 +140,24 @@ Other questions to consider:
 
 There are several problems that might manifest as you develop your program:
 
-1. `basic.p4` might fails to compile. In this case, `run.sh` will
+1. `basic.p4` might fail to compile. In this case, `make run` will
 report the error emitted from the compiler and halt.
 
 2. `basic.p4` might compile but fail to support the control plane
 rules in the `s1-commands.txt` through `s3-command.txt` files that
-`run.sh` tries to install using the Bmv2 CLI. In this case, `run.sh`
-will report these errors to `stderr`. Use these error messages to fix
-your `basic.p4` implementation.
+`make run` tries to install using the Bmv2 CLI. In this case, `make run`
+will log the CLI tool output in the `logs` directory. Use these error 
+messages to fix your `basic.p4` implementation.
 
 3. `basic.p4` might compile, and the control plane rules might be
 installed, but the switch might not process packets in the desired
-way. The `build/logs/<switch-name>.log` files contain detailed logs
+way. The `/tmp/p4s.<switch-name>.log` files contain detailed logs
 that describing how each switch processes each packet. The output is
 detailed and can help pinpoint logic errors in your implementation.
 
 #### Cleaning up Mininet
 
-In the latter two cases above, `run.sh` may leave a Mininet instance
+In the latter two cases above, `make run` may leave a Mininet instance
 running in the background. Use the following command to clean up
 these instances:
 
@@ -167,5 +167,7 @@ make stop
 
 ## Next Steps
 
-Congratulations, your implementation works!  Move on to the next
-exercise: implementing the [scrambler](../scrambler)!
+Congratulations, your implementation works! In the next exercise we
+will build on top of this and add support for a basic tunneling
+protocol: [basic_tunnel](../basic_tunnel)!
+

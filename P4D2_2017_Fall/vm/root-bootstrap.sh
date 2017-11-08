@@ -1,6 +1,7 @@
 #!/bin/bash
 
-set -x
+# Print commands and exit on errors
+set -xe
 
 sudo add-apt-repository ppa:webupd8team/sublime-text-3
 sudo add-apt-repository ppa:webupd8team/atom
@@ -76,3 +77,14 @@ ln -s p4-logo.png lubuntu-default-wallpaper.png
 rm /home/vagrant/p4-logo.png
 cd /home/vagrant
 sed -i s@#background=@background=/usr/share/lubuntu/wallpapers/1604-lubuntu-default-wallpaper.png@ /etc/lightdm/lightdm-gtk-greeter.conf
+
+# Disable screensaver
+apt-get -y remove light-locker
+
+# Automatically log into the P4 user
+cat << EOF | tee -a /etc/lightdm/lightdm.conf.d/10-lightdm.conf
+[SeatDefaults]
+autologin-user=p4
+autologin-user-timeout=0
+user-session=Lubuntu
+EOF

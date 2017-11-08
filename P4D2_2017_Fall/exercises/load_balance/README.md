@@ -4,9 +4,9 @@ In this exercise, you will implement a form of load balancing based on
 a single version of Equal-Cost Multipath Forwarding. The switch you
 will implement will use two tables to forward packets to one of two
 destination hosts at random. The first table will use a hash function
-(applied to a 5-tuple consisting of the source and destination
-Ethernet addresses, source and destination IP addresses, and IP
-protocol) to select one of two hosts. The second table will use the
+(applied to a 5-tuple consisting of the source and destination 
+IP addresses, IP protocol, and source and destination TCP ports) 
+to select one of two hosts. The second table will use the
 computed hash value to forward the packet to the selected host.
 
 > **Spoiler alert:** There is a reference solution in the `solution`
@@ -117,13 +117,13 @@ report the error emitted from the compiler and stop.
 
 2. `load_balance.p4` compiles but does not support the control plane
 rules in the `sX-commands.txt` files that `make` tries to install
-using the BMv2 CLI.  In this case, `make` will report these errors
-to `stderr`.  Use these error messages to fix your `load_balance.p4`
+using the BMv2 CLI.  In this case, `make` will log the CLI tool output
+in the `logs` directory. Use these error messages to fix your `load_balance.p4`
 implementation.
 
 3. `load_balance.p4` compiles, and the control plane rules are
 installed, but the switch does not process packets in the desired way.
-The `build/logs/<switch-name>.log` files contain trace messages
+The `/tmp/p4s.<switch-name>.log` files contain trace messages
 describing how each switch processes each packet.  The output is
 detailed and can help pinpoint logic errors in your implementation.
 
@@ -139,5 +139,4 @@ mn -c
 
 ## Next Steps
 
-Congratulations, your implementation works!  Move on to the next
-exercise: [HULA](../hula).
+Congratulations, your implementation works! 

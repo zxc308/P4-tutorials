@@ -38,7 +38,7 @@ switch in Mininet to test its behavior.
    * start a Mininet instance with three switches (`s1`, `s2`, `s3`) configured
      in a triangle. There are 5 hosts. `h1` and `h11` are connected to `s1`.
      `h2` and `h22` are connected to `s2` and `h3` is connected to `s3`.     
-   * The hosts are assigned IPs of `10.0.1.10`, `10.0.2.10`, etc
+   * The hosts are assigned IPs of `10.0.1.1`, `10.0.2.2`, etc
      (`10.0.<Switchid>.<hostID>`).
    * The control plane programs the P4 tables in each switch based on
      `sx-commands.txt`
@@ -49,6 +49,8 @@ switch in Mininet to test its behavior.
    reduced its bandwidth to 512kbps in topology.json.  Therefore, if we
    capture packets at `h2`, we should see high queue size for that
    link.
+
+![Setup](setup.png)
 
 3. You should now see a Mininet command prompt. Open four terminals
    for `h1`, `h11`, `h2`, `h22`, respectively:
@@ -193,10 +195,13 @@ got a packet
       |   |###[ SwitchTrace ]###
       |   |  swid      = 1
       |   |  qdepth    = 17
+###[ UDP ]###
+        sport     = 1234
+        dport     = 4321
+        len       = 18
+        chksum    = 0x1c7b
 ###[ Raw ]###
-        load      = '\x04\xd2'
-###[ Padding ]###
-           load      = '\x10\xe1\x00\x12\x1c{P4 is cool'
+           load      = 'P4 is cool'
 
 ```
 
@@ -208,11 +213,11 @@ There are several ways that problems might manifest:
 error emitted from the compiler and stop.
 2. `mri.p4` compiles but does not support the control plane rules in
 the `sX-commands.txt` files that `make` tries to install using the BMv2 CLI.
-In this case, `make` will report these errors to `stderr`. Use these error
-messages to fix your `mri.p4` implementation.
+In this case, `make` will log the CLI tool output in the `logs` directory.
+Use these error messages to fix your `mri.p4` implementation.
 3. `mri.p4` compiles, and the control plane rules are installed, but
 the switch does not process packets in the desired way. The
-`build/logs/<switch-name>.log` files contain trace messages describing
+`/tmp/p4s.<switch-name>.log` files contain trace messages describing
 how each switch processes each packet. The output is detailed and can
 help pinpoint logic errors in your implementation.  The
 `build/<switch-name>-<interface-name>.pcap` also contains the pcap of

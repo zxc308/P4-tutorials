@@ -41,11 +41,14 @@ network in Mininet to test its behavior.
      (`10.0.<Switchid>.<hostID>`).
    * The control plane programs the P4 tables in each switch based on
      `sx-commands.txt`
+
 2. We want to send a low rate traffic from `h1` to `h2` and a high
 rate iperf traffic from `h11` to `h22`.  The link between `s1` and
 `s2` is common between the flows and is a bottleneck because we
 reduced its bandwidth to 512kbps in topology.json.  Therefore, if we
 capture packets at `h2`, we should see the right ECN value.
+
+![Setup](setup.png)
 
 3. You should now see a Mininet command prompt. Open four terminals
 for `h1`, `h11`, `h2`, `h22`, respectively:
@@ -162,12 +165,12 @@ There are several ways that problems might manifest:
    error emitted from the compiler and stop.
 2. `ecn.p4` compiles but does not support the control plane rules in
    the `sX-commands.txt` files that `make` tries to install using
-   the BMv2 CLI.  In this case, `make` will report these errors to
-   `stderr`.  Use these error messages to fix your `ecn.p4`
+   the BMv2 CLI.  In this case, `make` will log the CLI tool output 
+   in th `logs` directory. Use these error messages to fix your `ecn.p4`
    implementation.
 3. `ecn.p4` compiles, and the control plane rules are installed, but
    the switch does not process packets in the desired way.  The
-   `build/logs/<switch-name>.log` files contain trace messages
+   `/tmp/p4s.<switch-name>.log` files contain trace messages
    describing how each switch processes each packet.  The output is
    detailed and can help pinpoint logic errors in your implementation.
    The `build/<switch-name>-<interface-name>.pcap` also contains the

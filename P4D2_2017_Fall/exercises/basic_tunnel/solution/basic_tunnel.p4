@@ -90,7 +90,7 @@ parser MyParser(packet_in packet,
 ************   C H E C K S U M    V E R I F I C A T I O N   *************
 *************************************************************************/
 
-control MyVerifyChecksum(in headers hdr, inout metadata meta) {   
+control MyVerifyChecksum(inout headers hdr, inout metadata meta) {   
     apply {  }
 }
 
@@ -143,10 +143,14 @@ control MyIngress(inout headers hdr,
     }
 
     apply {
-        if (hdr.myTunnel.isValid()) {
-            myTunnel_exact.apply();
-        } else if (hdr.ipv4.isValid()) {
+        if (hdr.ipv4.isValid() && !hdr.myTunnel.isValid()) {
+            // Process only non-tunneled IPv4 packets
             ipv4_lpm.apply();
+        }
+
+        if (hdr.myTunnel.isValid()) {
+            // process tunneled packets
+            myTunnel_exact.apply();
         }
     }
 }
