@@ -14,7 +14,7 @@ GRPC_COMMIT="tags/v1.3.0"
 NUM_CORES=`grep -c ^processor /proc/cpuinfo`
 
 # Mininet
-git clone git://github.com/mininet/mininet mininet
+git clone https://github.com/mininet/mininet.git
 cd mininet
 sudo ./util/install.sh -nwv
 cd ..
