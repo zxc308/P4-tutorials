@@ -126,7 +126,7 @@ cd .vim
 mkdir ftdetect
 mkdir syntax
 echo "au BufRead,BufNewFile *.p4      set filetype=p4" >> ftdetect/p4.vim
-echo "set bg=dark" >> /home/p4/.vimrc
+echo "set bg=dark" | sudo tee --append /home/p4/.vimrc
 cp /home/vagrant/p4.vim syntax/p4.vim
 cd /home/vagrant
 sudo mv .vim /home/p4/.vim
