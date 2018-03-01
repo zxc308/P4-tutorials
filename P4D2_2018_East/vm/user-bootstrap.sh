@@ -5,11 +5,11 @@ set -x
 # Exit on errors.
 set -e
 
-BMV2_COMMIT="ae84c2f6d5bc3dd6873a62e351f26c39038804da"
-PI_COMMIT="f06a4df7d56413849dbe9ab8f9441321ff140bca"
-P4C_COMMIT="3ad8d93f334a34d181e8d9d83100d797bac3f65a"
-PROTOBUF_COMMIT="tags/v3.0.2"
-GRPC_COMMIT="tags/v1.3.0"
+BMV2_COMMIT="39abe290b4143e829b8f983965fcdc711e3c450c"
+PI_COMMIT="afd5831393824228246ea01b26da2f93d38fd20c"
+P4C_COMMIT="80f8970b5ec8e57c4a3611da343461b5b0a8dda3"
+PROTOBUF_COMMIT="v3.2.0"
+GRPC_COMMIT="v1.3.2"
 
 NUM_CORES=`grep -c ^processor /proc/cpuinfo`
 
@@ -38,7 +38,7 @@ cd ..
 git clone https://github.com/grpc/grpc.git
 cd grpc
 git checkout ${GRPC_COMMIT}
-git submodule update --init
+git submodule update --init --recursive
 export LDFLAGS="-Wl,-s"
 make -j${NUM_CORES}
 sudo make install
@@ -103,6 +103,7 @@ mkdir -p build
 cd build
 cmake ..
 make -j${NUM_CORES}
+make -j${NUM_CORES} check
 sudo make install
 sudo ldconfig
 cd ..
@@ -126,7 +127,8 @@ cd .vim
 mkdir ftdetect
 mkdir syntax
 echo "au BufRead,BufNewFile *.p4      set filetype=p4" >> ftdetect/p4.vim
-echo "set bg=dark" >> /home/p4/.vimrc
+echo "set bg=dark" >> /home/vagrant/.vimrc
+sudo mv /home/vagrant/.vimrc /home/p4/.vimrc
 cp /home/vagrant/p4.vim syntax/p4.vim
 cd /home/vagrant
 sudo mv .vim /home/p4/.vim
@@ -169,3 +171,8 @@ Icon=sublime-text
 Exec=/opt/sublime_text/sublime_text
 Comment[en_US]=
 EOF
+
+sudo mkdir -p /home/p4/Desktop
+sudo mv /home/${USER}/Desktop/* /home/p4/Desktop
+sudo chown -R p4:p4 /home/p4/Desktop/
+sudo reboot
