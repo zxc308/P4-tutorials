@@ -175,4 +175,6 @@ EOF
 sudo mkdir -p /home/p4/Desktop
 sudo mv /home/${USER}/Desktop/* /home/p4/Desktop
 sudo chown -R p4:p4 /home/p4/Desktop/
+
+# Do this last!
 sudo reboot
