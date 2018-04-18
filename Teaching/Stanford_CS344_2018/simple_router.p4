@@ -51,20 +51,7 @@ control HashtableUpdate(in register<bit<32>> hashtable,
                         inout bit<32> bytecount) {
     
     action update_hashtable() {
-        bit<32> hashtable_address; 
-        hash(hashtable_address,
-             algo,
-             32w0,
-             { hdr.ipv4.srcAddr,
-               hdr.ipv4.dstAddr,
-               hdr.ipv4.protocol,
-               hdr.tcp.srcPort,
-               hdr.tcp.dstPort },
-             MAX_ADDRESS);
-        hashtable.read(bytecount, hashtable_address);
-        bytecount = bytecount + (bit<32>)hdr.ipv4.totalLen;
-        hashtable.write(hashtable_address, bytecount);
-         
+        //TODO 
     }
 
     apply {
@@ -89,16 +76,15 @@ control HHD(inout headers hdr,
     HashtableUpdate() update_hashtable_b3;
     
     action calculate_age() {
-        last_reset_time.read(meta.hhd.filter_age, 32w0);
-        meta.hhd.filter_age = standard_metadata.ingress_global_timestamp - meta.hhd.filter_age;
+        //TODO
     }
    
     action set_threshold(bit<32> threshold) {
-        meta.hhd.threshold = threshold;
+        //TODO
     }
     
     action set_filter() {
-        is_a_active.read(meta.hhd.is_a_active, 32w0);
+        //TODO
     }
 
     action heavy_hitter_drop() {
@@ -106,27 +92,7 @@ control HHD(inout headers hdr,
     }
 
     action decide_heavy_hitter() {
-        if (meta.hhd.is_a_active == 1w1) {
-            if (meta.hhd.value_a0 > meta.hhd.threshold &&
-                meta.hhd.value_a1 > meta.hhd.threshold &&
-                meta.hhd.value_a2 > meta.hhd.threshold &&
-                meta.hhd.value_a3 > meta.hhd.threshold) {
-
-                meta.hhd.is_heavy_hitter = 1w1;
-            } else {
-                meta.hhd.is_heavy_hitter = 1w0;
-            }
-        } else {
-            if (meta.hhd.value_b0 > meta.hhd.threshold &&
-                meta.hhd.value_b1 > meta.hhd.threshold &&
-                meta.hhd.value_b2 > meta.hhd.threshold &&
-                meta.hhd.value_b3 > meta.hhd.threshold) {
-
-                meta.hhd.is_heavy_hitter = 1w1;
-            } else {
-                meta.hhd.is_heavy_hitter = 1w0;
-            }
-        }
+        //TODO
     }
 
 
