@@ -51,7 +51,14 @@ control HashtableUpdate(in register<bit<32>> hashtable,
                         inout bit<32> bytecount) {
     
     action update_hashtable() {
-        //TODO 
+        /* TODO
+        Use a hashfunction and calculate the corresponding address
+        of the count-min sketch based on its five-tuple (hdr.ipv4.srcAddr,
+        hdr.ipv4.dstAddr, hdr.ipv4.protocol, hdr.tcp.srcPort, hdr.tcp.dstPort)
+        Read the previous contents of that address, add the packet length to
+        the previous bytecount, update the register address and keep a
+        copy of the value in the metadata.
+        */
     }
 
     apply {
@@ -76,15 +83,25 @@ control HHD(inout headers hdr,
     HashtableUpdate() update_hashtable_b3;
     
     action calculate_age() {
-        //TODO
+        /* TODO
+        Read the last_reset_time register and calculate 
+        how long has it been since last reset of sketch A based
+        on standard_metadata.ingress_global_timestamp.
+        Save the result in meta.hhd.filter_age.
+        */
     }
    
     action set_threshold(bit<32> threshold) {
-        //TODO
+        /* TODO
+        Copy the threshlod to metamhhd.threshold
+        */
     }
     
     action set_filter() {
-        //TODO
+        /* TODO
+        Check whether count-min sketch A is active
+        and set meta.hhd.is_a_active flag appropriately
+        */
     }
 
     action heavy_hitter_drop() {
@@ -92,7 +109,12 @@ control HHD(inout headers hdr,
     }
 
     action decide_heavy_hitter() {
-        //TODO
+        /* TODO
+        Based on whether A is active and the appropriate
+        meta.hhd.value_xx values, decide, whether 
+        the packet belongs to a heavy hitter flow or not
+        and set meta.hhd.is_heavy_hitter flag.
+        */
     }
 
 
