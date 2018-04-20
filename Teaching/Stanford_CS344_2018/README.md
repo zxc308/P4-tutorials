@@ -18,7 +18,7 @@ a router. You can find a skeleton of the program in simple_router.p4. In that
 file, you have to fill in the parts that are marked with TODO.
 
 This example is based on [count-min sketch](http://theory.stanford.edu/~tim/s15/l/l2.pdf).
-In fact, we use two count-mi sketches which are reset with an offset
+In fact, we use two count-min sketches which are reset with an offset
 equal to their half-life. With every new packet coming in, we update
 the values of both sketches but we use only the ones of the least 
 recently reset one to decide whether a packet belongs to a heavy hitter
@@ -68,7 +68,7 @@ within each table are inserted by the control plane. When a rule
 matches a packet, its action is invoked with parameters supplied by
 the control plane as part of the rule.
 
-In this exercise, we have already implemented the the control plane
+In this exercise, we have already implemented the control plane
 logic for you. As part of invoking `run.sh`, a set of rules is generated
 by `setup.py` and when bringing up the Mininet instance, these
 packet-processing rules are installed in the tables of
@@ -78,7 +78,7 @@ the switch. These are defined in the `simple_router.config` file.
 
 The `simple_router.p4` file contains a skeleton P4 program with key pieces of
 logic replaced by `TODO` comments. Your implementation should follow
-the structure given in this file---replace each `TODO` with logic
+the structure given in this file, just replace each `TODO` with logic
 implementing the missing piece.
 
 More specifically, you need to implement the main actions used within
