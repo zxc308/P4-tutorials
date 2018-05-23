@@ -32,10 +32,10 @@ make -j${NUM_CORES}
 sudo make install
 sudo ldconfig
 unset CFLAGS CXXFLAGS LDFLAGS
+# force install python module
 cd python
 sudo python setup.py install
-cd ..
-cd ..
+cd ../..
 
 # gRPC
 git clone https://github.com/grpc/grpc.git
