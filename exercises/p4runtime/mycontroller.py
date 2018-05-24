@@ -11,7 +11,7 @@ sys.path.append(
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  '../../utils/'))
 import p4runtime_lib.bmv2
-from p4runtime_lib.switch import ShutdownAllSwitches
+from p4runtime_lib.switch import ShutdownAllSwitchConnections
 import p4runtime_lib.helper
 
 SWITCH_TO_HOST_PORT = 1
@@ -190,7 +190,7 @@ def main(p4info_file_path, bmv2_file_path):
     except grpc.RpcError as e:
         printGrpcError(e)
 
-    ShutdownAllSwitches()
+    ShutdownAllSwitchConnections()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='P4Runtime Controller')
