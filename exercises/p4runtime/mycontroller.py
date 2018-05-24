@@ -1,8 +1,8 @@
 #!/usr/bin/env python2
 import argparse
+import grpc
 import os
 import sys
-import grpc
 from time import sleep
 
 # Import P4Runtime lib from parent utils dir
@@ -125,6 +125,12 @@ def printCounter(p4info_helper, sw, counter_name, index):
                 counter.data.packet_count, counter.data.byte_count
             )
 
+def printGrpcError(e):
+    print "gRPC Error:", e.details(),
+    status_code = e.code()
+    print "(%s)" % status_code.name,
+    traceback = sys.exc_info()[2]
+    print "[%s:%d]" % (traceback.tb_frame.f_code.co_filename, traceback.tb_lineno)
 
 def main(p4info_file_path, bmv2_file_path):
     # Instantiate a P4 Runtime helper from the p4info file
@@ -178,15 +184,11 @@ def main(p4info_file_path, bmv2_file_path):
             printCounter(p4info_helper, s2, "MyIngress.egressTunnelCounter", 100)
             printCounter(p4info_helper, s2, "MyIngress.ingressTunnelCounter", 200)
             printCounter(p4info_helper, s1, "MyIngress.egressTunnelCounter", 200)
+
     except KeyboardInterrupt:
         print " Shutting down."
-
     except grpc.RpcError as e:
-        print "gRPC Error:", e.details(),
-        status_code = e.code()
-        print "(%s)" % status_code.name,
-        traceback = sys.exc_info()[2]
-        print "[%s:%d]" % (traceback.tb_frame.f_code.co_filename, traceback.tb_lineno)
+        printGrpcError(e)
 
     ShutdownAllSwitches()
 
