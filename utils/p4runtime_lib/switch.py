@@ -22,8 +22,15 @@ from p4.tmp import p4config_pb2
 
 MSG_LOG_MAX_LEN = 1024
 
+# List of all active connections
+connections = []
+
+def ShutdownAllSwitches():
+    for c in connections:
+        c.shutdown()
 
 class SwitchConnection(object):
+
     def __init__(self, name=None, address='127.0.0.1:50051', device_id=0,
                  proto_dump_file=None):
         self.name = name
@@ -38,6 +45,7 @@ class SwitchConnection(object):
         self.requests_stream = IterableQueue()
         self.stream_msg_resp = self.client_stub.StreamChannel(iter(self.requests_stream))
         self.proto_dump_file = proto_dump_file
+        connections.append(self)
 
     @abstractmethod
     def buildDeviceConfig(self, **kwargs):
@@ -111,7 +119,7 @@ class SwitchConnection(object):
         else:
             counter_entry.counter_id = 0
         if index is not None:
-            counter_entry.index.index = index
+            counter_entry.index = index
         if dry_run:
             print "P4 Runtime Read:", request
         else:
@@ -147,7 +155,6 @@ class GrpcRequestLogger(grpc.UnaryUnaryClientInterceptor,
     def intercept_unary_stream(self, continuation, client_call_details, request):
         self.log_message(client_call_details.method, request)
         return continuation(client_call_details, request)
-
 
 class IterableQueue(Queue):
     _sentinel = object()
