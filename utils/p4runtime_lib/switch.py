@@ -25,7 +25,7 @@ MSG_LOG_MAX_LEN = 1024
 # List of all active connections
 connections = []
 
-def ShutdownAllSwitches():
+def ShutdownAllSwitchConnections():
     for c in connections:
         c.shutdown()
 
