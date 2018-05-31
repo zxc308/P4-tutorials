@@ -123,7 +123,7 @@ control MyIngress(inout headers hdr,
             NoAction;
         }
         size = 1024;
-        default_action = NoAction();
+        default_action = drop();
     }
     
     action myTunnel_forward(egressSpec_t port) {
