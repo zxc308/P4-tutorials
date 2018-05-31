@@ -177,16 +177,18 @@ def _byteify(data, ignore_dicts=False):
 
 def tableEntryToString(flow):
     if 'match' in flow:
-        matches = ['%s=%s' % (match_name, str(flow['match'][match_name])) for match_name in
-                   flow['match']]
-        matches = ', '.join(matches)
+        match_str = ['%s=%s' % (match_name, str(flow['match'][match_name])) for match_name in
+                     flow['match']]
+        match_str = ', '.join(match_str)
     elif 'default_action' in flow and flow['default_action']:
-        matches = '(default action)'
+        match_str = '(default action)'
+    else:
+        match_str = '(any)'
     params = ['%s=%s' % (param_name, str(flow['action_params'][param_name])) for param_name in
               flow['action_params']]
     params = ', '.join(params)
     return "%s: %s => %s(%s)" % (
-        flow['table'], matches, flow['action_name'], params)
+        flow['table'], match_str, flow['action_name'], params)
 
 
 if __name__ == '__main__':
