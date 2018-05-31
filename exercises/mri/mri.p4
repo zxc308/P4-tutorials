@@ -213,7 +213,7 @@ control MyEgress(inout headers hdr,
 
     table swtrace {
         actions        = { 
-            /* TODO: add the correct action */
+            add_swtrace;
             NoAction;
         }
 
