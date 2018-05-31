@@ -69,14 +69,15 @@ the control plane as part of the rule.
 For this exercise, we have already added the necessary static control
 plane entries. As part of bringing up the Mininet instance, the 
 `make run` command will install packet-processing rules in the tables
-of each switch. These are defined in the `sX-commands.txt` files, 
+of each switch. These are defined in the `sX-runtime.json` files, 
 where `X` corresponds to the switch number.
 
-**Important:** A P4 program also defines the interface between the
-switch pipeline and control plane. The commands in the files
-`sX-commands.txt` refer to specific tables, keys, and actions by name,
-and any changes in the P4 program that add or rename tables, keys, or
-actions will need to be reflected in these command files.
+**Important:** We use P4Runtime to install the control plane rules. The
+content of files `sX-runtime.json` refer to specific names of tables, keys, and
+actions, as defined in the P4Info file produced by the compiler (look for the
+file `build/basic.p4info` after executing `make run`). Any changes in the P4
+program that add or rename tables, keys, or actions will need to be reflected in
+these `sX-runtime.json` files.
 
 ## Step 2: Implement Basic Tunneling
 
@@ -96,7 +97,7 @@ Your job will be to do the following:
 4. **TODO:** Define a new table called `myTunnel_exact` that perfoms an exact match on the `dst_id` field of the `myTunnel` header. This table should invoke either the `myTunnel_forward` action if the there is a match in the table and it should invoke the `drop` action otherwise.
 5. **TODO:** Update the `apply` statement in the `MyIngress` control block to apply your newly defined `myTunnel_exact` table if the `myTunnel` header is valid. Otherwise, invoke the `ipv4_lpm` table if the `ipv4` header is valid.
 6. **TODO:** Update the deparser to emit the `ethernet`, then `myTunnel`, then `ipv4` headers. Remember that the deparser will only emit a header if it is valid. A header's implicit validity bit is set by the parser upon extraction. So there is no need to check header validity here.
-7. **TODO:** Add static rules for your newly defined table so that the switches will forward correctly for each possible value of `dst_id`. See the diagram below for the topology's port configuration as well as how we will assign IDs to hosts. For this step you will need to add your forwarding rules to the `sX-commands.txt` files.
+7. **TODO:** Add static rules for your newly defined table so that the switches will forward correctly for each possible value of `dst_id`. See the diagram below for the topology's port configuration as well as how we will assign IDs to hosts. For this step you will need to add your forwarding rules to the `sX-runtime.json` files.
 
 ![topology](./topo.png)
 
@@ -127,7 +128,7 @@ header to an IP packet upon ingress to the network and then remove the
 
 Hints:
 
- - The ingress switch will need to map the destination IP address to the corresponding `dst_id` for the `myTunnel` header. Also remember to set explicitly set the validity bit for the `myTunnel` header so that it can be emitted by the deparser.
+ - The ingress switch will need to map the destination IP address to the corresponding `dst_id` for the `myTunnel` header. Also, remember to set the validity bit for the `myTunnel` header so that it can be emitted by the deparser.
  - The egress switch will need to remove the `myTunnel` header from the packet after looking up the appropriate output port using the `dst_id` field.
 
 ### Troubleshooting
@@ -138,10 +139,10 @@ There are several problems that might manifest as you develop your program:
 report the error emitted from the compiler and halt.
 
 2. `basic_tunnel.p4` might compile but fail to support the control plane
-rules in the `s1-commands.txt` through `s3-command.txt` files that
-`make run` tries to install using the Bmv2 CLI. In this case, `make run`
-will log the CLI tool output in the `logs` directory. Use these error 
-messages to fix your `basic_tunnel.p4` implementation or forwarding rules.
+rules in the `sX-runtime.json` files that `make run` tries to install using
+the P4Runtime. In this case, `make run` will report errors if control plane
+rules cannot be installed. Use these error messages to fix your `basic_tunnel.p4`
+implementation or forwarding rules.
 
 3. `basic_tunnel.p4` might compile, and the control plane rules might be
 installed, but the switch might not process packets in the desired
