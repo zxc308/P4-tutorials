@@ -32,6 +32,9 @@ make -j${NUM_CORES}
 sudo make install
 sudo ldconfig
 unset CFLAGS CXXFLAGS LDFLAGS
+cd python
+sudo python setup.py install
+cd ..
 cd ..
 
 # gRPC
