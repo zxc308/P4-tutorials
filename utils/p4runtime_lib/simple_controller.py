@@ -133,14 +133,16 @@ def program_switch(addr, device_id, sw_conf_file, workdir, proto_dump_fpath):
 
 def insertTableEntry(sw, flow, p4info_helper):
     table_name = flow['table']
-    match_fields = flow['match']
+    match_fields = flow.get('match') # None if not found
     action_name = flow['action_name']
+    default_action = flow.get('default_action') # None if not found
     action_params = flow['action_params']
     priority = flow.get('priority')  # None if not found
 
     table_entry = p4info_helper.buildTableEntry(
         table_name=table_name,
         match_fields=match_fields,
+        default_action=default_action,
         action_name=action_name,
         action_params=action_params,
         priority=priority)
@@ -174,14 +176,19 @@ def _byteify(data, ignore_dicts=False):
 
 
 def tableEntryToString(flow):
-    matches = ['%s=%s' % (match_name, str(flow['match'][match_name])) for match_name in
-               flow['match']]
-    matches = ', '.join(matches)
+    if 'match' in flow:
+        match_str = ['%s=%s' % (match_name, str(flow['match'][match_name])) for match_name in
+                     flow['match']]
+        match_str = ', '.join(match_str)
+    elif 'default_action' in flow and flow['default_action']:
+        match_str = '(default action)'
+    else:
+        match_str = '(any)'
     params = ['%s=%s' % (param_name, str(flow['action_params'][param_name])) for param_name in
               flow['action_params']]
     params = ', '.join(params)
     return "%s: %s => %s(%s)" % (
-        flow['table'], matches, flow['action_name'], params)
+        flow['table'], match_str, flow['action_name'], params)
 
 
 if __name__ == '__main__':
