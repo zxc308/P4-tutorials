@@ -162,9 +162,10 @@ class P4InfoHelper(object):
 
     def buildTableEntry(self,
                         table_name,
-                        match_fields={},
+                        match_fields=None,
+                        default_action=False,
                         action_name=None,
-                        action_params={},
+                        action_params=None,
                         priority=None):
         table_entry = p4runtime_pb2.TableEntry()
         table_entry.table_id = self.get_tables_id(table_name)
@@ -177,6 +178,10 @@ class P4InfoHelper(object):
                 self.get_match_field_pb(table_name, match_field_name, value)
                 for match_field_name, value in match_fields.iteritems()
             ])
+
+        if default_action:
+            table_entry.is_default_action = True
+
         if action_name:
             action = table_entry.action.action
             action.action_id = self.get_actions_id(action_name)
