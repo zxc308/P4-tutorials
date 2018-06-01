@@ -80,14 +80,15 @@ the control plane as part of the rule.
 In this exercise, we have already implemented the the control plane
 logic for you. As part of bringing up the Mininet instance, the
 `make run` command will install packet-processing rules in the tables of
-each switch. These are defined in the `sX-commands.txt` files, where
+each switch. These are defined in the `sX-runtime.json` files, where
 `X` corresponds to the switch number.
 
-**Important:** A P4 program also defines the interface between the
-switch pipeline and control plane. The commands in the files
-`sX-commands.txt` refer to specific tables, keys, and actions by name,
-and any changes in the P4 program that add or rename tables, keys, or
-actions will need to be reflected in these command files.
+**Important:** We use P4Runtime to install the control plane rules. The
+content of files `sX-runtime.json` refer to specific names of tables, keys, and
+actions, as defined in the P4Info file produced by the compiler (look for the
+file `build/basic.p4info` after executing `make run`). Any changes in the P4
+program that add or rename tables, keys, or actions will need to be reflected in
+these `sX-runtime.json` files.
 
 ## Step 2: Implement L3 forwarding
 
@@ -144,9 +145,9 @@ There are several problems that might manifest as you develop your program:
 report the error emitted from the compiler and halt.
 
 2. `basic.p4` might compile but fail to support the control plane
-rules in the `s1-commands.txt` through `s3-command.txt` files that
-`make run` tries to install using the Bmv2 CLI. In this case, `make run`
-will log the CLI tool output in the `logs` directory. Use these error 
+rules in the `s1-runtime.json` through `s3-runtime.json` files that
+`make run` tries to install using P4Runtime. In this case, `make run` will
+report errors if control plane rules cannot be installed. Use these error
 messages to fix your `basic.p4` implementation.
 
 3. `basic.p4` might compile, and the control plane rules might be
