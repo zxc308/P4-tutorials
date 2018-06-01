@@ -66,7 +66,7 @@ bring up a network in Mininet to test its behavior.
 
 The message was not received because each switch is programmed with
 `source_routing.p4`, which drops all packets on arrival.  You can
-verify this by looking at `build/logs/s1.log`.  Your job is to extend
+verify this by looking at `/tmp/p4s.s1.log`.  Your job is to extend
 the P4 code so packets are delivered to their destination.
 
 ## Step 2: Implement source routing
@@ -127,8 +127,8 @@ There are several ways that problems might manifest:
    files contain trace messages describing how each switch processes
    each packet. The output is detailed and can help pinpoint logic
    errors in your implementation.  The
-   `build/<switch-name>-<interface-name>.pcap` also contains the pcap
-   of packets on each interface. Use `tcpdump -r <filename> -xxx` to
+   `<switch-name>-<interface-name>_<direction>.pcap` files contain pcap captures
+   of all packets sent and received on each interface. Use `tcpdump -r <filename> -xxx` to
    print the hexdump of the packets.
 
 #### Cleaning up Mininet
