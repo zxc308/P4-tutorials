@@ -165,7 +165,7 @@ There are several ways that problems might manifest:
    error emitted from the compiler and stop.
 2. `ecn.p4` compiles but does not support the control plane rules in
    the `sX-runtime.json` files that `make` tries to install using
-   the BMv2 CLI.  In this case, `make` will log the CLI tool output 
+   the P4 Runtime.  In this case, `make` will log the output of P4 Runtime 
    in the `logs` directory. Use these error messages to fix your `ecn.p4`
    implementation.
 3. `ecn.p4` compiles, and the control plane rules are installed, but
@@ -173,7 +173,7 @@ There are several ways that problems might manifest:
    `/tmp/p4s.<switch-name>.log` files contain trace messages
    describing how each switch processes each packet.  The output is
    detailed and can help pinpoint logic errors in your implementation.
-   The `build/<switch-name>-<interface-name>.pcap` also contains the
+   The `<switch-name>-<interface-name>.pcap` also contains the
    pcap of packets on each interface. Use `tcpdump -r <filename> -xxx`
    to print the hexdump of the packets.
 4. `ecn.p4` compiles and all rules are installed. Packets go through
