@@ -46,7 +46,7 @@ To build the virtual machine:
 - When the machine reboots, you should have a graphical desktop machine with the required
 software pre-installed.
 
-To install dependencies by hand, please reference the [vm](../vm) installation scripts.
+To install dependencies by hand, please reference the [vm](vm) installation scripts.
 They contain the dependencies, versions, and installation procedure.
 You can run them directly on an Ubuntu 16.04 machine:
 - `sudo ./root-bootstrap.sh`
