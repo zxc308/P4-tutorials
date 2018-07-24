@@ -5,6 +5,15 @@ set -x
 # Exit on errors.
 set -e
 
+# Install some needed deps
+sudo pip install psutil
+sudo pip install crcmod
+
+sudo apt -y install unzip libjudy-dev libreadline-dev pkg-config libboost-all-dev libevent-dev
+sudo apt -y install autoconf automake libtool curl make g++ unzip
+sudo apt -y install g++ git automake libtool libgc-dev bison flex libfl-dev libgmp-dev libboost-dev libboost-iostreams-dev pkg-config python python-scapy python-ipaddr tcpdump cmake
+sudo apt -y install libboost-graph-dev
+
 BMV2_COMMIT="7e25eeb19d01eee1a8e982dc7ee90ee438c10a05"
 PI_COMMIT="219b3d67299ec09b49f433d7341049256ab5f512"
 P4C_COMMIT="48a57a6ae4f96961b74bd13f6bdeac5add7bb815"
@@ -112,76 +121,3 @@ sudo ldconfig
 cd ..
 cd ..
 
-# Tutorials
-sudo pip install crcmod
-git clone https://github.com/p4lang/tutorials
-sudo mv tutorials /home/p4
-sudo chown -R p4:p4 /home/p4/tutorials
-
-# Emacs
-sudo cp p4_16-mode.el /usr/share/emacs/site-lisp/
-sudo mkdir /home/p4/.emacs.d/
-echo "(autoload 'p4_16-mode' \"p4_16-mode.el\" \"P4 Syntax.\" t)" > init.el
-echo "(add-to-list 'auto-mode-alist '(\"\\.p4\\'\" . p4_16-mode))" | tee -a init.el
-sudo mv init.el /home/p4/.emacs.d/
-sudo ln -s /usr/share/emacs/site-lisp/p4_16-mode.el /home/p4/.emacs.d/p4_16-mode.el
-sudo chown -R p4:p4 /home/p4/.emacs.d/
-
-# Vim
-cd /home/vagrant
-mkdir .vim
-cd .vim
-mkdir ftdetect
-mkdir syntax
-echo "au BufRead,BufNewFile *.p4      set filetype=p4" >> ftdetect/p4.vim
-echo "set bg=dark" >> /home/vagrant/.vimrc
-sudo mv /home/vagrant/.vimrc /home/p4/.vimrc
-cp /home/vagrant/p4.vim syntax/p4.vim
-cd /home/vagrant
-sudo mv .vim /home/p4/.vim
-sudo chown -R p4:p4 /home/p4/.vim
-sudo chown p4:p4 /home/p4/.vimrc
-
-# Adding Desktop icons
-DESKTOP=/home/${USER}/Desktop
-mkdir -p ${DESKTOP}
-
-cat > ${DESKTOP}/Terminal << EOF
-[Desktop Entry]
-Encoding=UTF-8
-Type=Application
-Name=Terminal
-Name[en_US]=Terminal
-Icon=konsole
-Exec=/usr/bin/x-terminal-emulator
-Comment[en_US]=
-EOF
-
-cat > ${DESKTOP}/Wireshark << EOF
-[Desktop Entry]
-Encoding=UTF-8
-Type=Application
-Name=Wireshark
-Name[en_US]=Wireshark
-Icon=wireshark
-Exec=/usr/bin/wireshark
-Comment[en_US]=
-EOF
-
-cat > ${DESKTOP}/Sublime\ Text << EOF
-[Desktop Entry]
-Encoding=UTF-8
-Type=Application
-Name=Sublime Text
-Name[en_US]=Sublime Text
-Icon=sublime-text
-Exec=/opt/sublime_text/sublime_text
-Comment[en_US]=
-EOF
-
-sudo mkdir -p /home/p4/Desktop
-sudo mv /home/${USER}/Desktop/* /home/p4/Desktop
-sudo chown -R p4:p4 /home/p4/Desktop/
-
-# Do this last!
-sudo reboot
