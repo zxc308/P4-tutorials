@@ -46,7 +46,7 @@ are working as expected.
    
 3. Open another shell and run the starter code:
    ```bash
-   cd ~/tutorials/P4D2_2017_Fall/exercises/p4runtime
+   cd ~/tutorials/exercises/p4runtime
    ./mycontroller.py
    ```
    This will install the `advanced_tunnel.p4` program on the switches and push the
