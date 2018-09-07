@@ -115,7 +115,7 @@ that will match on tunnel ID and forward packets to the next hop.
 ![topology](../basic_tunnel/topo.png)
 
 In this exercise, you will be interacting with some of the classes and methods in
-the `p4runtime_lib` directory. Here is a summary of each of the files in the directory:
+the `tutorials/utils/p4runtime_lib` directory. Here is a summary of each of the files in the directory:
 - `helper.py`
   - Contains the `P4InfoHelper` class which is used to parse the `p4info` files.
   - Provides translation methods from entity name to and from ID number.
