@@ -139,7 +139,7 @@ the `tutorials/utils/p4runtime_lib` directory. Here is a summary of each of the 
 Follow the instructions from Step 1. If your Mininet network is still running,
 you will just need to run the following in your second shell:
 ```bash
-./my_controller.py
+./mycontroller.py
 ```
 
 You should start to see ICMP replies in your Mininet prompt, and you should start to
