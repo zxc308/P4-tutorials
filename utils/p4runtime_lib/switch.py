@@ -121,7 +121,7 @@ class SwitchConnection(object):
         else:
             counter_entry.counter_id = 0
         if index is not None:
-            counter_entry.index.index = index
+            counter_entry.index = index
         if dry_run:
             print "P4Runtime Read:", request
         else:
