@@ -1,0 +1,62 @@
+from p4app import P4Mininet
+from mininet.topo import Topo
+from mininet.cli import CLI
+
+N = 3
+
+def getForwardingPort(s1, s2):
+    clockwise = s2 - s1 if s2 > s1 else (N - s1) + s2
+    counter_clockwise = (N - s2) + s1 if s2 > s1 else s2 - s1
+    return 2 if clockwise < counter_clockwise else 3
+
+class RingTopo(Topo):
+    def __init__(self, n, **opts):
+        Topo.__init__(self, **opts)
+
+        switches = []
+
+        for i in xrange(1, n+1):
+            host = self.addHost('h%d' % i,
+                                ip = "10.0.0.%d" % i,
+                                mac = '00:00:00:00:00:%02x' % i)
+            switch = self.addSwitch('s%d' % i)
+            self.addLink(host, switch, port2=1)
+            switches.append(switch)
+
+        # Port 2 connects to the next switch in the ring, and port 3 to the previous
+        for i in xrange(n):
+            self.addLink(switches[i], switches[(i+1)%n], port1=2, port2=3)
+
+topo = RingTopo(N)
+net = P4Mininet(program='basic_tunnel.p4', topo=topo)
+net.start()
+
+for i in range(1, N+1):
+    sw = net.get('s%d'% i)
+
+    # Forward to the host connected to this switch
+    sw.insertTableEntry(table_name='MyIngress.ipv4_lpm',
+                        match_fields={'hdr.ipv4.dstAddr': ["10.0.0.%d" % i, 32]},
+                        action_name='MyIngress.ipv4_forward',
+                        action_params={'dstAddr': '00:00:00:00:00:%02x' % i,
+                                          'port': 1})
+    sw.insertTableEntry(table_name='MyIngress.myTunnel_exact',
+                        match_fields={'hdr.myTunnel.dst_id': [i]},
+                        action_name='MyIngress.myTunnel_forward',
+                        action_params={'port': 1})
+
+    # Otherwise send the packet to another switch
+    for j in range(1, N+1):
+        if i == j: continue
+        sw.insertTableEntry(table_name='MyIngress.ipv4_lpm',
+                            match_fields={'hdr.ipv4.dstAddr': ["10.0.0.%d" % j, 32]},
+                            action_name='MyIngress.ipv4_forward',
+                            action_params={'dstAddr': '00:00:00:00:00:%02x' % j,
+                                              'port': getForwardingPort(i, j)})
+        sw.insertTableEntry(table_name='MyIngress.myTunnel_exact',
+                            match_fields={'hdr.myTunnel.dst_id': [j]},
+                            action_name='MyIngress.myTunnel_forward',
+                            action_params={'port': getForwardingPort(i, j)})
+
+
+CLI(net)
