@@ -36,7 +36,7 @@ p = subprocess.Popen(['./mycontroller.py', '--p4info', prog.p4info(), '--bmv2-js
 
 
 try:
-    raw_input("Hit ENTER to exit.")
+    raw_input("Hit ENTER to exit.\n\n")
 except KeyboardInterrupt:
     pass
 
