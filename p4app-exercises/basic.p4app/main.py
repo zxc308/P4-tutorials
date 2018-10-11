@@ -1,6 +1,12 @@
-from p4app import P4Mininet
+import sys
+from p4app import P4Mininet, P4Program
 from mininet.topo import Topo
 from mininet.cli import CLI
+
+if len(sys.argv) > 1:
+    if sys.argv[1] == 'compile':
+        P4Program('basic.p4').compile()
+        sys.exit(0)
 
 N = 3
 

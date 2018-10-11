@@ -1,8 +1,12 @@
 
-all: run
+all: compile
 
 run:
 	../p4app/p4app run .
+
+compile:
+	../p4app/p4app run . compile
+
 
 
 h1:
