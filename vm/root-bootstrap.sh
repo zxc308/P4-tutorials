@@ -83,7 +83,7 @@ sed -i s@#background=@background=/usr/share/lubuntu/wallpapers/1604-lubuntu-defa
 apt-get -y remove light-locker
 
 # Automatically log into the P4 user
-cat << EOF | tee -a /etc/lightdm/lightdm.conf.d/10-lightdm.conf
+cat << EOF | tee /etc/lightdm/lightdm.conf
 [SeatDefaults]
 autologin-user=p4
 autologin-user-timeout=0
