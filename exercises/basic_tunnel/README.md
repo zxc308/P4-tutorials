@@ -27,19 +27,19 @@ action is invoked with parameters supplied by the control plane as part of the
 rule.
 
 For this exercise, we have already added the necessary static control plane
-entries. As part of bringing up the Mininet instance, the `make run` command
+entries. As part of bringing up the Mininet instance, the `make` command
 will install packet-processing rules in the tables of each switch. These are
 defined in the `sX-runtime.json` files, where `X` corresponds to the switch
 number.
 
 Since the control plane tries to access the `myTunnel_exact` table, and that
-table does not yet exist, the `make run` command will not work with the starter
+table does not yet exist, the `make` command will not work with the starter
 code.
 
 **Important:** We use P4Runtime to install the control plane rules. The content
 of files `sX-runtime.json` refer to specific names of tables, keys, and
 actions, as defined in the P4Info file produced by the compiler (look for the
-file `build/basic.p4info` after executing `make run`). Any changes in the P4
+file `build/basic.p4info` after executing `make`). Any changes in the P4
 program that add or rename tables, keys, or actions will need to be reflected
 in these `sX-runtime.json` files.
 
@@ -88,7 +88,7 @@ to hosts. For this step you will need to add your forwarding rules to the
 
 1. In your shell, run: 
     ```bash 
-    make run 
+    make 
     ``` 
     This will:
    * compile `basic_tunnel.p4`, and
@@ -158,12 +158,12 @@ deparser.
 
 There are several problems that might manifest as you develop your program:
 
-1. `basic_tunnel.p4` might fail to compile. In this case, `make run` will
+1. `basic_tunnel.p4` might fail to compile. In this case, `make` will
 report the error emitted from the compiler and halt.
 
 2. `basic_tunnel.p4` might compile but fail to support the control plane rules
-in the `sX-runtime.json` files that `make run` tries to install using the
-P4Runtime. In this case, `make run` will report errors if control plane rules
+in the `sX-runtime.json` files that `make` tries to install using the
+P4Runtime. In this case, `make` will report errors if control plane rules
 cannot be installed. Use these error messages to fix your `basic_tunnel.p4`
 implementation or forwarding rules.
 
