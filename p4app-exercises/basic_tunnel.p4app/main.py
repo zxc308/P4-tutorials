@@ -5,7 +5,7 @@ from mininet.cli import CLI
 
 if len(sys.argv) > 1:
     if sys.argv[1] == 'compile':
-        P4Program('basic.p4').compile()
+        P4Program('basic_tunnel.p4').compile()
         sys.exit(0)
 
 N = 3
