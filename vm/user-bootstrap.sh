@@ -50,6 +50,7 @@ unset LDFLAGS
 cd ..
 # Install gRPC Python Package
 sudo pip install grpcio
+sudo pip install crcmod
 
 # BMv2 deps (needed by PI)
 git clone https://github.com/p4lang/behavioral-model.git
