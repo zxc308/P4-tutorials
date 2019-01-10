@@ -62,7 +62,7 @@ parser MyParser(packet_in packet,
 ************   C H E C K S U M    V E R I F I C A T I O N   *************
 *************************************************************************/
 
-control MyVerifyChecksum(inout headers hdr, inout metadata meta) {   
+control MyVerifyChecksum(inout headers hdr, inout metadata meta) {
     apply {  }
 }
 
@@ -77,11 +77,20 @@ control MyIngress(inout headers hdr,
     action drop() {
         mark_to_drop();
     }
-    
+
     action ipv4_forward(macAddr_t dstAddr, egressSpec_t port) {
         /* TODO: fill out code in action body */
+        /* all u need to do is
+           1. give metadata a egress report
+           2. replace origin mac(belong to h1)
+              with switch's mac(so this switch is
+              considered as gateway)
+           3. replace origin des addr(which is gateway's ip)
+              with dst ip (which is h2's ip)
+           4. decrement the TTL.
+        */
     }
-    
+
     table ipv4_lpm {
         key = {
             hdr.ipv4.dstAddr: lpm;
@@ -94,10 +103,13 @@ control MyIngress(inout headers hdr,
         size = 1024;
         default_action = NoAction();
     }
-    
+
     apply {
         /* TODO: fix ingress control logic
          *  - ipv4_lpm should be applied only when IPv4 header is valid
+         */
+        /* all you need is a if statement , like:
+          if (hdr.ipv4.isValid()) {...}
          */
         ipv4_lpm.apply();
     }

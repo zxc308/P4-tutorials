@@ -10,7 +10,7 @@ With IPv4 forwarding, the switch must perform the following actions
 for every packet: (i) update the source and destination MAC addresses,
 (ii) decrement the time-to-live (TTL) in the IP header, and (iii)
 forward the packet out the appropriate port.
- 
+
 Your switch will have a single table, which the control plane will
 populate with static rules. Each rule will map an IP address to the
 MAC address and output port for the next hop. We have already defined
@@ -70,6 +70,18 @@ The message was not received because each switch is programmed
 according to `basic.p4`, which drops all packets on arrival.
 Your job is to extend this file so it forwards packets.
 
+### 等你完成了查看solution 里的basic。p4再看这里
+
+![](assets/README-0fdc153c.jpg)
+
+从上图的实验，我们可以看到，此次发送的报文能够被接受了。
+
+值得注意的一些地方： build 文件夹中新增编译出来的两个文件：
+
+```
+basic.json;; basic.p4info
+```
+
 ### A note about the control plane
 
 A P4 program defines a packet-processing pipeline, but the rules
@@ -82,6 +94,8 @@ logic for you. As part of bringing up the Mininet instance, the
 `make run` command will install packet-processing rules in the tables of
 each switch. These are defined in the `sX-runtime.json` files, where
 `X` corresponds to the switch number.
+
+> sX-runtime 这些文件是定义了packet processing 的规则
 
 **Important:** We use P4Runtime to install the control plane rules. The
 content of files `sX-runtime.json` refer to specific names of tables, keys, and
@@ -103,9 +117,9 @@ A complete `basic.p4` will contain the following components:
 2. **TODO:** Parsers for Ethernet and IPv4 that populate `ethernet_t` and `ipv4_t` fields.
 3. An action to drop a packet, using `mark_to_drop()`.
 4. **TODO:** An action (called `ipv4_forward`) that:
-	1. Sets the egress port for the next hop. 
-	2. Updates the ethernet destination address with the address of the next hop. 
-	3. Updates the ethernet source address with the address of the switch. 
+	1. Sets the egress port for the next hop.
+	2. Updates the ethernet destination address with the address of the next hop.
+	3. Updates the ethernet source address with the address of the switch.
 	4. Decrements the TTL.
 5. **TODO:** A control that:
     1. Defines a table that will read an IPv4 destination address, and
@@ -171,4 +185,3 @@ make stop
 Congratulations, your implementation works! In the next exercise we
 will build on top of this and add support for a basic tunneling
 protocol: [basic_tunnel](../basic_tunnel)!
-
