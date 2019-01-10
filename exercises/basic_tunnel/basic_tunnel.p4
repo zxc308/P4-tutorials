@@ -69,8 +69,23 @@ parser MyParser(packet_in packet,
     state parse_ethernet {
         packet.extract(hdr.ethernet);
         transition select(hdr.ethernet.etherType) {
+            // add new type<->state_transition: TYPE_MYTUNNEL
+            // 添加新的解析以太网头部的能力：当是TYPE_MYTUNNEL转到parse_myTunnel state
+            TYPE_MYTUNNEL: parse_myTunnel;
             TYPE_IPV4 : parse_ipv4;
             default : accept;
+        }
+    }
+    /* todo 在这里添加你的 parse_myTunnel state ，这遵循报文头部的顺序
+     * 头部的顺序是ethernet， myTunnel, ipv4 ,而且造成了一个层层包裹的
+     * 结构。
+     */
+    state parse_myTunnel {
+        // 这个extract 一定提取出了 什么重要的信息： 后面可以用到
+        packet.extract(hdr.myTunnel);
+        transition select(hdr.myTunnel.proto_id) {
+            TYPE_IPV4: parse_ipv4;
+            default: accept;
         }
     }
 
