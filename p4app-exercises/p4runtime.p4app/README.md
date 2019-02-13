@@ -2,16 +2,24 @@
 
 ## Introduction
 
-In this exercise, we will be using P4Runtime to send flow entries to the 
-switch instead of using the switch's CLI. We will be building on the same P4
+In this exercise, we will be building on the same P4
 program that you used in the [basic_tunnel](../basic_tunnel) exercise. The
 P4 program has been renamed to `advanced_tunnel.py` and has been augmented
 with two counters (`ingressTunnelCounter`, `egressTunnelCounter`) and
 two new actions (`myTunnel_ingress`, `myTunnel_egress`).
- 
-You will use the starter program, `mycontroller.py`, and a few helper
-libraries in the `p4runtime_lib` directory to create the table entries
-necessary to tunnel traffic between host 1 and 2.
+
+Like the previous exercises, running the `make` command creates a new
+docker container and runs the program `main.py`, which compiles the P4
+program and starts Mininet.  Unlike the previous exercises, `main.py`
+does not install any table entries into the switches.  In this
+exercise, you will use the program `mycontroller.py` to create the
+table entries necessary to tunnel traffic between host 1 and 2.  Since
+the exercise can be completed by making changes only to
+`mycontroller.py`, and no changes to the P4 program are required, you
+may choose to run `make` once in one window, and leave that running
+for the entire exercise. In a separate terminal, you can quit
+`mycontroller.py`, edit it, and start it again, and the new controller
+process will take over control of the existing Mininet network.
 
 > **Spoiler alert:** There is a reference solution in the `solution`
 > sub-directory. Feel free to compare your implementation to the
