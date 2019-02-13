@@ -16,10 +16,9 @@ from p4runtime_lib.switch import ShutdownAllSwitchConnections
 import p4runtime_lib.helper
 
 SWITCH_TO_HOST_PORT = 1
-SWITCH_TO_SWITCH_PORT = 2
 
 def writeTunnelRules(p4info_helper, ingress_sw, egress_sw, tunnel_id,
-                     dst_eth_addr, dst_ip_addr):
+                     dst_eth_addr, dst_ip_addr, ingress_sw_port):
     """
     Installs three rules:
     1) An tunnel ingress rule on the ingress switch in the ipv4_lpm table that
@@ -55,10 +54,11 @@ def writeTunnelRules(p4info_helper, ingress_sw, egress_sw, tunnel_id,
     # the tunnel ID (hdr.myTunnel.dst_id). Traffic will need to be forwarded
     # using the myTunnel_forward action on the port connected to the next switch.
     #
-    # For our simple topology, switch 1 and switch 2 are connected using a
-    # link attached to port 2 on both switches. We have defined a variable at
-    # the top of the file, SWITCH_TO_SWITCH_PORT, that you can use as the output
-    # port for this action.
+    # For our simple topology, the link from switch 1 to switch 2 is
+    # numbered port 2 on switch 1 (clockwise around the ring), but
+    # numbered port 3 on switch 2 (counterclockwise around the ring).
+    # Use the parameter 'ingress_sw_port' to specify which output port the
+    # traffic should be sent next.
     #
     # We will only need a transit rule on the ingress switch because we are
     # using a simple topology. In general, you'll need on transit rule for
@@ -159,11 +159,13 @@ def main(p4info_file_path, bmv2_file_path):
 
         # Write the rules that tunnel traffic from h1 to h2
         writeTunnelRules(p4info_helper, ingress_sw=s1, egress_sw=s2, tunnel_id=100,
-                         dst_eth_addr="00:00:00:00:02:02", dst_ip_addr="10.0.2.2")
+                         dst_eth_addr="00:00:00:00:02:02", dst_ip_addr="10.0.2.2",
+                         ingress_sw_port=2)
 
         # Write the rules that tunnel traffic from h2 to h1
         writeTunnelRules(p4info_helper, ingress_sw=s2, egress_sw=s1, tunnel_id=200,
-                         dst_eth_addr="00:00:00:00:01:01", dst_ip_addr="10.0.1.1")
+                         dst_eth_addr="00:00:00:00:01:01", dst_ip_addr="10.0.1.1",
+                         ingress_sw_port=3)
 
         # TODO Uncomment the following two lines to read table entries from s1 and s2
         # readTableRules(p4info_helper, s1)
