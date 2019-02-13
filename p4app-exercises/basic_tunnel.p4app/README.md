@@ -198,5 +198,5 @@ contents when you next do `make run`.
 ## Next Steps
 
 Congratulations, your implementation works! Move onto the next assignment
-[p4runtime](../p4runtime)!
+[p4runtime](../p4runtime.p4app)!
 

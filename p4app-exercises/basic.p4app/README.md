@@ -172,4 +172,4 @@ contents when you next do `make run`.
 
 Congratulations, your implementation works! In the next exercise we
 will build on top of this and add support for a basic tunneling
-protocol: [basic_tunnel](../basic_tunnel)!
+protocol: [basic_tunnel](../basic_tunnel.p4app)!
