@@ -1,21 +1,25 @@
-# Implementing Basic Forwarding
+# Implementing a Control Plane using P4Runtime
 
 ## Introduction
 
-The objective of this exercise is to write a P4 program that
-implements basic forwarding. To keep things simple, we will just
-implement forwarding for IPv4.
+In this exercise, we will be building on the same P4
+program that you used in the [basic_tunnel](../basic_tunnel) exercise. The
+P4 program has been renamed to `advanced_tunnel.py` and has been augmented
+with two counters (`ingressTunnelCounter`, `egressTunnelCounter`) and
+two new actions (`myTunnel_ingress`, `myTunnel_egress`).
 
-With IPv4 forwarding, the switch must perform the following actions
-for every packet: (i) update the source and destination MAC addresses,
-(ii) decrement the time-to-live (TTL) in the IP header, and (iii)
-forward the packet out the appropriate port.
- 
-Your switch will have a single table, which the control plane will
-populate with static rules. Each rule will map an IP address to the
-MAC address and output port for the next hop. We have already defined
-the control plane rules, so you only need to implement the data plane
-logic of your P4 program.
+Like the previous exercises, running the `make` command creates a new
+docker container and runs the program `main.py`, which compiles the P4
+program and starts Mininet.  Unlike the previous exercises, `main.py`
+does not install any table entries into the switches.  In this
+exercise, you will use the program `mycontroller.py` to create the
+table entries necessary to tunnel traffic between host 1 and 2.  Since
+the exercise can be completed by making changes only to
+`mycontroller.py`, and no changes to the P4 program are required, you
+may choose to run `make` once in one window, and leave that running
+for the entire exercise. In a separate terminal, you can quit
+`mycontroller.py`, edit it, and start it again, and the new controller
+process will take over control of the existing Mininet network.
 
 > **Spoiler alert:** There is a reference solution in the `solution`
 > sub-directory. Feel free to compare your implementation to the
@@ -23,152 +27,165 @@ logic of your P4 program.
 
 ## Step 1: Run the (incomplete) starter code
 
-The directory with this README also contains a skeleton P4 program,
-`basic.p4`, which initially drops all packets. Your job will be to
-extend this skeleton program to properly forward IPv4 packets.
+The starter code for this assignment is in a file called `mycontroller.py`,
+and it will install only some of the rules that you need to tunnel traffic between
+two hosts.
 
-Before that, let's compile the incomplete `basic.p4` and bring
-up a switch in Mininet to test its behavior.
+Let's first compile the new P4 program, start the network, use `mycontroller.py`
+to install a few rules, and look at the `ingressTunnelCounter` to see that things
+are working as expected.
 
 1. In your shell, run:
    ```bash
-   make run
+   make
    ```
    This will:
-   * compile `basic.p4`, and
+   * compile `advanced_tunnel.p4`,
    * start a Mininet instance with three switches (`s1`, `s2`, `s3`)
-     configured in a triangle, each connected to one host (`h1`, `h2`,
-     and `h3`).
-   * The hosts are assigned IPs of `10.0.1.1`, `10.0.2.2`, and `10.0.3.3`.
+     configured in a triangle, each connected to one host (`h1`, `h2`, `h3`), and
+   * assign IPs of `10.0.1.1`, `10.0.2.2`, `10.0.3.3` to the respective hosts.
 
-2. You should now see a Mininet command prompt. Open two terminals
-for `h1` and `h2`, respectively:
+2. You should now see a Mininet command prompt. Start a ping between h1 and h2:
    ```bash
-   mininet> xterm h1 h2
+   mininet> h1 ping h2
    ```
-3. Each host includes a small Python-based messaging client and
-server. In `h2`'s xterm, start the server:
+   Because there are no rules on the switches, you should **not** receive any
+   replies yet. You should leave the ping running in this shell.
+   
+3. Open another shell and run the starter code:
    ```bash
-   ./receive.py
+   cd ~/tutorials/p4app-exercises/p4runtime.p4app
+   make mycontroller
    ```
-4. In `h1`'s xterm, send a message to `h2`:
-   ```bash
-   ./send.py 10.0.2.2 "P4 is cool"
+   This will install the `advanced_tunnel.p4` program on the switches and push the
+   tunnel ingress rules.
+   The program prints the tunnel ingress and egress counters every 2 seconds.
+   You should see the ingress tunnel counter for s1 increasing:
    ```
-   The message will not be received.
-5. Type `exit` to leave each xterm and the Mininet command line.
-   Then, to stop mininet:
-   ```bash
-   make stop
+    s1 ingressTunnelCounter 100: 2 packets
    ```
-   And to delete all pcaps, build files, and logs:
-   ```bash
-   make clean
-   ```
+   The other counters should remain at zero. 
 
-The message was not received because each switch is programmed
-according to `basic.p4`, which drops all packets on arrival.
-Your job is to extend this file so it forwards packets.
+4. Press `Ctrl-C` to the second shell to stop `mycontroller.py`
+
+Each switch is currently mapping traffic into tunnels based on the destination IP
+address. Your job is to write the rules that forward the traffic between the switches
+based on the tunnel ID.
+
+### Potential Issues
+
+If you see the following error message when running `mycontroller.py`, then
+the gRPC server is not running on one or more switches.
+
+```
+p4@p4:~/tutorials/p4app-exercises/p4runtime.p4app$ make mycontroller
+...
+grpc._channel._Rendezvous: <_Rendezvous of RPC that terminated with (StatusCode.UNAVAILABLE, Connect Failed)>
+```
+
+You can check to see which of gRPC ports are listening on the machine by running:
+```bash
+sudo netstat -lpnt
+```
+
+The easiest solution is to enter `Ctrl-D` or `exit` in the `mininet>` prompt,
+and re-run `make`.
 
 ### A note about the control plane
 
 A P4 program defines a packet-processing pipeline, but the rules
-within each table are inserted by the control plane. When a rule
-matches a packet, its action is invoked with parameters supplied by
-the control plane as part of the rule.
+within each table are inserted by the control plane. In this case,
+`mycontroller.py` implements our control plane, instead of installing static
+table entries like we have in the previous exercises.
 
-In this exercise, we have already implemented the the control plane
-logic for you. As part of bringing up the Mininet instance, the
-`make run` command will install packet-processing rules in the tables of
-each switch. These are defined in the `sX-runtime.json` files, where
-`X` corresponds to the switch number.
+**Important:** A P4 program also defines the interface between the
+switch pipeline and control plane. This interface is defined in the
+`advanced_tunnel.p4info` file. The table entries that you build in `mycontroller.py`
+refer to specific tables, keys, and actions by name, and we use a P4Info helper
+to convert the names into the IDs that are required for P4Runtime. Any changes
+in the P4 program that add or rename tables, keys, or actions will need to be
+reflected in your table entries.
 
-**Important:** We use P4Runtime to install the control plane rules. The
-content of files `sX-runtime.json` refer to specific names of tables, keys, and
-actions, as defined in the P4Info file produced by the compiler (look for the
-file `build/basic.p4info` after executing `make run`). Any changes in the P4
-program that add or rename tables, keys, or actions will need to be reflected in
-these `sX-runtime.json` files.
+## Step 2: Implement Tunnel Forwarding
 
-## Step 2: Implement L3 forwarding
+The `mycontroller.py` file is a basic controller plane that does the following:
+1. Establishes a gRPC connection to the switches for the P4Runtime service.
+2. Pushes the P4 program to each switch.
+3. Writes tunnel ingress and tunnel egress rules for two tunnels between h1 and h2.
+4. Reads tunnel ingress and egress counters every 2 seconds.
 
-The `basic.p4` file contains a skeleton P4 program with key pieces of
-logic replaced by `TODO` comments. Your implementation should follow
-the structure given in this file---replace each `TODO` with logic
-implementing the missing piece.
+It also contains comments marked with `TODO` which indicate the functionality
+that you need to implement.
 
-A complete `basic.p4` will contain the following components:
+Your job will be to write the tunnel transit rule in the `writeTunnelRules` function
+that will match on tunnel ID and forward packets to the next hop.
 
-1. Header type definitions for Ethernet (`ethernet_t`) and IPv4 (`ipv4_t`).
-2. **TODO:** Parsers for Ethernet and IPv4 that populate `ethernet_t` and `ipv4_t` fields.
-3. An action to drop a packet, using `mark_to_drop()`.
-4. **TODO:** An action (called `ipv4_forward`) that:
-	1. Sets the egress port for the next hop. 
-	2. Updates the ethernet destination address with the address of the next hop. 
-	3. Updates the ethernet source address with the address of the switch. 
-	4. Decrements the TTL.
-5. **TODO:** A control that:
-    1. Defines a table that will read an IPv4 destination address, and
-       invoke either `drop` or `ipv4_forward`.
-    2. An `apply` block that applies the table.   
-6. **TODO:** A deparser that selects the order
-    in which fields inserted into the outgoing packet.
-7. A `package` instantiation supplied with the parser, control, and deparser.
-    > In general, a package also requires instances of checksum verification
-    > and recomputation controls. These are not necessary for this tutorial
-    > and are replaced with instantiations of empty controls.
+![topology](./topo.png)
+
+In this exercise, you will be interacting with some of the classes and methods in
+the `p4runtime_lib` directory. Here is a summary of each of the files in the directory:
+- `helper.py`
+  - Contains the `P4InfoHelper` class which is used to parse the `p4info` files.
+  - Provides translation methods from entity name to and from ID number.
+  - Builds P4 program-dependent sections of P4Runtime table entries.
+- `switch.py`
+  - Contains the `SwitchConnection` class which grabs the gRPC client stub, and
+    establishes connections to the switches.
+  - Provides helper methods that construct the P4Runtime protocol buffer messages
+    and makes the P4Runtime gRPC service calls.
+- `bmv2.py`
+  - Contains `Bmv2SwitchConnection` which extends `SwitchConnections` and provides
+    the BMv2-specific device payload to load the P4 program.
+- `convert.py`
+  - Provides convenience methods to encode and decode from friendly strings and
+    numbers to the byte strings required for the protocol buffer messages.
+  - Used by `helper.py`
+
 
 ## Step 3: Run your solution
 
-Follow the instructions from Step 1. This time, your message from
-`h1` should be delivered to `h2`.
+Follow the instructions from Step 1. If your Mininet network is still running,
+you will just need to run the following in your second shell:
+```bash
+make mycontroller
+```
 
-### Food for thought
+You should start to see ICMP replies in your Mininet prompt, and you should start to
+see the values for all counters start to increment.
 
-The "test suite" for your solution---sending a message from `h1` to
-`h2`---is not very robust. What else should you test to be confident
-of your implementation?
+### Extra Credit and Food for Thought 
 
-> Although the Python `scapy` library is outside the scope of this tutorial,
-> it can be used to generate packets for testing. The `send.py` file shows how
-> to use it.
+You might notice that the rules that are printed by `mycontroller.py` contain the entity
+IDs rather than the table names. You can use the P4Info helper to translate these IDs
+into entry names. 
 
-Other questions to consider:
- - How would you enhance your program to support next hops?
- - Is this program enough to replace a router?  What's missing?
+Also, you may want to think about the following:
+- What assumptions about the topology are baked into your implementation? How would you
+need to change it for a more realistic network?
 
-### Troubleshooting
+- Why are the byte counters different between the ingress and egress counters?
 
-There are several problems that might manifest as you develop your program:
+- What is the TTL in the ICMP replies? Why is it the value that it is?
+Hint: The default TTL is 64 for packets sent by the hosts.
 
-1. `basic.p4` might fail to compile. In this case, `make run` will
-report the error emitted from the compiler and halt.
-
-2. `basic.p4` might compile but fail to support the control plane
-rules in the `s1-runtime.json` through `s3-runtime.json` files that
-`make run` tries to install using P4Runtime. In this case, `make run` will
-report errors if control plane rules cannot be installed. Use these error
-messages to fix your `basic.p4` implementation.
-
-3. `basic.p4` might compile, and the control plane rules might be
-installed, but the switch might not process packets in the desired
-way. The `/tmp/p4s.<switch-name>.log` files contain detailed logs
-that describing how each switch processes each packet. The output is
-detailed and can help pinpoint logic errors in your implementation.
+If you are interested, you can find the protocol buffer and gRPC definitions here:
+- [P4Runtime](https://github.com/p4lang/p4runtime/blob/master/proto/v1/p4/p4runtime.proto)
+- [P4Info](https://github.com/p4lang/p4runtime/blob/master/proto/p4/config/v1/p4info.proto)
 
 #### Cleaning up Mininet
 
-In the latter two cases above, `make run` may leave a Mininet instance
-running in the background. Use the following command to clean up
-these instances:
+Typing `exit` at the `mininet>` prompt should cause the Mininet
+process, which was started inside of a new docker container, to exit
+and for that container to be removed.
 
+The log files written to the directory `/tmp/p4app-logs` remain after
+the container exits, but will be overwritten with new contents when
+you next do `make`.
+
+#### Running the reference solution
+
+To run the reference solution, you should run the following command from the
+`~/tutorials/p4app-exercises/p4runtime.p4app` directory:
 ```bash
-make stop
+make solutioncontroller
 ```
-
-## Next Steps
-
-Congratulations, your implementation works! In the next exercise we
-will build on top of this and add support for a basic tunneling
-protocol: [basic_tunnel](../basic_tunnel)!
-

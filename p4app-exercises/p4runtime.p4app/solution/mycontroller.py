@@ -156,12 +156,12 @@ def main(p4info_file_path, bmv2_file_path):
             name='s1',
             address='127.0.0.1:50051',
             device_id=0,
-            proto_dump_file='logs/s1-p4runtime-requests.txt')
+            proto_dump_file='/tmp/p4app-logs/s1-p4runtime-requests.txt')
         s2 = p4runtime_lib.bmv2.Bmv2SwitchConnection(
             name='s2',
             address='127.0.0.1:50052',
             device_id=1,
-            proto_dump_file='logs/s2-p4runtime-requests.txt')
+            proto_dump_file='/tmp/p4app-logs/s2-p4runtime-requests.txt')
 
         # Send master arbitration update message to establish this controller as
         # master (required by P4Runtime before performing any other write operation)

@@ -1,8 +1,9 @@
 from p4app import P4Program, P4Mininet
 from mininet.topo import Topo
+from mininet.cli import CLI
 import subprocess
 
-N = 2
+N = 3
 
 def getForwardingPort(s1, s2):
     clockwise = s2 - s1 if s2 > s1 else (N - s1) + s2
@@ -32,12 +33,4 @@ prog = P4Program('advanced_tunnel.p4')
 net = P4Mininet(program=prog, topo=topo, start_controller=False)
 net.start()
 
-p = subprocess.Popen(['./mycontroller.py', '--p4info', prog.p4info(), '--bmv2-json', prog.json()])
-
-
-try:
-    raw_input("Hit ENTER to exit.\n\n")
-except KeyboardInterrupt:
-    pass
-
-p.kill()
+CLI(net)
