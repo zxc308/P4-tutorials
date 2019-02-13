@@ -120,7 +120,7 @@ that you need to implement.
 Your job will be to write the tunnel transit rule in the `writeTunnelRules` function
 that will match on tunnel ID and forward packets to the next hop.
 
-![topology](../basic_tunnel/topo.png)
+![topology](./topo.png)
 
 In this exercise, you will be interacting with some of the classes and methods in
 the `p4runtime_lib` directory. Here is a summary of each of the files in the directory:
