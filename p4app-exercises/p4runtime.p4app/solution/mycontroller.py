@@ -16,11 +16,9 @@ from p4runtime_lib.switch import ShutdownAllSwitchConnections
 import p4runtime_lib.helper
 
 SWITCH_TO_HOST_PORT = 1
-CLOCKWISE_SWITCH_TO_SWITCH_PORT = 2
-COUNTERCLOCKWISE_SWITCH_TO_SWITCH_PORT = 3
 
 def writeTunnelRules(p4info_helper, ingress_sw, egress_sw, tunnel_id,
-                     dst_eth_addr, dst_ip_addr, direction):
+                     dst_eth_addr, dst_ip_addr, port):
     """
     Installs three rules:
     1) An tunnel ingress rule on the ingress switch in the ipv4_lpm table that
@@ -59,13 +57,8 @@ def writeTunnelRules(p4info_helper, ingress_sw, egress_sw, tunnel_id,
     # For our simple topology, the link from switch 1 to switch 2 is
     # numbered port 2 on switch 1 (clockwise around the ring), but
     # numbered port 3 on switch 2 (counterclockwise around the ring).
-    # link attached to port 2 on both switches. We have defined two
-    # variables at the top of the file,
-    # CLOCKWISE_SWITCH_TO_SWITCH_PORT and
-    # COUNTERCLOCKWISE_SWITCH_TO_SWITCH_PORT, that you can use as the
-    # output port for this action, based upon the value of the
-    # 'direction' parameter of this method.
-
+    # Use the parameter 'port' to specify which output port the
+    # traffic should be sent next.
     #
     # We will only need a transit rule on the ingress switch because we are
     # using a simple topology. In general, you'll need on transit rule for
@@ -75,10 +68,6 @@ def writeTunnelRules(p4info_helper, ingress_sw, egress_sw, tunnel_id,
 
     # TODO build the transit rule
     # TODO install the transit rule on the ingress switch
-    if direction == "clockwise":
-        switch_port = CLOCKWISE_SWITCH_TO_SWITCH_PORT
-    else:
-        switch_port = COUNTERCLOCKWISE_SWITCH_TO_SWITCH_PORT
     table_entry = p4info_helper.buildTableEntry(
         table_name="MyIngress.myTunnel_exact",
         match_fields={
@@ -86,7 +75,7 @@ def writeTunnelRules(p4info_helper, ingress_sw, egress_sw, tunnel_id,
         },
         action_name="MyIngress.myTunnel_forward",
         action_params={
-            "port": switch_port
+            "port": port
         })
     ingress_sw.WriteTableEntry(table_entry)
     print "Installed transit tunnel rule on %s" % ingress_sw.name
@@ -190,12 +179,12 @@ def main(p4info_file_path, bmv2_file_path):
         # Write the rules that tunnel traffic from h1 to h2
         writeTunnelRules(p4info_helper, ingress_sw=s1, egress_sw=s2, tunnel_id=100,
                          dst_eth_addr="00:00:00:00:02:02", dst_ip_addr="10.0.2.2",
-                         direction="clockwise")
+                         port=2)
 
         # Write the rules that tunnel traffic from h2 to h1
         writeTunnelRules(p4info_helper, ingress_sw=s2, egress_sw=s1, tunnel_id=200,
                          dst_eth_addr="00:00:00:00:01:01", dst_ip_addr="10.0.1.1",
-                         direction="counterclockwise")
+                         port=3)
 
         # TODO Uncomment the following two lines to read table entries from s1 and s2
         readTableRules(p4info_helper, s1)
