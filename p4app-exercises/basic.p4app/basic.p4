@@ -98,6 +98,7 @@ control MyIngress(inout headers hdr,
     apply {
         /* TODO: fix ingress control logic
          *  - ipv4_lpm should be applied only when IPv4 header is valid
+         *  - drop the packet otherwise
          */
         ipv4_lpm.apply();
     }

@@ -166,14 +166,15 @@ control MyIngress(inout headers hdr,
     }
 
     apply {
-        if (hdr.ipv4.isValid() && !hdr.myTunnel.isValid()) {
-            // Process only non-tunneled IPv4 packets.
-            ipv4_lpm.apply();
-        }
-
-        if (hdr.myTunnel.isValid()) {
-            // Process all tunneled packets.
+        if (!hdr.ipv4.isValid() && !hdr.myTunnel.isValid()) {
+            // drop non-tunneled, non-IPv4 packets
+            drop();
+        } else if (hdr.myTunnel.isValid()) {
+            // process tunneled packets
             myTunnel_exact.apply();
+        } else {
+            // process non-tunneled IPv4 packets
+            ipv4_lpm.apply();
         }
     }
 }

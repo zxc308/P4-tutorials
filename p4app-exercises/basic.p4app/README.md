@@ -111,7 +111,8 @@ A complete `basic.p4` will contain the following components:
 5. **TODO:** A control that:
     1. Defines a table that will read an IPv4 destination address, and
        invoke either `drop` or `ipv4_forward`.
-    2. An `apply` block that applies the table.   
+    2. An `apply` block that applies the table for IPv4 packets and drops all
+       other packets.
 6. **TODO:** A deparser that selects the order
     in which fields inserted into the outgoing packet.
 7. A `package` instantiation supplied with the parser, control, and deparser.
