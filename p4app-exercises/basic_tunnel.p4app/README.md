@@ -77,11 +77,12 @@ valid. Otherwise, invoke the `ipv4_lpm` table if the `ipv4` header is valid.
 `ipv4` headers. Remember that the deparser will only emit a header if it is
 valid. A header's implicit validity bit is set by the parser upon extraction.
 So there is no need to check header validity here.
-7. **TODO:** Add static rules for your newly defined table so that the switches
-will forward correctly for each possible value of `dst_id`. See the diagram
-below for the topology's port configuration as well as how we will assign IDs
-to hosts. For this step you will need to add your forwarding rules to the
-`sX-runtime.json` files.
+7. The static rules for your newly defined table, so that the switches
+will forward correctly for each possible value of `dst_id`, are
+already added by appropriate calls to the `insertTableEntry` method
+near the end of the `main.py` program. See the diagram below for the
+topology's port configuration as well as how we will assign IDs to
+hosts.
 
 ![topology](./topo.png)
 

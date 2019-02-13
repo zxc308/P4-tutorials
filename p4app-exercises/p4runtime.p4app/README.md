@@ -3,7 +3,7 @@
 ## Introduction
 
 In this exercise, we will be building on the same P4
-program that you used in the [basic_tunnel](../basic_tunnel) exercise. The
+program that you used in the [basic_tunnel](../basic_tunnel.p4app) exercise. The
 P4 program has been renamed to `advanced_tunnel.py` and has been augmented
 with two counters (`ingressTunnelCounter`, `egressTunnelCounter`) and
 two new actions (`myTunnel_ingress`, `myTunnel_egress`).
@@ -123,7 +123,7 @@ that will match on tunnel ID and forward packets to the next hop.
 ![topology](./topo.png)
 
 In this exercise, you will be interacting with some of the classes and methods in
-the `p4runtime_lib` directory. Here is a summary of each of the files in the directory:
+the `p4runtime_lib` directory (absolute directory `~/tutorials/p4app-exercises/p4app/docker/scripts/p4runtime_lib`, or `../p4app/docker/scripts/p4runtime_lib` relative to this exercise's directory). Here is a summary of each of the files in the directory:
 - `helper.py`
   - Contains the `P4InfoHelper` class which is used to parse the `p4info` files.
   - Provides translation methods from entity name to and from ID number.
@@ -169,7 +169,7 @@ need to change it for a more realistic network?
 Hint: The default TTL is 64 for packets sent by the hosts.
 
 If you are interested, you can find the protocol buffer and gRPC definitions here:
-- [P4Runtime](https://github.com/p4lang/p4runtime/blob/master/proto/v1/p4/p4runtime.proto)
+- [P4Runtime](https://github.com/p4lang/p4runtime/blob/master/proto/p4/v1/p4runtime.proto)
 - [P4Info](https://github.com/p4lang/p4runtime/blob/master/proto/p4/config/v1/p4info.proto)
 
 #### Cleaning up Mininet
