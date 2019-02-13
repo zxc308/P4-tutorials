@@ -5,7 +5,11 @@ from mininet.cli import CLI
 
 if len(sys.argv) > 1:
     if sys.argv[1] == 'compile':
-        P4Program('basic.p4').compile()
+        try:
+            P4Program('basic.p4').compile()
+        except Exception as e:
+            print(e)
+            sys.exit(1)
         sys.exit(0)
 
 N = 3
@@ -34,7 +38,11 @@ class RingTopo(Topo):
             self.addLink(switches[i], switches[(i+1)%n], port1=2, port2=3)
 
 topo = RingTopo(N)
-net = P4Mininet(program='basic.p4', topo=topo)
+try:
+    net = P4Mininet(program='basic.p4', topo=topo)
+except Exception as e:
+    print(e)
+    sys.exit(1)
 net.start()
 
 for i in range(1, N+1):

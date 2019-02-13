@@ -36,39 +36,39 @@ up a switch in Mininet to test its behavior.
    ```
    This will:
    * compile `basic.p4`, and
-   * start a Mininet instance with three switches (`s1`, `s2`, `s3`)
+   * start a Mininet instance in a new docker container,
+     with three switches (`s1`, `s2`, `s3`)
      configured in a triangle, each connected to one host (`h1`, `h2`,
      and `h3`).
-   * The hosts are assigned IPs of `10.0.1.1`, `10.0.2.2`, and `10.0.3.3`.
+   * The hosts are assigned IPs of `10.0.0.1`, `10.0.0.2`, and `10.0.0.3`.
 
 2. You should now see a Mininet command prompt. Open two terminals
 for `h1` and `h2`, respectively:
    ```bash
-   mininet> xterm h1 h2
+   # In two separate terminal windows, change their current directories to
+   # be this one.  In the first, run this command:
+   make h1
+
+   # And this in the second:
+   make h2
    ```
 3. Each host includes a small Python-based messaging client and
-server. In `h2`'s xterm, start the server:
+server. In `h2`'s terminal, start the server:
    ```bash
    ./receive.py
    ```
-4. In `h1`'s xterm, send a message to `h2`:
+4. In `h1`'s terminal, send a message to `h2`:
    ```bash
-   ./send.py 10.0.2.2 "P4 is cool"
+   ./send.py 10.0.0.2 "P4 is cool"
    ```
    The message will not be received.
-5. Type `exit` to leave each xterm and the Mininet command line.
-   Then, to stop mininet:
-   ```bash
-   make stop
-   ```
-   And to delete all pcaps, build files, and logs:
-   ```bash
-   make clean
-   ```
+5. Type `exit` to leave the Mininet command line, which will also remove
+   the docker container and all its processes.  The shells for `h1`
+   and `h2` should automatically exit as a result.
 
 The message was not received because each switch is programmed
 according to `basic.p4`, which drops all packets on arrival.
-Your job is to extend this file so it forwards packets.
+Your job is to extend this program so it forwards packets.
 
 ### A note about the control plane
 
@@ -77,18 +77,19 @@ within each table are inserted by the control plane. When a rule
 matches a packet, its action is invoked with parameters supplied by
 the control plane as part of the rule.
 
-In this exercise, we have already implemented the the control plane
-logic for you. As part of bringing up the Mininet instance, the
-`make run` command will install packet-processing rules in the tables of
-each switch. These are defined in the `sX-runtime.json` files, where
-`X` corresponds to the switch number.
+In this exercise, we have already implemented the control plane logic
+for you. As part of bringing up the Mininet instance, the `make run`
+command will install packet-processing rules in the tables of each
+switch. `make run` causes the program `main.py` to be run inside the
+new docker container. The control plane rules are installed near the
+end of `main.py`, by calls to the method `insertTableEntry`.
 
 **Important:** We use P4Runtime to install the control plane rules. The
-content of files `sX-runtime.json` refer to specific names of tables, keys, and
+`insertTableEntry` method calls refer to specific names of tables, keys, and
 actions, as defined in the P4Info file produced by the compiler (look for the
-file `build/basic.p4info` after executing `make run`). Any changes in the P4
+file `/tmp/p4app-logs/basic.p4info` after executing `make run`). Any changes in the P4
 program that add or rename tables, keys, or actions will need to be reflected in
-these `sX-runtime.json` files.
+these `insertTableEntry` method calls in `main.py`.
 
 ## Step 2: Implement L3 forwarding
 
@@ -145,30 +146,30 @@ There are several problems that might manifest as you develop your program:
 report the error emitted from the compiler and halt.
 
 2. `basic.p4` might compile but fail to support the control plane
-rules in the `s1-runtime.json` through `s3-runtime.json` files that
-`make run` tries to install using P4Runtime. In this case, `make run` will
-report errors if control plane rules cannot be installed. Use these error
-messages to fix your `basic.p4` implementation.
+rules that the `main.py` program tries to install using P4Runtime. In
+this case, `make run` will report errors if control plane rules cannot
+be installed. Use these error messages to fix your `basic.p4`
+implementation.
 
 3. `basic.p4` might compile, and the control plane rules might be
 installed, but the switch might not process packets in the desired
-way. The `/tmp/p4s.<switch-name>.log` files contain detailed logs
-that describing how each switch processes each packet. The output is
-detailed and can help pinpoint logic errors in your implementation.
+way. The `/tmp/p4app-logs/p4s.<switch-name>.log` files contain
+detailed logs that describe how each switch processes each packet. The
+output is detailed and can help pinpoint logic errors in your
+implementation.
 
 #### Cleaning up Mininet
 
-In the latter two cases above, `make run` may leave a Mininet instance
-running in the background. Use the following command to clean up
-these instances:
+Typing `exit` at the `mininet>` prompt should cause the Mininet
+process, which was started inside of a new docker container, to exit
+and for that container to be removed.
 
-```bash
-make stop
-```
+The log files written to the directory `/tmp/p4app-logs` remain after
+the container exits, but will be deleted and replaced with new
+contents when you next do `make run`.
 
 ## Next Steps
 
 Congratulations, your implementation works! In the next exercise we
 will build on top of this and add support for a basic tunneling
 protocol: [basic_tunnel](../basic_tunnel)!
-
