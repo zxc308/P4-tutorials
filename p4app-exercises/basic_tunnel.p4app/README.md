@@ -28,20 +28,21 @@ rule.
 
 For this exercise, we have already added the necessary static control plane
 entries. As part of bringing up the Mininet instance, the `make run` command
-will install packet-processing rules in the tables of each switch. These are
-defined in the `sX-runtime.json` files, where `X` corresponds to the switch
-number.
+will install packet-processing rules in the tables of each switch.
+`make run` causes the program `main.py` to be run inside the
+new docker container. The control plane rules are installed near the
+end of `main.py`, by calls to the method `insertTableEntry`.
 
 Since the control plane tries to access the `myTunnel_exact` table, and that
 table does not yet exist, the `make run` command will not work with the starter
 code.
 
-**Important:** We use P4Runtime to install the control plane rules. The content
-of files `sX-runtime.json` refer to specific names of tables, keys, and
+**Important:** We use P4Runtime to install the control plane rules. The
+`insertTableEntry` method calls refer to specific names of tables, keys, and
 actions, as defined in the P4Info file produced by the compiler (look for the
-file `build/basic.p4info` after executing `make run`). Any changes in the P4
+file `/tmp/p4app-logs/basic_tunnel.p4info` after executing `make run`). Any changes in the P4
 program that add or rename tables, keys, or actions will need to be reflected
-in these `sX-runtime.json` files.
+in these `insertTableEntry` method calls in `main.py`.
 
 ## Step 2: Implement Basic Tunneling
 
@@ -86,31 +87,61 @@ to hosts. For this step you will need to add your forwarding rules to the
 
 ## Step 3: Run your solution
 
-1. In your shell, run: ```bash make run ``` This will:
+1. In your shell, run:
+   ```bash
+   make run
+   ```
+   This will:
    * compile `basic_tunnel.p4`, and
-   * start a Mininet instance with three switches (`s1`, `s2`, `s3`) configured
+   * start a Mininet instance in a new docker container,
+     with three switches (`s1`, `s2`, `s3`) configured
      in a triangle, each connected to one host (`h1`, `h2`, and `h3`).
-   * The hosts are assigned IPs of `10.0.1.1`, `10.0.2.2`, and `10.0.3.3`.
+   * The hosts are assigned IPs of `10.0.0.1`, `10.0.0.2`, and `10.0.0.3`.
 
 2. You should now see a Mininet command prompt. Open two terminals for `h1` and
-`h2`, respectively: ```bash mininet> xterm h1 h2 ```
-3. Each host includes a small Python-based messaging client and server. In
-`h2`'s xterm, start the server: ```bash ./receive.py ```
-4. First we will test without tunneling. In `h1`'s xterm, send a message to
-`h2`: ```bash ./send.py 10.0.2.2 "P4 is cool" ``` The packet should be received
-at `h2`. If you examine the received packet you should see that is consists of
-an Ethernet header, an IP header, a TCP header, and the message. If you change
-the destination IP address (e.g. try to send to `10.0.3.3`) then the message
-should not be received by h2, and will instead be received by h3.
-5. Now we test with tunneling. In `h1`'s xterm, send a message to `h2`: ```bash
-./send.py 10.0.2.2 "P4 is cool" --dst_id 2``` The packet should be received at
-`h2`. If you examine the received packet you should see that is consists of an
-Ethernet header, a tunnel header, an IP header, a TCP header, and the message. 
-6. In `h1`'s xterm, send a message: ```bash ./send.py 10.0.3.3 "P4 is cool"
---dst_id 2``` The packet should be received at `h2`, even though that ip
-address is the address of `h3`. This is because the switch is no longer using
-the IP header for routing when the `MyTunnel` header is in the packet. 
-7. Type `exit` or `Ctrl-D` to leave each xterm and the Mininet command line.
+`h2`, respectively:
+   ```bash
+   # In two separate terminal windows, change their current directories to
+   # be this one.  In the first, run this command:
+   make h1
+
+   # And this in the second:
+   make h2
+   ```
+3. Each host includes a small Python-based messaging client and
+   server. In `h2`'s terminal, start the server:
+   ```bash
+   ./receive.py
+   ```
+4. First we will test without tunneling. In `h1`'s terminal, send a
+   message to `h2`:
+   ```bash
+   ./send.py 10.0.0.2 "P4 is cool"
+   ```
+   The packet should be received at `h2`. If you examine the received
+   packet you should see that it consists of an Ethernet header, an IP
+   header, a TCP header, and the message. If you change the
+   destination IP address (e.g. try to send to `10.0.0.3`) then the
+   message should not be received by `h2`, and will instead be
+   received by `h3`.
+
+5. Now we test with tunneling. In `h1`'s terminal, send a message to `h2`:
+   ```bash
+   ./send.py 10.0.0.2 "P4 is cool" --dst_id 2
+   ```
+   The packet should be received at `h2`. If you examine the received
+   packet you should see that is consists of an Ethernet header, a
+   tunnel header, an IP header, a TCP header, and the message.
+
+6. In `h1`'s terminal, send a message:
+   ```bash
+   ./send.py 10.0.0.3 "P4 is cool" --dst_id 2
+   ```
+   The packet should be received at `h2`, even though that IP address
+   is the address of `h3`. This is because the switch is no longer
+   using the IP header for routing when the `MyTunnel` header is in
+   the packet.
+7. Type `exit` or `Ctrl-D` to leave the Mininet command line.
 
 
 > Python Scapy does not natively support the `myTunnel` header type so we have
@@ -141,24 +172,28 @@ There are several problems that might manifest as you develop your program:
 1. `basic_tunnel.p4` might fail to compile. In this case, `make run` will
 report the error emitted from the compiler and halt.
 
-2. `basic_tunnel.p4` might compile but fail to support the control plane rules
-in the `sX-runtime.json` files that `make run` tries to install using the
-P4Runtime. In this case, `make run` will report errors if control plane rules
-cannot be installed. Use these error messages to fix your `basic_tunnel.p4`
-implementation or forwarding rules.
+2. `basic_tunnel.p4` might compile but fail to support the control
+plane rules that the `main.py` program tries to install using
+P4Runtime.  In this case, `make run` will report errors if control
+plane rules cannot be installed. Use these error messages to fix your
+`basic_tunnel.p4` implementation or forwarding rules.
 
-3. `basic_tunnel.p4` might compile, and the control plane rules might be
-installed, but the switch might not process packets in the desired way. The
-`/tmp/p4s.<switch-name>.log` files contain detailed logs that describing how
-each switch processes each packet. The output is detailed and can help pinpoint
-logic errors in your implementation.
+3. `basic_tunnel.p4` might compile, and the control plane rules might
+be installed, but the switch might not process packets in the desired
+way. The `/tmp/p4app-logs/p4s.<switch-name>.log` files contain
+detailed logs that describe how each switch processes each packet. The
+output is detailed and can help pinpoint logic errors in your
+implementation.
 
 #### Cleaning up Mininet
 
-In the latter two cases above, `make` may leave a Mininet instance running in
-the background. Use the following command to clean up these instances:
+Typing `exit` at the `mininet>` prompt should cause the Mininet
+process, which was started inside of a new docker container, to exit
+and for that container to be removed.
 
-```bash make stop ```
+The log files written to the directory `/tmp/p4app-logs` remain after
+the container exits, but will be deleted and replaced with new
+contents when you next do `make run`.
 
 ## Next Steps
 
