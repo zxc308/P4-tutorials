@@ -133,6 +133,8 @@ control MyIngress(inout headers hdr,
         // TODO: Update control flow
         if (hdr.ipv4.isValid()) {
             ipv4_lpm.apply();
+        } else {
+            drop();
         }
     }
 }

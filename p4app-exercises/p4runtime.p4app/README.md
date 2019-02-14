@@ -6,7 +6,8 @@ In this exercise, we will be building on the same P4
 program that you used in the [basic_tunnel](../basic_tunnel.p4app) exercise. The
 P4 program has been renamed to `advanced_tunnel.py` and has been augmented
 with two counters (`ingressTunnelCounter`, `egressTunnelCounter`) and
-two new actions (`myTunnel_ingress`, `myTunnel_egress`).
+two new actions (`myTunnel_ingress`, `myTunnel_egress`), which take care of
+performing encap and decap on IPv4 packets using our tunneling protocol.
 
 Like the previous exercises, running the `make` command creates a new
 docker container and runs the program `main.py`, which compiles the P4

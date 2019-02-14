@@ -65,7 +65,7 @@ for i in range(1, N+1):
         sw.insertTableEntry(table_name='MyIngress.ipv4_lpm',
                             match_fields={'hdr.ipv4.dstAddr': ["10.0.0.%d" % j, 32]},
                             action_name='MyIngress.ipv4_forward',
-                            action_params={'dstAddr': '00:00:00:00:00:%02x' % j,
+                            action_params={'dstAddr': '00:00:00:00:ff:%02x' % j,
                                               'port': getForwardingPort(i, j)})
         sw.insertTableEntry(table_name='MyIngress.myTunnel_exact',
                             match_fields={'hdr.myTunnel.dst_id': [j]},
