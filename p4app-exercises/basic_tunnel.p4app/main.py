@@ -25,6 +25,9 @@ def hostIP(i):
 def hostMAC(i):
     return '00:00:00:00:00:%02x' % (i)
 
+def switchMAC(i):
+    return '00:00:00:00:ff:%02x' % (i)
+
 class RingTopo(Topo):
     def __init__(self, n, **opts):
         Topo.__init__(self, **opts)
@@ -71,7 +74,7 @@ for i in range(1, N+1):
         sw.insertTableEntry(table_name='MyIngress.ipv4_lpm',
                             match_fields={'hdr.ipv4.dstAddr': [hostIP(j), 32]},
                             action_name='MyIngress.ipv4_forward',
-                            action_params={'dstAddr': hostMAC(j),
+                            action_params={'dstAddr': switchMAC(j),
                                            'port': getForwardingPort(i, j)})
         sw.insertTableEntry(table_name='MyIngress.myTunnel_exact',
                             match_fields={'hdr.myTunnel.dst_id': [j]},
