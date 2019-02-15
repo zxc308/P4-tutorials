@@ -40,7 +40,7 @@ up a switch in Mininet to test its behavior.
      with three switches (`s1`, `s2`, `s3`)
      configured in a triangle, each connected to one host (`h1`, `h2`,
      and `h3`).
-   * The hosts are assigned IPs of `10.0.0.1`, `10.0.0.2`, and `10.0.0.3`.
+   * The hosts are assigned IPs of `10.0.1.1`, `10.0.2.2`, and `10.0.3.3`.
 
 2. You should now see a Mininet command prompt. Open two terminals
 for `h1` and `h2`, respectively:
@@ -59,7 +59,7 @@ server. In `h2`'s terminal, start the server:
    ```
 4. In `h1`'s terminal, send a message to `h2`:
    ```bash
-   ./send.py 10.0.0.2 "P4 is cool"
+   ./send.py 10.0.2.2 "P4 is cool"
    ```
    The message will not be received.
 5. Type `exit` to leave the Mininet command line, which will also remove

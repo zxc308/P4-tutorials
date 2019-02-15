@@ -19,6 +19,12 @@ def getForwardingPort(s1, s2):
     counter_clockwise = (N - s2) + s1 if s2 > s1 else s2 - s1
     return 2 if clockwise < counter_clockwise else 3
 
+def hostIP(i):
+    return "10.0.%d.%d" % (i, i)
+
+def hostMAC(i):
+    return '00:00:00:00:00:%02x' % (i)
+
 class RingTopo(Topo):
     def __init__(self, n, **opts):
         Topo.__init__(self, **opts)
@@ -27,8 +33,8 @@ class RingTopo(Topo):
 
         for i in xrange(1, n+1):
             host = self.addHost('h%d' % i,
-                                ip = "10.0.0.%d" % i,
-                                mac = '00:00:00:00:00:%02x' % i)
+                                ip = hostIP(i),
+                                mac = hostMAC(i))
             switch = self.addSwitch('s%d' % i)
             self.addLink(host, switch, port2=1)
             switches.append(switch)
@@ -50,19 +56,19 @@ for i in range(1, N+1):
 
     # Forward to the host connected to this switch
     sw.insertTableEntry(table_name='MyIngress.ipv4_lpm',
-                        match_fields={'hdr.ipv4.dstAddr': ["10.0.0.%d" % i, 32]},
+                        match_fields={'hdr.ipv4.dstAddr': [hostIP(i), 32]},
                         action_name='MyIngress.ipv4_forward',
-                        action_params={'dstAddr': '00:00:00:00:00:%02x' % i,
-                                          'port': 1})
+                        action_params={'dstAddr': hostMAC(i),
+                                       'port': 1})
 
     # Otherwise send the packet to another switch
     for j in range(1, N+1):
         if i == j: continue
         sw.insertTableEntry(table_name='MyIngress.ipv4_lpm',
-                            match_fields={'hdr.ipv4.dstAddr': ["10.0.0.%d" % j, 32]},
+                            match_fields={'hdr.ipv4.dstAddr': [hostIP(j), 32]},
                             action_name='MyIngress.ipv4_forward',
-                            action_params={'dstAddr': '00:00:00:00:ff:%02x' % j,
-                                              'port': getForwardingPort(i, j)})
+                            action_params={'dstAddr': hostMAC(j),
+                                           'port': getForwardingPort(i, j)})
 
 
 CLI(net)
