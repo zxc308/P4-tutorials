@@ -97,7 +97,7 @@ hosts.
    * start a Mininet instance in a new docker container,
      with three switches (`s1`, `s2`, `s3`) configured
      in a triangle, each connected to one host (`h1`, `h2`, and `h3`).
-   * The hosts are assigned IPs of `10.0.0.1`, `10.0.0.2`, and `10.0.0.3`.
+   * The hosts are assigned IPs of `10.0.1.1`, `10.0.2.2`, and `10.0.3.3`.
 
 2. You should now see a Mininet command prompt. Open two terminals for `h1` and
 `h2`, respectively:
@@ -117,18 +117,18 @@ hosts.
 4. First we will test without tunneling. In `h1`'s terminal, send a
    message to `h2`:
    ```bash
-   ./send.py 10.0.0.2 "P4 is cool"
+   ./send.py 10.0.2.2 "P4 is cool"
    ```
    The packet should be received at `h2`. If you examine the received
    packet you should see that it consists of an Ethernet header, an IP
    header, a TCP header, and the message. If you change the
-   destination IP address (e.g. try to send to `10.0.0.3`) then the
+   destination IP address (e.g. try to send to `10.0.3.3`) then the
    message should not be received by `h2`, and will instead be
    received by `h3`.
 
 5. Now we test with tunneling. In `h1`'s terminal, send a message to `h2`:
    ```bash
-   ./send.py 10.0.0.2 "P4 is cool" --dst_id 2
+   ./send.py 10.0.2.2 "P4 is cool" --dst_id 2
    ```
    The packet should be received at `h2`. If you examine the received
    packet you should see that is consists of an Ethernet header, a
@@ -136,7 +136,7 @@ hosts.
 
 6. In `h1`'s terminal, send a message:
    ```bash
-   ./send.py 10.0.0.3 "P4 is cool" --dst_id 2
+   ./send.py 10.0.3.3 "P4 is cool" --dst_id 2
    ```
    The packet should be received at `h2`, even though that IP address
    is the address of `h3`. This is because the switch is no longer
