@@ -123,7 +123,7 @@ sudo ln -s /usr/share/emacs/site-lisp/p4_16-mode.el /home/p4/.emacs.d/p4_16-mode
 sudo chown -R p4:p4 /home/p4/.emacs.d/
 
 # --- Vim --- #
-cd ~vim us  
+cd ~  
 mkdir .vim
 cd .vim
 mkdir ftdetect
