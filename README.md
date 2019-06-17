@@ -56,3 +56,7 @@ They contain the dependencies, versions, and installation procedure.
 You should be able to run them directly on an Ubuntu 16.04 machine:
 - `sudo ./root-bootstrap.sh`
 - `sudo ./user-bootstrap.sh`
+
+If you want a lighter installation for virtual machines with Ubuntu 16.04, you can use the following script:
+-`sudo ./install.sh`
+
