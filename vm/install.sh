@@ -189,6 +189,7 @@ function tuto_dep {
 
 function vim {
 	# --- Vim --- #
+	cp p4.vim ~
 	cd ~  
 	mkdir .vim
 	cd .vim
@@ -196,6 +197,7 @@ function vim {
 	mkdir syntax
 	echo "au BufRead,BufNewFile *.p4      set filetype=p4" >> ftdetect/p4.vim
 	echo "set bg=dark" >> ~/.vimrc
+	mv ~/p4.vim ./syntax/
 }
 
 function all {
