@@ -55,12 +55,12 @@ To install dependencies by hand, please reference the [vm](../vm) installation s
 They contain the dependencies, versions, and installation procedure.
 You should be able to run them directly on an Ubuntu 16.04 machine. 
 
-It has two installation modes, the native method, used in Vagrant, that creates a graphical environment, wallpaper, icons and pre-configured IDEs, with a dedicated user called p4 configured to log in automatically. The quick method installs what is necessary to complete the tutorial and modifies the minimum of the machine in which it is installed. Only configure vim as IDE to develop code p4.
+It has two installation modes, the **native** method, used in `vagrant`, that creates a graphical environment, wallpaper, icons and pre-configured IDEs, with a dedicated user called `p4` configured to log in automatically. The **quick** method installs what is necessary to complete the tutorial and modifies the minimum of the machine in which it is installed. Only configure `vim` as IDE to develop code `p4`.
 
-- To native method (Default): `sudo ./install` or `sudo ./install -n` 
+- To **native** method (Default): `sudo ./install` or `sudo ./install -n` 
 
-- To quick method: `sudo ./install -q`
+- To **quick** method: `sudo ./install -q`
 
-More info: ./install -h
+More info: `./install -h`
 
 
