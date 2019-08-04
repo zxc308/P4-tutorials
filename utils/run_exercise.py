@@ -67,7 +67,7 @@ def configureP4Switch(**switch_args):
 class ExerciseTopo(Topo):
     """ The mininet topology class for the P4 tutorial exercises.
     """
-    def __init__(self, hosts, switches, links, log_dir, **opts):
+    def __init__(self, hosts, switches, links, log_dir, bmv2_exe, pcap_dir, **opts):
         Topo.__init__(self, **opts)
         host_links = []
         switch_links = []
@@ -79,8 +79,17 @@ class ExerciseTopo(Topo):
             else:
                 switch_links.append(link)
 
-        for sw in switches:
-            self.addSwitch(sw, log_file="%s/%s.log" %(log_dir, sw))
+        for sw, params in switches.iteritems():
+            if "program" in params:
+                switchClass = configureP4Switch(
+                        sw_path=bmv2_exe,
+                        json_path=params["program"],
+                        log_console=True,
+                        pcap_dump=pcap_dir)
+            else:
+                # add default switch
+                switchClass = None
+            self.addSwitch(sw, log_file="%s/%s.log" %(log_dir, sw), cls=switchClass)
 
         for link in host_links:
             host_name = link['node1']
@@ -234,18 +243,18 @@ class ExerciseRunner:
         """
         self.logger("Building mininet topology.")
 
-        self.topo = ExerciseTopo(self.hosts, self.switches, self.links, self.log_dir)
+        defaultSwitchClass = configureP4Switch(
+                                sw_path=self.bmv2_exe,
+                                json_path=self.switch_json,
+                                log_console=True,
+                                pcap_dump=self.pcap_dir)
 
-        switchClass = configureP4Switch(
-                sw_path=self.bmv2_exe,
-                json_path=self.switch_json,
-                log_console=True,
-                pcap_dump=self.pcap_dir)
+        self.topo = ExerciseTopo(self.hosts, self.switches, self.links, self.log_dir, self.bmv2_exe, self.pcap_dir)
 
         self.net = Mininet(topo = self.topo,
                       link = TCLink,
                       host = P4Host,
-                      switch = switchClass,
+                      switch = defaultSwitchClass,
                       controller = None)
 
     def program_switch_p4runtime(self, sw_name, sw_dict):
