@@ -50,7 +50,7 @@ up a switch in Mininet to test its behavior.
    This will:
    * compile `firewall.p4`, and
    * start the pod-topo in Mininet and configure all switches with
-   the appropriate P4 program, and
+   the appropriate P4 program + table entries, and
    * configure all hosts with the commands listed in
    [pod-topo/topology.json](./pod-topo/topology.json)
 
