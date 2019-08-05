@@ -198,21 +198,13 @@ control MyIngress(inout headers hdr,
                     }
                     // Packet comes from internal network
                     if (standard_metadata.ingress_port == 1 || standard_metadata.ingress_port == 2){
-                        // If there is a syn we update the bloom filter and add the entry
-                        if (hdr.tcp.syn == 1){
-                            bloom_filter.write(reg_pos_one, 1);
-                            bloom_filter.write(reg_pos_two, 1);
-                        }
+                        // TODO: this packet is part of an outgoing TCP connection.
+                        //   We need to set the bloom filter if this is a SYN packet
                     }
                     // Packet comes from outside
                     else if (standard_metadata.ingress_port == 3 || standard_metadata.ingress_port == 4){
-                        // Read bloom filter cells to check if there are 1's
-                        bloom_filter.read(reg_val_one, reg_pos_one);
-                        bloom_filter.read(reg_val_two, reg_pos_two);
-                        // only allow flow to pass if both entries are set
-                        if (reg_val_one != 1 || reg_val_two != 1){
-                            drop();
-                        }
+                        // TODO: this packet is part of an incomming TCP connection.
+                        //   We need to check if this packet is allowed to pass by reading the bloom filter
                     }
                 }
             }
