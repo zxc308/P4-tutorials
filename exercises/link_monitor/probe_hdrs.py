@@ -23,16 +23,3 @@ bind_layers(ProbeData, ProbeData, bos=0)
 bind_layers(ProbeData, ProbeFwd, bos=1)
 bind_layers(ProbeFwd, ProbeFwd)
 
-"""
-def expand(x):
-    yield x
-    while x.payload:
-        x = x.payload
-        yield x
-
-data_layers = [l for l in expand(pkts[0]) if l.name=='ProbeData']
-
-for l in data_layers:
-    print l.swid
-"""
-
