@@ -17,6 +17,10 @@ MAC address and output port for the next hop. We have already defined
 the control plane rules, so you only need to implement the data plane
 logic of your P4 program.
 
+We will use the following topology for this exercise. It is a single
+pod of a fat-tree topology and henceforth referred to as pod-topo:
+![pod-topo](./pod-topo/pod-topo.png)
+
 > **Spoiler alert:** There is a reference solution in the `solution`
 > sub-directory. Feel free to compare your implementation to the
 > reference.
@@ -36,27 +40,18 @@ up a switch in Mininet to test its behavior.
    ```
    This will:
    * compile `basic.p4`, and
-   * start a Mininet instance with three switches (`s1`, `s2`, `s3`)
-     configured in a triangle, each connected to one host (`h1`, `h2`,
-     and `h3`).
-   * The hosts are assigned IPs of `10.0.1.1`, `10.0.2.2`, and `10.0.3.3`.
+   * start the pod-topo in Mininet and configure all switches with
+   the appropriate P4 program + table entries, and
+   * configure all hosts with the commands listed in
+   [pod-topo/topology.json](./pod-topo/topology.json)
 
-2. You should now see a Mininet command prompt. Open two terminals
-for `h1` and `h2`, respectively:
+2. You should now see a Mininet command prompt. Try to ping between
+   two hosts in the topology:
    ```bash
-   mininet> xterm h1 h2
+   mininet> h1 ping h2
+   mininet> pingall
    ```
-3. Each host includes a small Python-based messaging client and
-server. In `h2`'s xterm, start the server:
-   ```bash
-   ./receive.py
-   ```
-4. In `h1`'s xterm, send a message to `h2`:
-   ```bash
-   ./send.py 10.0.2.2 "P4 is cool"
-   ```
-   The message will not be received.
-5. Type `exit` to leave each xterm and the Mininet command line.
+3. Type `exit` to leave each xterm and the Mininet command line.
    Then, to stop mininet:
    ```bash
    make stop
@@ -66,7 +61,7 @@ server. In `h2`'s xterm, start the server:
    make clean
    ```
 
-The message was not received because each switch is programmed
+The ping failed because each switch is programmed
 according to `basic.p4`, which drops all packets on arrival.
 Your job is to extend this file so it forwards packets.
 
@@ -152,7 +147,7 @@ messages to fix your `basic.p4` implementation.
 
 3. `basic.p4` might compile, and the control plane rules might be
 installed, but the switch might not process packets in the desired
-way. The `/tmp/p4s.<switch-name>.log` files contain detailed logs
+way. The `logs/sX.log` files contain detailed logs
 that describing how each switch processes each packet. The output is
 detailed and can help pinpoint logic errors in your implementation.
 
@@ -165,10 +160,4 @@ these instances:
 ```bash
 make stop
 ```
-
-## Next Steps
-
-Congratulations, your implementation works! In the next exercise we
-will build on top of this and add support for a basic tunneling
-protocol: [basic_tunnel](../basic_tunnel)!
 

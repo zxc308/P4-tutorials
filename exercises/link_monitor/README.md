@@ -35,6 +35,12 @@ header probe_fwd_t {
 }
 ```
 
+We will use the pod-topology for this exercise, which consists of
+four hosts connected to four switches, which are wired up as they
+would be in a single pod of a fat tree topology.
+
+![topology](./link-monitor-topo.png)
+
 In order to monitor the link utilization our switch will maintain
 two register arrays:
 * `byte_cnt_reg` - counts the number of bytes transmitted out of
