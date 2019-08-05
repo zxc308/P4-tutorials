@@ -13,7 +13,7 @@ def handle_pkt(pkt):
         data_layers = [l for l in expand(pkt) if l.name=='ProbeData']
         print ""
         for sw in data_layers:
-            utilization = 8.0*sw.byte_cnt/(sw.cur_time - sw.last_time)
+            utilization = 0 if sw.cur_time == sw.last_time else 8.0*sw.byte_cnt/(sw.cur_time - sw.last_time)
             print "Switch {} - Port {}: {} Mbps".format(sw.swid, sw.port, utilization)
 
 def main():

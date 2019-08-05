@@ -11,6 +11,10 @@ def main():
                 ProbeFwd(egress_spec=1) / \
                 ProbeFwd(egress_spec=4) / \
                 ProbeFwd(egress_spec=1) / \
+                ProbeFwd(egress_spec=3) / \
+                ProbeFwd(egress_spec=2) / \
+                ProbeFwd(egress_spec=3) / \
+                ProbeFwd(egress_spec=2) / \
                 ProbeFwd(egress_spec=1)
 
     while True:

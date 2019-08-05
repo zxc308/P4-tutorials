@@ -5,7 +5,7 @@
 const bit<16> TYPE_IPV4  = 0x800;
 const bit<16> TYPE_PROBE = 0x812;
 
-#define MAX_HOPS 8
+#define MAX_HOPS 10
 #define MAX_PORTS 8
 
 /*************************************************************************
@@ -39,11 +39,13 @@ header ipv4_t {
     ip4Addr_t dstAddr;
 }
 
+// Top-level probe header, indicates how many hops this probe
+// packet has traversed so far.
 header probe_t {
     bit<8> hop_cnt;
 }
 
-// fields filled out by switch at each hop
+// The data added to the probe by each switch at each hop.
 header probe_data_t {
     bit<1>    bos;
     bit<7>    swid;
@@ -53,6 +55,8 @@ header probe_data_t {
     time_t    cur_time;
 }
 
+// Indicates the egress port the switch should send this probe
+// packet out of. There is one of these headers for each hop.
 header probe_fwd_t {
     bit<8>   egress_spec;
 }
