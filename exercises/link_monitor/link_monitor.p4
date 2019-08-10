@@ -219,6 +219,7 @@ control MyEgress(inout headers hdr,
         // increment byte cnt for this packet's port
         byte_cnt_reg.read(byte_cnt, (bit<32>)standard_metadata.egress_port);
         byte_cnt = byte_cnt + standard_metadata.packet_length;
+        // reset the byte count when a probe packet passes through
         new_byte_cnt = (hdr.probe.isValid()) ? 0 : byte_cnt;
         byte_cnt_reg.write((bit<32>)standard_metadata.egress_port, new_byte_cnt);
 
@@ -237,6 +238,9 @@ control MyEgress(inout headers hdr,
             // TODO: fill out the rest of the probe packet fields
             // hdr.probe_data[0].port = ...
             // hdr.probe_data[0].byte_cnt = ...
+            // TODO: read / update the last_time_reg
+            // last_time_reg.read(<val>, <index>);
+            // last_time_reg.write(<index>, <val>); 
             // hdr.probe_data[0].last_time = ...
             // hdr.probe_data[0].cur_time = ...
         }

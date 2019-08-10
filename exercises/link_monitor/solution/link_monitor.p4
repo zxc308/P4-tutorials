@@ -219,6 +219,7 @@ control MyEgress(inout headers hdr,
         // increment byte cnt for this packet's port
         byte_cnt_reg.read(byte_cnt, (bit<32>)standard_metadata.egress_port);
         byte_cnt = byte_cnt + standard_metadata.packet_length;
+        // reset the byte count when a probe packet passes through
         new_byte_cnt = (hdr.probe.isValid()) ? 0 : byte_cnt;
         byte_cnt_reg.write((bit<32>)standard_metadata.egress_port, new_byte_cnt);
 

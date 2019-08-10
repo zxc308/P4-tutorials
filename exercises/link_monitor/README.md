@@ -36,7 +36,7 @@ header probe_fwd_t {
 ```
 
 We will use the pod-topology for this exercise, which consists of
-four hosts connected to four switches, which are wired up as they
+four hosts connected to four switches that are wired up as they
 would be in a single pod of a fat tree topology.
 
 ![topology](./link-monitor-topo.png)
@@ -48,6 +48,13 @@ two register arrays:
   the port.
 * `last_time_reg` - stores the last time that a probe packet was 
   transmitted out of each port.
+
+Our P4 program will be written for the V1Model architecture implemented
+on P4.org's bmv2 software switch. The architecture file for the V1Model
+can be found at: /usr/local/share/p4c/p4include/v1model.p4. This file
+desribes the interfaces of the P4 programmable elements in the architecture,
+the supported externs, as well as the architecture's standard metadata
+fields. We encourage you to take a look at it.
 
 > **Spoiler alert:** There is a reference solution in the `solution`
 > sub-directory. Feel free to compare your implementation to the
@@ -66,7 +73,7 @@ program:
 
 1. In your shell, run:
    ```bash
-   make
+   make run
    ```
    This will:
    * compile `link_monitor.p4`, and
@@ -81,7 +88,8 @@ on `h1`:
    mininet> xterm h1 h1
    ```
 3. In one of the xterms run the `send.py` script to start sending
-probe packets every second:
+probe packets every second. Each of these probe packets takes the
+path indicated in link-monitor-topo.png.
    ```bash
    ./send.py
    ```
@@ -91,8 +99,9 @@ the link utilization within the network.
    ```bash
    ./receive.py
    ```
-The reported link utilization will always be 0 because the probe
-fields have not been filled out yet.
+The reported link utilization and the switch port numbers will
+always be 0 because the probe fields have not been filled out yet.
+
 5. Run an iperf flow between h1 and h4:
    ```bash
    mininet> iperf h1 h4
@@ -119,7 +128,7 @@ within each table are inserted by the control plane. When a rule
 matches a packet, its action is invoked with parameters supplied by
 the control plane as part of the rule.
 
-In this exercise, we have already implemented the the control plane
+In this exercise, we have already implemented the control plane
 logic for you. As part of bringing up the Mininet instance, the
 `make run` command will install packet-processing rules in the tables of
 each switch. These are defined in the `sX-runtime.json` files, where
@@ -128,7 +137,7 @@ each switch. These are defined in the `sX-runtime.json` files, where
 **Important:** We use P4Runtime to install the control plane rules. The
 content of files `sX-runtime.json` refer to specific names of tables, keys, and
 actions, as defined in the P4Info file produced by the compiler (look for the
-file `build/link_utilization.p4info` after executing `make run`). Any
+file `build/link_monitor.p4.p4info.txt` after executing `make run`). Any
 changes in the P4 program that add or rename tables, keys, or actions
 will need to be reflected in these `sX-runtime.json` files.
 
