@@ -182,3 +182,11 @@ these instances:
 make stop
 ```
 
+### Food For Thought
+
+Now that you've implemented this basic monitoring framework can you
+think of ways to leverage this information about link utilization
+within the core of the network? For instance, how might you use this
+data, either at the hosts or at the switches, to make real-time
+load-balancing decisions?
+
