@@ -121,7 +121,8 @@ control MyIngress(inout headers hdr,
                   inout metadata meta,
                   inout standard_metadata_t standard_metadata) {
 
-    register<bit<BLOOM_FILTER_BIT_WIDTH>>(BLOOM_FILTER_ENTRIES) bloom_filter;
+    register<bit<BLOOM_FILTER_BIT_WIDTH>>(BLOOM_FILTER_ENTRIES) bloom_filter_1;
+    register<bit<BLOOM_FILTER_BIT_WIDTH>>(BLOOM_FILTER_ENTRIES) bloom_filter_2;
     bit<32> reg_pos_one; bit<32> reg_pos_two;
     bit<1> reg_val_one; bit<1> reg_val_two;
     bit<1> direction;
@@ -200,15 +201,15 @@ control MyIngress(inout headers hdr,
                     if (standard_metadata.ingress_port == 1 || standard_metadata.ingress_port == 2){
                         // If there is a syn we update the bloom filter and add the entry
                         if (hdr.tcp.syn == 1){
-                            bloom_filter.write(reg_pos_one, 1);
-                            bloom_filter.write(reg_pos_two, 1);
+                            bloom_filter_1.write(reg_pos_one, 1);
+                            bloom_filter_2.write(reg_pos_two, 1);
                         }
                     }
                     // Packet comes from outside
                     else if (standard_metadata.ingress_port == 3 || standard_metadata.ingress_port == 4){
                         // Read bloom filter cells to check if there are 1's
-                        bloom_filter.read(reg_val_one, reg_pos_one);
-                        bloom_filter.read(reg_val_two, reg_pos_two);
+                        bloom_filter_1.read(reg_val_one, reg_pos_one);
+                        bloom_filter_2.read(reg_val_two, reg_pos_two);
                         // only allow flow to pass if both entries are set
                         if (reg_val_one != 1 || reg_val_two != 1){
                             drop();
