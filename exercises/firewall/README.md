@@ -14,8 +14,8 @@ would be in a single pod of a fat tree topology.
 ![topology](./firewall-topo.png)
 
 Switch s1 will be configured with a P4 program that implements a
-simple stateful firewill, the rest of the switches will run the 
-basic IPv4 router program from the previous exercise.
+simple stateful firewall (`firewall.p4`), the rest of the switches will run the 
+basic IPv4 router program (`basic.p4`) from the previous exercise.
 
 The firewall on s1 should have the following functionality:
 * Hosts h1 and h2 are on the internal network and can always
@@ -52,7 +52,7 @@ up a switch in Mininet to test its behavior.
 
 1. In your shell, run:
    ```bash
-   make
+   make run
    ```
    This will:
    * compile `firewall.p4`, and
@@ -93,7 +93,7 @@ each switch. These are defined in the `sX-runtime.json` files, where
 **Important:** We use P4Runtime to install the control plane rules. The
 content of files `sX-runtime.json` refer to specific names of tables, keys, and
 actions, as defined in the P4Info file produced by the compiler (look for the
-file `build/firewall.p4info` after executing `make run`). Any changes in the P4
+file `build/firewall.p4.p4info.txt` after executing `make run`). Any changes in the P4
 program that add or rename tables, keys, or actions will need to be reflected in
 these `sX-runtime.json` files.
 
