@@ -202,11 +202,13 @@ control MyIngress(inout headers hdr,
                     if (standard_metadata.ingress_port == 1 || standard_metadata.ingress_port == 2){
                         // TODO: this packet is part of an outgoing TCP connection.
                         //   We need to set the bloom filter if this is a SYN packet
+                        //   E.g. bloom_filter_1.write(<index>, <value>);
                     }
                     // Packet comes from outside
                     else if (standard_metadata.ingress_port == 3 || standard_metadata.ingress_port == 4){
                         // TODO: this packet is part of an incomming TCP connection.
                         //   We need to check if this packet is allowed to pass by reading the bloom filter
+                        //   E.g. bloom_filter_1.read(<value>, <index>);
                     }
                 }
             }
