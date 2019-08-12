@@ -189,6 +189,7 @@ control MyIngress(inout headers hdr,
         if (hdr.ipv4.isValid()){
             ipv4_lpm.apply();
             if (hdr.tcp.isValid()){
+                direction = 0; // default
                 if (check_ports.apply().hit) {
                     // test and set the bloom filter
                     if (direction == 0) {
