@@ -104,6 +104,52 @@ logic replaced by `TODO` comments. Your implementation should follow
 the structure given in this file---replace each `TODO` with logic
 implementing the missing piece.
 
+**High-level Approach:** We will use a bloom filter with two hash functions 
+to check if a packet coming into the internal network is a part of 
+an already established TCP connection. We will use two different register 
+arrays for the bloom filter, each to be updated by a hash function. 
+Using different register arrays makes our design amenable to high-speed 
+P4 targets that typically allow only one access to a register array per packet.
+
+A complete `firewall.p4` will contain the following components:
+
+1. Header type definitions for Ethernet (`ethernet_t`), IPv4 (`ipv4_t`) and TCP (`tcp_t`).
+2. Parsers for Ethernet, IPv4 and TCP that populate `ethernet_t`, `ipv4_t` and `tcp_t` fields.
+3. An action to drop a packet, using `mark_to_drop()`.
+4. An action (called `compute_hashes`) to compute the bloom filter's two hashes using hash 
+algorithms `crc16` and `crc32`. The hashes will be computed on the packet 5-tuple consisting 
+of IPv4 source and  destination addresses, source and destination port numbers and 
+the IPv4 protocol type.
+5. An action (`ipv4_forward`) and a table (`ipv4_lpm`) that will perform basic 
+IPv4 forwarding (adopted from `basic.p4`).
+6. An action (called `set_direction`) that will simply set a one-bit direction variable 
+as per the action's parameter.
+7. A table (called `check_ports`) that will read the ingress and egress port of a packet 
+(after IPv4 forwarding) and invoke `set_direction`. The direction will be set to 1, 
+if the packet is incoming into the internal network. Otherwise, the direction will be set to 0.
+To achieve this, the file `pod-topo/s1-runtime.json` contains the appropriate control plane
+entries for the `check_ports` table.
+8. A control that will:
+    1. First apply the table `ipv4_lpm` if the packet has a valid IPv4 header.
+    2. Then if the TCP header is valid, apply the `check_ports` table to determine the direction.
+    3. Apply the `compute_hashes` action to compute the two hash values which are the bit positions 
+    in the two register arrays of the bloom filter (`reg_pos_one` and `reg_pos_two`). 
+    When the direction is `1` i.e. the packet is incoming into the internal network, 
+    `compute_hashes` will be invoked by swapping the source and destination IPv4 addresses 
+    and the source and destination ports. This is to check against bloom filter's set bits 
+    when the TCP connection was initially made from the internal network.
+    4. **TODO:** If the TCP packet is going out of the internal network and is a SYN packet, 
+    set both the bloom filter arrays at the computed bit positions (`reg_pos_one` and `reg_pos_two`). 
+    Else, if the TCP packet is entering the internal network, 
+    read both the bloom filter arrays at the computed bit positions and drop the packet if 
+    either is not set.
+9. A deparser that emits the Ethernet, IPv4 and TCP headers in the right order.
+10. A `package` instantiation supplied with the parser, control, and deparser.
+    > In general, a package also requires instances of checksum verification
+    > and recomputation controls. These are not necessary for this tutorial
+    > and are replaced with instantiations of empty controls.
+
+
 ## Step 3: Run your solution
 
 Follow the instructions from Step 1. This time, the `iperf` flow between
