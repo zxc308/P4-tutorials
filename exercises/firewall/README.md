@@ -169,6 +169,21 @@ entries for the `check_ports` table.
 Follow the instructions from Step 1. This time, the `iperf` flow between
 h3 and h1 should be blocked by the firewall.
 
+### Food for thought
+
+You may have noticed that in this simple stateful firewall, we are adding 
+new TCP connections to the bloom filter (based on outgoing SYN packets). 
+However, we are not removing them in case of TCP connection teardown 
+(FIN packets). How would you implement the removal of TCP connections that are 
+no longer active?
+
+Things to consider: 
+ - Can we simply set the bloom filter array bits to `0` on 
+ receiving a FIN packet? What happens when there is one hash collision in 
+ the bloom filter arrays between two _active_ TCP connections?
+ - How can we modify our bloom filter structure so that the deletion 
+ operation can be properly supported? 
+
 ### Troubleshooting
 
 There are several problems that might manifest as you develop your program:
