@@ -62,12 +62,26 @@ up a switch in Mininet to test its behavior.
    [pod-topo/topology.json](./pod-topo/topology.json)
 
 2. You should now see a Mininet command prompt. Try to run some iperf
-   flows between the hosts. Since the firewall is not implemented yet
-   the following should work: 
+   TCP flows between the hosts. First, TCP flows within the internal 
+   network should work:
+   ```bash
+   mininet> iperf h1 h2
+   ```
+
+   TCP flows from hosts in the internal network to outside hosts 
+   should also work:
+   ```bash
+   mininet> iperf h1 h3
+   ```   
+
+   TCP flows from outside hosts to hosts inside the 
+   internal network should NOT work. However, since the firewall is not 
+   implemented yet, the following should work: 
    ```bash
    mininet> iperf h3 h1
    ```
-3. Type `exit` to leave each xterm and the Mininet command line.
+
+3. Type `exit` to leave the Mininet command line.
    Then, to stop mininet:
    ```bash
    make stop
