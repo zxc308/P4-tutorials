@@ -199,7 +199,7 @@ control MyIngress(inout headers hdr,
                         compute_hashes(hdr.ipv4.dstAddr, hdr.ipv4.srcAddr, hdr.tcp.dstPort, hdr.tcp.srcPort);
                     }
                     // Packet comes from internal network
-                    if (standard_metadata.ingress_port == 1 || standard_metadata.ingress_port == 2){
+                    if (direction == 0){
                         // If there is a syn we update the bloom filter and add the entry
                         if (hdr.tcp.syn == 1){
                             bloom_filter_1.write(reg_pos_one, 1);
@@ -207,7 +207,7 @@ control MyIngress(inout headers hdr,
                         }
                     }
                     // Packet comes from outside
-                    else if (standard_metadata.ingress_port == 3 || standard_metadata.ingress_port == 4){
+                    else if (direction == 1){
                         // Read bloom filter cells to check if there are 1's
                         bloom_filter_1.read(reg_val_one, reg_pos_one);
                         bloom_filter_2.read(reg_val_two, reg_pos_two);
