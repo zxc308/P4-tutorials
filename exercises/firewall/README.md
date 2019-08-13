@@ -62,19 +62,19 @@ up a switch in Mininet to test its behavior.
    [pod-topo/topology.json](./pod-topo/topology.json)
 
 2. You should now see a Mininet command prompt. Try to run some iperf
-   TCP flows between the hosts. First, TCP flows within the internal 
+   TCP flows between the hosts. TCP flows within the internal 
    network should work:
    ```bash
    mininet> iperf h1 h2
    ```
 
-   TCP flows from hosts in the internal network to outside hosts 
+   TCP flows from hosts in the internal network to the outside hosts 
    should also work:
    ```bash
    mininet> iperf h1 h3
    ```   
 
-   TCP flows from outside hosts to hosts inside the 
+   TCP flows from the outside hosts to hosts inside the 
    internal network should NOT work. However, since the firewall is not 
    implemented yet, the following should work: 
    ```bash
@@ -115,7 +115,7 @@ these `sX-runtime.json` files.
 
 The `firewall.p4` file contains a skeleton P4 program with key pieces of
 logic replaced by `TODO` comments. Your implementation should follow
-the structure given in this file---replace each `TODO` with logic
+the structure given in this file --- replace each `TODO` with logic
 implementing the missing piece.
 
 **High-level Approach:** We will use a bloom filter with two hash functions 
@@ -139,8 +139,8 @@ IPv4 forwarding (adopted from `basic.p4`).
 6. An action (called `set_direction`) that will simply set a one-bit direction variable 
 as per the action's parameter.
 7. A table (called `check_ports`) that will read the ingress and egress port of a packet 
-(after IPv4 forwarding) and invoke `set_direction`. The direction will be set to 1, 
-if the packet is incoming into the internal network. Otherwise, the direction will be set to 0.
+(after IPv4 forwarding) and invoke `set_direction`. The direction will be set to `1`, 
+if the packet is incoming into the internal network. Otherwise, the direction will be set to `0`.
 To achieve this, the file `pod-topo/s1-runtime.json` contains the appropriate control plane
 entries for the `check_ports` table.
 8. A control that will:
@@ -199,7 +199,7 @@ plane rules cannot be installed. Use these error messages to fix your
 
 3. `firewall.p4` might compile, and the control plane rules might be
 installed, but the switch might not process packets in the desired
-way. The `logs/sX.log` files contain detailed logs that describing
+way. The `logs/sX.log` files contain detailed logs that describe
 how each switch processes each packet. The output is detailed and can
 help pinpoint logic errors in your implementation.
 
