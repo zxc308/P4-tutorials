@@ -35,9 +35,10 @@ which contains various examples that you can refer to.
         
 ## Obtaining required software
 
-If you are starting this tutorial at the Spring 2018 P4 Developer Day,
+If you are starting this tutorial at one of the proctored tutorial events,
 then we've already provided you with a virtual machine that has all of
-the required software installed.
+the required software installed. Ask an instructor for a USB stick with
+the VM image.
 
 Otherwise, to complete the exercises, you will need to either build a
 virtual machine or install several dependencies.
