@@ -53,7 +53,7 @@ up a switch in Mininet to test its behavior.
    [pod-topo/topology.json](./pod-topo/topology.json)
 
 2. You should now see a Mininet command prompt. Try to ping between
-   two hosts in the topology:
+   hosts in the topology:
    ```bash
    mininet> h1 ping h2
    mininet> pingall
@@ -122,20 +122,22 @@ A complete `basic.p4` will contain the following components:
 
 ## Step 3: Run your solution
 
-Follow the instructions from Step 1. This time, your message from
-`h1` should be delivered to `h2`.
+Follow the instructions from Step 1. This time, you should be able to
+sucessfully ping between any two hosts in the topology. 
 
 ### Food for thought
 
-The "test suite" for your solution---sending a message from `h1` to
-`h2`---is not very robust. What else should you test to be confident
-of your implementation?
+The "test suite" for your solution---sending pings between hosts in the
+topology---is not very robust. What else should you test to be confident
+that you implementation is correct?
 
 > Although the Python `scapy` library is outside the scope of this tutorial,
 > it can be used to generate packets for testing. The `send.py` file shows how
 > to use it.
 
 Other questions to consider:
+ - How would you enhance your program to respond to ARP requests?
+ - How would you enhance your program to support traceroute?
  - How would you enhance your program to support next hops?
  - Is this program enough to replace a router?  What's missing?
 

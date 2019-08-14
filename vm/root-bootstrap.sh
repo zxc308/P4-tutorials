@@ -66,6 +66,9 @@ apt-get install -y --no-install-recommends --fix-missing\
   xcscope-el \
   xterm
 
+# Install grip for offline markdown rendering
+pip install grip
+
 useradd -m -d /home/p4 -s /bin/bash p4
 echo "p4:p4" | chpasswd
 echo "p4 ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/99_p4

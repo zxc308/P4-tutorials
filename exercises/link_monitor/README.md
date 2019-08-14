@@ -148,6 +148,41 @@ logic replaced by `TODO` comments. Your implementation should follow
 the structure given in this file---replace each `TODO` with logic
 implementing the missing piece.
 
+Here are a few more details about the design:
+
+**Parser**
+* The parser has been extended support parsing of the source routed probe packets.
+The parser is the most complicated part of the design so spend a bit of time
+reading over it. Note that it does not contain any TODO comments so there is
+nothing you need to change here.
+* To parse the probe packets, we use the `hdr.probe.hop_cnt` to determine how many
+hops the packet has traversed prior to reaching the switch. If this is the first
+hop then there will not be any `probe_data` in the packet so we skip that state
+and transition directly to the `parse_probe_fwd` state. In the `parse_probe_fwd`
+state, we use the `hdr.probe.hop_cnt` field to figure out which `egress_spec`
+header field to use to perform forwarding and we save that port value into a
+metadata field which is subsequently used to perform forwarding.
+
+**Ingress Control**
+* The ingress control block looks very similar to the `basic` exercise. The only
+difference is that the `apply` block contains another condition to forward probe
+packets using the `egress_spec` field extracted by the parser. It also increments
+the `hdr.probe.hop_cnt` field.
+
+**Egress Control**
+* This is where the interesting stateful processing occurs. It uses the
+`byte_cnt_reg` register to count the number of bytes that have passed through each
+port since the last probe packet passed through the port.
+* It adds a new `probe_data` header to the packet and filld out the `bos`
+(bottom of stack) field, as well as the `swid` (switch ID) field.
+* TODO: your job is to fill out the rest of the probe packet fields in order to
+ensure that you can properly measure link utilization.
+
+**Deparser**
+* Simply emits all headers in the correct order.
+* Note that emitting a header stack will only emit the headers within the stack
+that are actually marked as valid.
+
 ## Step 3: Run your solution
 
 Follow the instructions from Step 1. This time, the measured link
