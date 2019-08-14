@@ -109,7 +109,7 @@ cd ../..
 
 # --- Tutorials --- #
 sudo pip install crcmod
-git clone https://github.com/p4lang/tutorials
+git clone -b sigcomm19 --single-branch https://github.com/p4lang/tutorials
 sudo mv tutorials /home/p4
 sudo chown -R p4:p4 /home/p4/tutorials
 # Install grip for offline markdown rendering
