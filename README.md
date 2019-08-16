@@ -47,6 +47,7 @@ yourself.
 
 * If you are outside China download the image from [here](http://stanford.edu/~sibanez/docs/)
 * If you are inside China dowload the image from [here](http://58.213.119.23:8899/)
+* `MD5 (P4 Tutorial 2019-08-15.ova) = 3dd7a6e5f0df7a5b9a94b695d1111b81`
 
 #### Import the image into VirtualBox
 
