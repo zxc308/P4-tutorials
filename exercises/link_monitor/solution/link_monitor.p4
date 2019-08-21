@@ -47,7 +47,7 @@ header probe_t {
 
 // The data added to the probe by each switch at each hop.
 header probe_data_t {
-    bit<1>    bos;
+    bit<1>    bos; // bottom of stack
     bit<7>    swid;
     bit<8>    port;
     bit<32>   byte_cnt;
