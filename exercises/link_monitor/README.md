@@ -41,7 +41,7 @@ would be in a single pod of a fat tree topology.
 
 ![topology](./link-monitor-topo.png)
 
-In order to monitor the link utilization our switch will maintain
+In order to monitor the link utilization our switches will maintain
 two register arrays:
 * `byte_cnt_reg` - counts the number of bytes transmitted out of
   each port since the last probe packet was transmitted out of
@@ -151,7 +151,7 @@ implementing the missing piece.
 Here are a few more details about the design:
 
 **Parser**
-* The parser has been extended support parsing of the source routed probe packets.
+* The parser has been extended to support parsing of the source routed probe packets.
 The parser is the most complicated part of the design so spend a bit of time
 reading over it. Note that it does not contain any TODO comments so there is
 nothing you need to change here.
@@ -173,7 +173,7 @@ the `hdr.probe.hop_cnt` field.
 * This is where the interesting stateful processing occurs. It uses the
 `byte_cnt_reg` register to count the number of bytes that have passed through each
 port since the last probe packet passed through the port.
-* It adds a new `probe_data` header to the packet and filld out the `bos`
+* It adds a new `probe_data` header to the packet and fills out the `bos`
 (bottom of stack) field, as well as the `swid` (switch ID) field.
 * TODO: your job is to fill out the rest of the probe packet fields in order to
 ensure that you can properly measure link utilization.
