@@ -180,5 +180,11 @@ sudo mkdir -p /home/p4/Desktop
 sudo mv /home/${USER}/Desktop/* /home/p4/Desktop
 sudo chown -R p4:p4 /home/p4/Desktop/
 
+# --- xterm --- #
+cat > ${DESKTOP}/.Xresources << EOF
+XTerm*faceName:     BitStream Vera Sans Mono
+XTerm*faceSize:     16
+EOF
+
 # Do this last!
 sudo reboot
