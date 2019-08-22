@@ -85,3 +85,13 @@ Please ask an instructor for one of these USB sticks so you can copy
 the image onto your laptop. Please return the USB to the instructor
 after you have copied the image. We do not have enough for everyone.
 
+### Fixes
+
+#### xterm font size is too small
+
+If you need to increase the size of the xterm terminal created by `mininet`, enter the following commands into your terminal:
+```
+$ echo "XTerm*faceName:     BitStream Vera Sans Mono" >> ~/.Xresources
+$ echo "XTerm*faceSize:     16" >> ~/.Xresources
+$ xrdb -merge ~/.Xresources
+```
