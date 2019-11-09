@@ -70,15 +70,16 @@ You should be able to run them directly on an Ubuntu 16.04 machine:
 
 # Older tutorials
 
-A live tutorial class using different versions of the example code in
-this repository have been given over the last several years, typically
-in May at Stanford University in California, and at the ACM SIGCOMM
-workshop.
+Multiple live tutorial classes have been given using the example code
+in this repository for hands-on exercises.  For example, there is one
+each April or May at the P4 workshop at Stanford University in
+California, and there have been several at networking conferences such
+as ACM SIGCOMM.
 
 Please [create an issue](https://github.com/p4lang/tutorials/issues)
 for this tutorials repository if you know a public link for classroom
 video recordings and/or pre-built VM images that currently do not have
-such a link,
+such a link.
 
 
 ## ACM SIGCOMM August 2019 Tutorial on Programming the Network Data Plane
