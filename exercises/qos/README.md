@@ -92,7 +92,7 @@ A complete `qos.p4` will contain the following components:
            the next hop.
 	3. Update the ethernet source address with the address of the switch.
 	4. Decrement the TTL.
-5. An egress control block that checks the protocols and sets the ipv4.diffserv.
+5. An ingress control block that checks the protocols and sets the ipv4.diffserv.
 6. A deparser that selects the order in which fields inserted into the outgoing
    packet.
 7. A `package` instantiation supplied with the parser, control,
@@ -103,7 +103,7 @@ A complete `qos.p4` will contain the following components:
 Follow the instructions from Step 1. This time, when your message from
 `h1` is delivered to `h2`, you should see `tos` values change from 0x1
 to  0xb9 for UDP and 0xb1 for TCP. It depends upon the action you choose 
-in Egress processing.
+in Ingress processing.
 
 To easily track the `tos` values you may want to redirect the output
 of `h2` to a file by running the following for `h2`

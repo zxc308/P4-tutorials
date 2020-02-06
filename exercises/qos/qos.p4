@@ -117,6 +117,9 @@ control MyIngress(inout headers hdr,
         hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
 
+/* TODO: Implement actions for different traffic classes */
+
+
     table ipv4_lpm {
         key = {
             hdr.ipv4.dstAddr: lpm;
@@ -130,6 +133,7 @@ control MyIngress(inout headers hdr,
         default_action = NoAction();
     }
 
+/* TODO: set hdr.ipv4.diffserv on the basis of protocol */
     apply {
         if (hdr.ipv4.isValid()) {
             ipv4_lpm.apply();
@@ -144,10 +148,7 @@ control MyIngress(inout headers hdr,
 control MyEgress(inout headers hdr,
                  inout metadata meta,
                  inout standard_metadata_t standard_metadata) {
-
-    apply {
-        /* TODO: set hdr.ipv4.diffserv on the basis of protocol */
-    }
+    apply {  }
 }
 
 

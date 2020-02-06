@@ -114,34 +114,6 @@ control MyIngress(inout headers hdr,
         hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
 
-    table ipv4_lpm {
-        key = {
-            hdr.ipv4.dstAddr: lpm;
-        }
-        actions = {
-            ipv4_forward;
-            drop;
-            NoAction;
-        }
-        size = 1024;
-        default_action = NoAction();
-    }
-
-    apply {
-        if (hdr.ipv4.isValid()) {
-            ipv4_lpm.apply();
-        }
-    }
-}
-
-/*************************************************************************
-****************  E G R E S S   P R O C E S S I N G   *******************
-*************************************************************************/
-
-control MyEgress(inout headers hdr,
-                 inout metadata meta,
-                 inout standard_metadata_t standard_metadata) {
-
     /* Default Forwarding */
     action default_forwarding() {
         hdr.ipv4.diffserv = 0;
@@ -218,14 +190,40 @@ control MyEgress(inout headers hdr,
         hdr.ipv4.diffserv = 38;
     }
 
+    table ipv4_lpm {
+        key = {
+            hdr.ipv4.dstAddr: lpm;
+        }
+        actions = {
+            ipv4_forward;
+            drop;
+            NoAction;
+        }
+        size = 1024;
+        default_action = NoAction();
+    }
+
     apply {
-        if (hdr.ipv4.protocol == IP_PROTOCOLS_UDP) {
-            expedited_forwarding();
-	}
-        else if (hdr.ipv4.protocol == IP_PROTOCOLS_TCP) {
-	    voice_admit();
+        if (hdr.ipv4.isValid()) {
+            if (hdr.ipv4.protocol == IP_PROTOCOLS_UDP) {
+                expedited_forwarding();
+	    }
+            else if (hdr.ipv4.protocol == IP_PROTOCOLS_TCP) {
+	        voice_admit();
+            }
+            ipv4_lpm.apply();
         }
     }
+}
+
+/*************************************************************************
+****************  E G R E S S   P R O C E S S I N G   *******************
+*************************************************************************/
+
+control MyEgress(inout headers hdr,
+                 inout metadata meta,
+                 inout standard_metadata_t standard_metadata) {
+    apply {  }
 }
 
 /*************************************************************************
