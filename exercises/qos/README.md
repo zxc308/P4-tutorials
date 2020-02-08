@@ -18,7 +18,7 @@ program.
 
 The directory with this README also contains a skeleton P4 program,
 `qos.p4`, which initially implements L3 forwarding. Your job (in the
-next step) will be to extend it to properly append set the `diffserv` bits.
+next step) will be to extend it to properly set the `diffserv` bits.
 
 Before that, let's compile the incomplete `qos.p4` and bring up a
 network in Mininet to test its behavior.
@@ -93,7 +93,7 @@ A complete `qos.p4` will contain the following components:
 	3. Update the ethernet source address with the address of the switch.
 	4. Decrement the TTL.
 5. An ingress control block that checks the protocols and sets the ipv4.diffserv.
-6. A deparser that selects the order in which fields inserted into the outgoing
+6. A deparser that selects the order in which headers are inserted into the outgoing
    packet.
 7. A `package` instantiation supplied with the parser, control,
   checksum verification and recomputation and deparser.
