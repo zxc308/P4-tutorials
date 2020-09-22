@@ -16,7 +16,7 @@ Vagrant.configure(2) do |config|
                 "--port", "0", "--device", "0", 
                 "--type", "dvddrive", 
                 "--medium", "emptydrive"]    
-    vb.customize ["modifyvm", :id, "--vram", "32"]
+    vb.customize ["modifyvm", :id, "--vram", "32","--graphicscontroller", "vmsvga"]
 
   end
   config.vm.synced_folder '.', '/vagrant', disabled: true  
