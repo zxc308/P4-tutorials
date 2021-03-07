@@ -92,6 +92,8 @@ move_usr_local_lib_python3_from_site_packages_to_dist_packages() {
     ls -lrt ${DST_DIR}
 }
 
+find /usr/lib /usr/local $HOME/.local | sort > $HOME/usr-local-1-before-protobuf.txt
+
 # --- Protobuf --- #
 git clone https://github.com/google/protobuf.git
 cd protobuf
@@ -106,6 +108,8 @@ sudo ldconfig
 cd python
 sudo python3 setup.py install
 cd ../..
+
+find /usr/lib /usr/local $HOME/.local | sort > $HOME/usr-local-2-after-protobuf.txt
 
 # --- gRPC --- #
 git clone https://github.com/grpc/grpc.git
@@ -129,6 +133,8 @@ GRPC_PYTHON_BUILD_WITH_CYTHON=1 sudo pip3 install .
 sudo ldconfig
 cd ..
 
+find /usr/lib /usr/local $HOME/.local | sort > $HOME/usr-local-3-after-grpc.txt
+
 # --- BMv2 deps (needed by PI) --- #
 git clone https://github.com/p4lang/behavioral-model.git
 cd behavioral-model
@@ -144,6 +150,8 @@ bash ../travis/install-nnpy.sh
 cd ..
 sudo rm -rf $tmpdir
 cd ..
+
+find /usr/lib /usr/local $HOME/.local | sort > $HOME/usr-local-3b-after-behavioral-model-deps.txt
 
 # --- PI/P4Runtime --- #
 git clone https://github.com/p4lang/PI.git
@@ -165,6 +173,8 @@ move_usr_local_lib_python3_from_site_packages_to_dist_packages
 sudo ldconfig
 cd ..
 
+find /usr/lib /usr/local $HOME/.local | sort > $HOME/usr-local-4-after-PI.txt
+
 # --- Bmv2 --- #
 cd behavioral-model
 ./autogen.sh
@@ -183,6 +193,7 @@ sudo ldconfig
 move_usr_local_lib_python3_from_site_packages_to_dist_packages
 cd ../../..
 
+find /usr/lib /usr/local $HOME/.local | sort > $HOME/usr-local-5-after-behavioral-model.txt
 
 # --- P4C --- #
 git clone https://github.com/p4lang/p4c
@@ -202,6 +213,8 @@ sudo make install
 sudo ldconfig
 cd ../..
 
+find /usr/lib /usr/local $HOME/.local | sort > $HOME/usr-local-6-after-p4c.txt
+
 # --- Mininet --- #
 git clone git://github.com/mininet/mininet mininet
 cd mininet
@@ -211,6 +224,8 @@ cd ..
 # TBD: Try without installing openvswitch, i.e. no '-v' option, to see
 # if everything still works well without it.
 sudo ./mininet/util/install.sh -nw
+
+find /usr/lib /usr/local $HOME/.local | sort > $HOME/usr-local-7-after-mininet-install.txt
 
 # --- Tutorials --- #
 git clone https://github.com/p4lang/tutorials
