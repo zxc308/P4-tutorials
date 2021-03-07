@@ -135,23 +135,13 @@ cd ..
 
 find /usr/lib /usr/local $HOME/.local | sort > $HOME/usr-local-3-after-grpc.txt
 
-# --- BMv2 deps (needed by PI) --- #
-git clone https://github.com/p4lang/behavioral-model.git
-cd behavioral-model
-git checkout ${BMV2_COMMIT}
-# From bmv2's install_deps.sh, we can skip apt-get install.
-# Nanomsg is required by p4runtime, p4runtime is needed by BMv2...
-tmpdir=`mktemp -d -p .`
-cd ${tmpdir}
-bash ../travis/install-thrift.sh
-bash ../travis/install-nanomsg.sh
-sudo ldconfig
-bash ../travis/install-nnpy.sh
-cd ..
-sudo rm -rf $tmpdir
-cd ..
-
-find /usr/lib /usr/local $HOME/.local | sort > $HOME/usr-local-3b-after-behavioral-model-deps.txt
+# Note: This is a noticeable difference between how an earlier
+# user-bootstrap.sh version worked, where it effectively ran
+# behavioral-model's install_deps.sh script, then installed PI, then
+# went back and compiled the behavioral-model code.  Building PI code
+# first, without first running behavioral-model's install_deps.sh
+# script, might result in less PI project features being compiled into
+# its binaries.
 
 # --- PI/P4Runtime --- #
 git clone https://github.com/p4lang/PI.git
@@ -161,7 +151,7 @@ git submodule update --init --recursive
 ./autogen.sh
 # install-p4dev-v4.sh adds more --without-* options to the configure
 # script here.  I suppose without those, this script will cause
-# building PI code to build more artifacts?
+# building PI code to include more features?
 ./configure --with-proto
 make -j${NUM_CORES}
 sudo make install
@@ -176,7 +166,12 @@ cd ..
 find /usr/lib /usr/local $HOME/.local | sort > $HOME/usr-local-4-after-PI.txt
 
 # --- Bmv2 --- #
+git clone https://github.com/p4lang/behavioral-model.git
 cd behavioral-model
+git checkout ${BMV2_COMMIT}
+PATCH_DIR="${THIS_SCRIPT_DIR_ABSOLUTE}/patches"
+patch -p1 < "${PATCH_DIR}/behavioral-model-use-correct-libssl-pkg.patch" || echo "Errors while attempting to patch behavioral-model, but continuing anyway ..."
+./install_deps.sh
 ./autogen.sh
 ./configure --enable-debugger --with-pi
 make -j${NUM_CORES}
