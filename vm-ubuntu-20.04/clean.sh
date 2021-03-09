@@ -32,6 +32,14 @@ cd ..
 sudo apt autoremove
 sudo apt clean
 
+# Zero out unused disk blocks.  Results in significantly smaller VM
+# image files.
+
+echo "Writing zeros to unused disk blocks (be patient) ..."
+FNAME=`mktemp --tmpdir big-empty-zero-file-XXXXXXXX`
+dd if=/dev/zero of=${FNAME} bs=4096k
+/bin/rm -f ${FNAME}
+
 echo "Disk usage before running this script:"
 echo "$DF1_BEFORE"
 echo "$DF2_BEFORE"

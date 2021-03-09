@@ -158,13 +158,15 @@ Virtual system settings:
 + Vendor-URL: https://p4.org
 + Version: 2021-03-08
 + Description:
-  + Open source P4 development tools built from latest source code as
-    of 2021-Mar-06 and packaged into an Ubuntu 20.04 Desktop Linux VM
-    for the AMD64 architecture.
+
+```
+Open source P4 development tools built from latest source code as of 2021-Mar-06 and packaged into an Ubuntu 20.04 Desktop Linux VM for the AMD64 architecture.
+```
+
 + License
-  + Open source code available hosted at https://github.com/p4lang is
-    released under the Apache 2.0 license.  Libraries it depends upon,
-    such as Protobuf, Thrift, gRPC, Ubuntu Linux, etc. are released
-    under their own licenses.
+
+```
+Open source code available hosted at https://github.com/p4lang is released under the Apache 2.0 license.  Libraries it depends upon, such as Protobuf, Thrift, gRPC, Ubuntu Linux, etc. are released under their own licenses.
+```
 
 Clicked "Export" button.
