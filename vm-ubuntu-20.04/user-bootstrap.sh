@@ -105,9 +105,10 @@ make -j${NUM_CORES}
 sudo make install
 sudo ldconfig
 # Force install python module
-cd python
-sudo python3 setup.py install
-cd ../..
+#cd python
+#sudo python3 setup.py install
+#cd ../..
+cd ..
 
 find /usr/lib /usr/local $HOME/.local | sort > $HOME/usr-local-2-after-protobuf.txt
 

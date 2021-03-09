@@ -129,10 +129,7 @@ apt-get install -y --no-install-recommends --fix-missing\
 # At that point, attempting to import any of the 3 modules above gave NO error.
 
 sudo apt-get purge -y python3-protobuf || echo "Failed to remove python3-protobuf, probably because there was no such package installed"
-
-# Let the user-bootstrap.sh install this when it installs protobuf
-# from source code.
-#sudo pip3 install protobuf==3.6.1
+sudo pip3 install protobuf==3.6.1
 
 # Starting in 2019-Nov, Python3 version of Scapy is needed for `cd
 # p4c/build ; make check` to succeed.
