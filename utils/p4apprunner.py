@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # Copyright 2013-present Barefoot Networks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import print_function
+
 
 import argparse
 from collections import OrderedDict
@@ -76,7 +76,7 @@ def read_manifest(manifest_file):
     elif 'default-target' in manifest:
         chosen_target = manifest['default-target']
     else:
-        chosen_target = manifest['targets'].keys()[0]
+        chosen_target = list(manifest['targets'].keys())[0]
 
     if chosen_target not in manifest['targets']:
         log_error('Target not found in manifest:', chosen_target)
