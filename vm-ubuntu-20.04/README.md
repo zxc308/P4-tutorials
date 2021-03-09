@@ -1,3 +1,5 @@
+# Creating the VM
+
 Start creating a brand new VM by running `vagrant up` in this
 directory (install vagrant on your system if needed).  It can take one
 to several hours, depending upon the speed of your computer and
@@ -47,8 +49,10 @@ new VM very often (a couple of times per year?).
   + Terminal
   + Wireshark
 + cd tutorials
-  + `git checkout add-2021-mar-vm-based-on-ubuntu-20.04`
-  + The above command changes to a branch that includes changes for
+  + `git remote add jafingerhut https://github.com/jafingerhut/tutorials`
+  + `git pull jafingerhut`
+  + `git checkout jafingerhut/add-2021-mar-vm-based-on-ubuntu-20.04`
+  + The above commands change to a branch that includes changes for
     using Python3, and hopefully removes all traces of using Python2.
     This is relatively new as of March 2021, and there may be bugs
     remaining to be found.
@@ -61,3 +65,106 @@ new VM very often (a couple of times per year?).
   + Run the command `./clean.sh`, which removes about 6 to 7 GBytes of
     files created while building the projects.
 + Log off
+
+
+# Notes on test results for the VM
+
+## p4c testing results
+
+The p4c compiler passes all but 52 of its included tests.
+
+The cpplint test fails because Python2 is not installed on the system.
+Omitting Python2 is intentional for this VM.  The cpplint test passes
+fine on other systems that have Python2 installed.
+
+There are 50 tests whose names begin with 'ebpf' and 'ubpf' that fail.
+They work fine in the continuous integration tests on the
+https://github.com/p4lang/p4c project, because the VM used to run
+those tests has additional software installed to enable it.  Perhaps
+future versions of this VM will enable the ebpf and ubpf back ends to
+work, also.  Contributions are welcome to the needed changes in the VM
+build scripts to enable this.
+
+One test tuple4.p4 fails.  An issue was created on Github to track
+this: https://github.com/p4lang/p4c/issues/2681
+
+
+## Send ping packets in the solution to `basic` exercise of `p4lang/tutorials` repository
+
+With the branch of the p4lang/tutorials repository included with this
+VM, the following tests pass.  More testing and/or bug fixes is
+welcome here.
+
+First log in as the user `p4` (password `p4`) and open a terminal
+window.
+```bash
+$ cd tutorials/exercises/basic
+$ cp solution/basic.p4 basic.p4
+$ make run
+```
+
+If at the end of many lines of logging output you see a prompt
+`mininet>`, you can try entering the command `h1 ping h2` to ping from
+virtual host `h1` in the exercise to `h2`, and it should report a
+successful ping every second.  It will not stop on its own.  You can
+type Control-C to stop it and return to the `mininet>` prompt, and you
+can type Control-D to exit from mininet and get back to the original
+shell prompt.  To ensure that any processes started by the above steps
+are terminated, you can run this command:
+```bash
+$ make stop
+```
+
+
+# Creating a single file image of the VM
+
+For the particular case of creating the VM named 'P4 Tutorial
+2021-03-08' on March 8, 2021, here were the host OS details, in case
+it turns out that matters to the finished VM image for some reason:
+
++ macOS 10.14.6
++ VirtualBox 6.0.24 r139119
++ Vagrant 2.2.14
+
+In the VirtualBox GUI interface:
+
++ Choose menu item File -> Export Appliance ...
++ Select the VM named 'P4 Tutorial 2021-03-03' and click Continue button
+
++ Format
+  + I used: Open Virtualization Format 1.0
+  + Other available options were:
+    + Open Virtualization Format 0.9
+    + Open Virtualization Format 2.0
++ Target file
+  + I used: /Users/andy/Documents/P4 Tutorial 2021-03-08.ova
++ Mac Address Policy
+  + I used: Include only NAT network adapter MAC addresses
+  + Other available options were:
+    + Include all network adapter MAC addresses
+    + Strip all network adapter MAC addresses
++ Additionally
+  + Write Manifest file: checked
+  + Include ISO image files: unchecked
+
+Clicked "Continue" button.
+
+Virtual system settings:
+
++ Name: P4 Tutorial 2021-03-08
++ Product: I left this blank
++ Product-URL: I left this blank
++ Vendor: P4.org - P4 Language Consortium
++ Vendor-URL: https://p4.org
++ Version: 2021-03-08
++ Description:
+  + Open source P4 development tools built from latest source code as
+    of 2021-Mar-06 and packaged into an Ubuntu 20.04 Desktop Linux VM
+    for the AMD64 architecture.
++ License
+  + Open source code available hosted at https://github.com/p4lang is
+    released under the Apache 2.0 license.  Libraries it depends upon,
+    such as Protobuf, Thrift, gRPC, Ubuntu Linux, etc. are released
+    under their own licenses.
+
+Clicked "Export" button.
