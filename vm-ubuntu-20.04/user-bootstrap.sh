@@ -256,7 +256,7 @@ sudo chown p4:p4 /home/p4/.vimrc
 DESKTOP=/home/${USER}/Desktop
 mkdir -p ${DESKTOP}
 
-cat > ${DESKTOP}/Terminal << EOF
+cat > ${DESKTOP}/Terminal.desktop << EOF
 [Desktop Entry]
 Encoding=UTF-8
 Type=Application
@@ -267,7 +267,7 @@ Exec=/usr/bin/x-terminal-emulator
 Comment[en_US]=
 EOF
 
-cat > ${DESKTOP}/Wireshark << EOF
+cat > ${DESKTOP}/Wireshark.desktop << EOF
 [Desktop Entry]
 Encoding=UTF-8
 Type=Application
@@ -278,7 +278,7 @@ Exec=/usr/bin/wireshark
 Comment[en_US]=
 EOF
 
-cat > ${DESKTOP}/Sublime\ Text << EOF
+cat > ${DESKTOP}/Sublime\ Text.desktop << EOF
 [Desktop Entry]
 Encoding=UTF-8
 Type=Application
