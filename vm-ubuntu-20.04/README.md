@@ -11,6 +11,15 @@ and time required to automate them, since I do not expect to create a
 new VM very often (a couple of times per year?).
 
 + Log in as user p4 (password p4)
++ Answer "Yes" in the pop window asking if you want to upgrade the
+  system, if asked.  This will download the latest Linux Linux kernel
+  version released for Ubuntu 20.04, and other updated packages.
++ Reboot the system.
++ Use `sudo apt purge <list of packages>` to remove older version of
+  Linux kernel, if the upgrade installed a newer one.
++ `sudo apt clean`
+
++ Log in as user p4 (password p4)
 + Start menu -> Preferences -> LXQt settings -> Monitor settings
   + Change resolution from initial 800x600 to 1024x768.  Apply the changes.
   + Close monitor settings window
@@ -37,6 +46,12 @@ new VM very often (a couple of times per year?).
   + Sublime Text
   + Terminal
   + Wireshark
++ cd tutorials
+  + `git checkout add-2021-mar-vm-based-on-ubuntu-20.04`
+  + The above command changes to a branch that includes changes for
+    using Python3, and hopefully removes all traces of using Python2.
+    This is relatively new as of March 2021, and there may be bugs
+    remaining to be found.
 + Log off
 
 + Log in as user vagrant (password vagrant)
@@ -46,11 +61,3 @@ new VM very often (a couple of times per year?).
   + Run the command `./clean.sh`, which removes about 6 to 7 GBytes of
     files created while building the projects.
 + Log off
-
-+ Log back in as user vagrant, and answer "Yes" to allow the system to
-  be upgraded to the latest Linux kernel version released for Ubuntu
-  20.04, and other updated packages.
-+ Shut down the system.  Reboot it.  Log on as vagrant
-+ Use `sudo apt purge <list of packages>` to remove older version of
-  Linux kernel, if the upgrade installed a newer one.
-+ `sudo apt clean`
