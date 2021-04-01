@@ -7,6 +7,7 @@ set -xe
 BMV2_COMMIT="62a013a15ed2c42b1063c26331d73c2560d1e4d0"  # 2021-Mar-06
 PI_COMMIT="970a2f254bf0aa5bc5366f815d7e8f0f0df789f2"    # 2021-Mar-06
 P4C_COMMIT="01b63cb3d5a78b416c1ca6bc867fe3882929f794"   # 2021-Mar-06
+PTF_COMMIT="b2978becdee26c6fc731845d1139d494eece3fb3"   # 2021-Mar-06
 PROTOBUF_COMMIT="v3.6.1"
 GRPC_COMMIT="tags/v1.17.2"
 
@@ -222,6 +223,15 @@ cd ..
 sudo ./mininet/util/install.sh -nw
 
 find /usr/lib /usr/local $HOME/.local | sort > $HOME/usr-local-7-after-mininet-install.txt
+
+# --- PTF --- #
+git clone git://github.com/p4lang/ptf
+cd ptf
+git checkout ${PTF_COMMIT}
+sudo python3 setup.py install
+cd ..
+
+find /usr/lib /usr/local $HOME/.local | sort > $HOME/usr-local-8-after-ptf-install.txt
 
 # --- Tutorials --- #
 git clone https://github.com/p4lang/tutorials

@@ -13,9 +13,10 @@ and time required to automate them, since I do not expect to create a
 new VM very often (a couple of times per year?).
 
 + Log in as user p4 (password p4)
-+ Answer "Yes" in the pop window asking if you want to upgrade the
-  system, if asked.  This will download the latest Linux Linux kernel
-  version released for Ubuntu 20.04, and other updated packages.
++ Click "Upgrade" in the pop-up window asking if you want to upgrade
+  the system, if asked.  This will download the latest Linux Linux
+  kernel version released for Ubuntu 20.04, and other updated
+  packages.
 + Reboot the system.
 + Use `sudo apt purge <list of packages>` to remove older version of
   Linux kernel, if the upgrade installed a newer one.

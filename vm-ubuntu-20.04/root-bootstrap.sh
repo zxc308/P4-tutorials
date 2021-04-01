@@ -145,6 +145,9 @@ sudo pip3 install scapy
 # ipv6Addr_to_bytes.
 sudo pip3 install ipaddr
 
+# Things needed for PTF
+sudo pip3 install pypcap
+
 # Things needed for `cd tutorials/exercises/basic ; make run` to work:
 sudo pip3 install psutil crcmod
 
