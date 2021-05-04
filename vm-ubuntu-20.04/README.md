@@ -117,17 +117,17 @@ $ make stop
 # Creating a single file image of the VM
 
 For the particular case of creating the VM named 'P4 Tutorial
-2021-04-05' on April 5, 2021, here were the host OS details, in case
-it turns out that matters to the finished VM image for some reason:
+2021-05-04' on May 4, 2021, here were the host OS details, in case it
+turns out that matters to the finished VM image for some reason:
 
 + macOS 10.14.6
-+ VirtualBox 6.1.18 r142142
-+ Vagrant 2.2.14
++ VirtualBox 6.1.22 r144080
++ Vagrant 2.2.16
 
 In the VirtualBox GUI interface:
 
 + Choose menu item File -> Export Appliance ...
-+ Select the VM named 'P4 Tutorial 2021-04-05' and click Continue button
++ Select the VM named 'P4 Tutorial 2021-05-04' and click Continue button
 
 + Format
   + I used: Open Virtualization Format 1.0
@@ -135,7 +135,7 @@ In the VirtualBox GUI interface:
     + Open Virtualization Format 0.9
     + Open Virtualization Format 2.0
 + Target file
-  + I used: /Users/andy/Documents/P4 Tutorial 2021-04-05.ova
+  + I used: /Users/andy/Documents/P4 Tutorial 2021-05-04.ova
 + Mac Address Policy
   + I used: Include only NAT network adapter MAC addresses
   + Other available options were:
@@ -149,16 +149,16 @@ Clicked "Continue" button.
 
 Virtual system settings:
 
-+ Name: P4 Tutorial 2021-04-05
++ Name: P4 Tutorial 2021-05-04
 + Product: I left this blank
 + Product-URL: I left this blank
 + Vendor: P4.org - P4 Language Consortium
 + Vendor-URL: https://p4.org
-+ Version: 2021-04-05
++ Version: 2021-05-04
 + Description:
 
 ```
-Open source P4 development tools built from latest source code as of 2021-Apr-05 and packaged into an Ubuntu 20.04 Desktop Linux VM for the AMD64 architecture.
+Open source P4 development tools built from latest source code as of 2021-May-04 and packaged into an Ubuntu 20.04 Desktop Linux VM for the AMD64 architecture.
 ```
 
 + License
