@@ -29,7 +29,7 @@
     {
       "table": "MyIngress.local_pat_exact",
       "match": {
-        "hdr.ipv4.dstAddr": ["8.8.8.8"],
+        "hdr.ipv4.dstAddr": ["20.0.0.2"],
         "hdr.tcp.dstPort": [80]
       },
       "action_name": "MyIngress.local_pat_translate",
@@ -48,7 +48,7 @@
       },
       "action_name": "MyIngress.global_pat_translate",
       "action_params": {
-        "srcAddr": "8.8.8.8",
+        "srcAddr": "20.0.0.2",
         "srcPort": 80
       }
     }

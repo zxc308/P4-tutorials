@@ -2,6 +2,9 @@
 #include <core.p4>
 #include <v1model.p4>
 
+#define local_pat_port 1
+#define global_pat_port 2
+
 const bit<16> TYPE_IPV4 = 0x800;
 const bit<8>  TYPE_TCP  = 6;
 
@@ -34,29 +37,45 @@ header ipv4_t {
     ip4Addr_t dstAddr;
 }
 
-header tcp_t{
+// header tcp_t{
+//     bit<16> srcPort;
+//     bit<16> dstPort;
+//     bit<32> seqNo;
+//     bit<32> ackNo;
+//     bit<4>  dataOffset;
+//     bit<4>  res;
+//     bit<1>  cwr;
+//     bit<1>  ece;
+//     bit<1>  urg;
+//     bit<1>  ack;
+//     bit<1>  psh;
+//     bit<1>  rst;
+//     bit<1>  syn;
+//     bit<1>  fin;
+//     bit<16> window;
+//     bit<16> checksum;
+//     bit<16> urgentPtr;
+// }
+
+header tcp_t {
     bit<16> srcPort;
     bit<16> dstPort;
     bit<32> seqNo;
     bit<32> ackNo;
-    bit<4>  dataOffset;
-    bit<4>  res;
-    bit<1>  cwr;
-    bit<1>  ece;
-    bit<1>  urg;
-    bit<1>  ack;
-    bit<1>  psh;
-    bit<1>  rst;
-    bit<1>  syn;
-    bit<1>  fin;
+    bit<4> dataOffset;
+    bit<3> res;
+    bit<3> ecn;
+    bit<6> ctrl;
     bit<16> window;
     bit<16> checksum;
     bit<16> urgentPtr;
 }
 
 
+
 struct metadata {
-    /* empty */
+    bit<16> tcpLength;
+    bit<1> isDrop;
 }
 
 struct headers {
@@ -88,6 +107,7 @@ parser MyParser(packet_in packet,
 
     state parse_ipv4 {
         packet.extract(hdr.ipv4);
+        meta.tcpLength = hdr.ipv4.totalLen - 16w20;
         transition select(hdr.ipv4.protocol) {
             TYPE_TCP: tcp;
             default: accept;
@@ -117,8 +137,10 @@ control MyVerifyChecksum(inout headers hdr, inout metadata meta) {
 control MyIngress(inout headers hdr,
                   inout metadata meta,
                   inout standard_metadata_t standard_metadata) {
+
     action drop() {
         mark_to_drop(standard_metadata);
+        meta.isDrop = 1;
     }
     
     action ipv4_forward(macAddr_t dstAddr, egressSpec_t port) {
@@ -154,15 +176,16 @@ control MyIngress(inout headers hdr,
         }
         actions = {
             local_pat_translate;
+            drop;
             NoAction;
         }
         size = 1024;
-        default_action = NoAction;
+        default_action = drop();
     }
 
     action global_pat_translate(ip4Addr_t srcAddr, bit<16> srcPort) {
-        // hdr.ipv4.srcAddr = srcAddr;
-        // hdr.tcp.srcPort = srcPort;
+        hdr.ipv4.srcAddr = srcAddr;
+        hdr.tcp.srcPort = srcPort;
     }
 
     table global_pat_exact {
@@ -172,17 +195,28 @@ control MyIngress(inout headers hdr,
         }
         actions = {
             global_pat_translate;
+            drop;
             NoAction;
         }
         size = 1024;
-        default_action = NoAction;
+        default_action = drop();
     }
     
     apply {
-        if(hdr.tcp.isValid()) {
-            local_pat_exact.apply();
+        meta.isDrop = 0;
+
+        if(hdr.tcp.isValid() && standard_metadata.ingress_port == local_pat_port) {
             global_pat_exact.apply();
         }
+        
+        if(hdr.tcp.isValid() && standard_metadata.ingress_port == global_pat_port) {
+            local_pat_exact.apply();
+        }
+
+        if(meta.isDrop == 1) {
+            return;
+        }
+
         if (hdr.ipv4.isValid()) {
             ipv4_lpm.apply();
         }
@@ -220,6 +254,30 @@ control MyComputeChecksum(inout headers  hdr, inout metadata meta) {
               hdr.ipv4.dstAddr },
             hdr.ipv4.hdrChecksum,
             HashAlgorithm.csum16);
+
+    update_checksum_with_payload(
+        hdr.tcp.isValid(),
+        {
+            hdr.ipv4.srcAddr,
+            hdr.ipv4.dstAddr,
+            8w0,
+            hdr.ipv4.protocol,
+            meta.tcpLength,
+            hdr.tcp.srcPort,
+            hdr.tcp.dstPort,
+            hdr.tcp.seqNo,
+            hdr.tcp.ackNo,
+            hdr.tcp.dataOffset,
+            hdr.tcp.res,
+            hdr.tcp.ecn,
+            hdr.tcp.ctrl,
+            hdr.tcp.window,
+            hdr.tcp.urgentPtr
+        },
+        hdr.tcp.checksum,
+        HashAlgorithm.csum16
+    );
+
     }
 }
 
