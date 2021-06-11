@@ -140,8 +140,49 @@ control MyIngress(inout headers hdr,
         size = 1024;
         default_action = drop();
     }
+
+        
+    action local_pat_translate(ip4Addr_t dstAddr, bit<16> dstPort) {
+        hdr.ipv4.dstAddr = dstAddr;
+        hdr.tcp.dstPort = dstPort;
+    }
+
+    table local_pat_exact {
+        key = {
+            hdr.ipv4.dstAddr: exact;
+            hdr.tcp.dstPort: exact;
+        }
+        actions = {
+            local_pat_translate;
+            NoAction;
+        }
+        size = 1024;
+        default_action = NoAction;
+    }
+
+    action global_pat_translate(ip4Addr_t srcAddr, bit<16> srcPort) {
+        // hdr.ipv4.srcAddr = srcAddr;
+        // hdr.tcp.srcPort = srcPort;
+    }
+
+    table global_pat_exact {
+        key = {
+            hdr.ipv4.srcAddr: exact;
+            hdr.tcp.srcPort: exact;
+        }
+        actions = {
+            global_pat_translate;
+            NoAction;
+        }
+        size = 1024;
+        default_action = NoAction;
+    }
     
     apply {
+        if(hdr.tcp.isValid()) {
+            local_pat_exact.apply();
+            global_pat_exact.apply();
+        }
         if (hdr.ipv4.isValid()) {
             ipv4_lpm.apply();
         }
@@ -167,7 +208,7 @@ control MyComputeChecksum(inout headers  hdr, inout metadata meta) {
 	update_checksum(
 	    hdr.ipv4.isValid(),
             { hdr.ipv4.version,
-	      hdr.ipv4.ihl,
+	          hdr.ipv4.ihl,
               hdr.ipv4.diffserv,
               hdr.ipv4.totalLen,
               hdr.ipv4.identification,
@@ -190,6 +231,7 @@ control MyDeparser(packet_out packet, in headers hdr) {
     apply {
         packet.emit(hdr.ethernet);
         packet.emit(hdr.ipv4);
+        packet.emit(hdr.tcp);
     }
 }
 

@@ -1,0 +1,58 @@
+{
+  "target": "bmv2",
+  "p4info": "build/static_pat.p4.p4info.txt",
+  "bmv2_json": "build/static_pat.json",
+  "table_entries": [
+    {
+      "table": "MyIngress.ipv4_lpm",
+      "match": {
+        "hdr.ipv4.dstAddr": ["10.0.1.1", 32]
+      },
+      "action_name": "MyIngress.ipv4_forward",
+      "action_params": {
+        "dstAddr": "08:00:00:00:01:11",
+        "port": 1
+      }
+    },
+    {
+      "table": "MyIngress.ipv4_lpm",
+      "match": {
+        "hdr.ipv4.dstAddr": ["10.0.2.2", 32]
+      },
+      "action_name": "MyIngress.ipv4_forward",
+      "action_params": {
+        "dstAddr": "08:00:00:00:02:22",
+        "port": 2
+      }
+    },
+
+    {
+      "table": "MyIngress.local_pat_exact",
+      "match": {
+        "hdr.ipv4.dstAddr": ["8.8.8.8"],
+        "hdr.tcp.dstPort": [80]
+      },
+      "action_name": "MyIngress.local_pat_translate",
+      "action_params": {
+        "dstAddr": "10.0.1.1",
+        "dstPort": 8000
+      }
+    },
+
+  
+    {
+      "table": "MyIngress.global_pat_exact",
+      "match": {
+        "hdr.ipv4.srcAddr": ["10.0.1.1"],
+        "hdr.tcp.srcPort": [8000]
+      },
+      "action_name": "MyIngress.global_pat_translate",
+      "action_params": {
+        "srcAddr": "8.8.8.8",
+        "srcPort": 80
+      }
+    }
+
+    
+  ]
+}
