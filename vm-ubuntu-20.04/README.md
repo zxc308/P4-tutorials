@@ -72,19 +72,37 @@ new VM very often (a couple of times per year?).
 
 ## p4c testing results
 
-The p4c compiler passes all but 51 of its included tests.
+Steps to run the p4c tests:
 
-The cpplint test fails because Python2 is not installed on the system.
-Omitting Python2 is intentional for this VM.  The cpplint test passes
-fine on other systems that have Python2 installed.
++ Log in as user vagrant (password vagrant)
++ In a new terminal, execute these commands:
 
-There are 50 tests whose names begin with 'ebpf' and 'ubpf' that fail.
+```bash
+# Compile p4c again from source, since the clean.sh step reduced disk
+# space by deleting the p4c/build directory.
+git clone https://github.com/jafingerhut/p4-guide
+cd p4c
+~/p4-guide/bin/build-p4c.sh
+
+# Run the p4c tests
+cd build
+make -j2 check |& tee make-check-out.txt
+```
+
+As of 2021-09-07, the p4c compiler passes all but 61 of its included
+tests.
+
+The test named cpplint fails because Python2 is not installed on the
+system.  Omitting Python2 is intentional for this VM.  The cpplint
+test passes fine on other systems that have Python2 installed.
+
+There are 60 tests whose names begin with 'ebpf' and 'ubpf' that fail.
 They work fine in the continuous integration tests on the
 https://github.com/p4lang/p4c project, because the VM used to run
 those tests has additional software installed to enable it.  Perhaps
 future versions of this VM will enable the ebpf and ubpf back ends to
-work, also.  Contributions are welcome to the needed changes in the VM
-build scripts to enable this.
+pass these tests, also.  Contributions are welcome to the needed
+changes in the VM build scripts to enable this.
 
 
 ## Send ping packets in the solution to `basic` exercise of `p4lang/tutorials` repository
@@ -117,17 +135,18 @@ $ make stop
 # Creating a single file image of the VM
 
 For the particular case of creating the VM named 'P4 Tutorial
-2021-08-01' on August 1, 2021, here were the host OS details, in case
-it turns out that matters to the finished VM image for some reason:
+2021-09-07' on September 7, 2021, here were the host OS details, in
+case it turns out that matters to the finished VM image for some
+reason:
 
 + macOS 10.14.6
-+ VirtualBox 6.1.22 r144080
++ VirtualBox 6.1.26 r145957
 + Vagrant 2.2.16
 
 In the VirtualBox GUI interface:
 
 + Choose menu item File -> Export Appliance ...
-+ Select the VM named 'P4 Tutorial 2021-08-01' and click Continue button
++ Select the VM named 'P4 Tutorial 2021-09-07' and click Continue button
 
 + Format
   + I used: Open Virtualization Format 1.0
@@ -135,7 +154,7 @@ In the VirtualBox GUI interface:
     + Open Virtualization Format 0.9
     + Open Virtualization Format 2.0
 + Target file
-  + I used: /Users/andy/Documents/P4 Tutorial 2021-08-01.ova
+  + I used: /Users/andy/Documents/P4 Tutorial 2021-09-07.ova
 + Mac Address Policy
   + I used: Include only NAT network adapter MAC addresses
   + Other available options were:
@@ -149,16 +168,16 @@ Clicked "Continue" button.
 
 Virtual system settings:
 
-+ Name: P4 Tutorial 2021-08-01
++ Name: P4 Tutorial 2021-09-07
 + Product: I left this blank
 + Product-URL: I left this blank
 + Vendor: P4.org - P4 Language Consortium
 + Vendor-URL: https://p4.org
-+ Version: 2021-08-01
++ Version: 2021-09-07
 + Description:
 
 ```
-Open source P4 development tools built from latest source code as of 2021-Aug-01 and packaged into an Ubuntu 20.04 Desktop Linux VM for the AMD64 architecture.
+Open source P4 development tools built from latest source code as of 2021-Sep-07 and packaged into an Ubuntu 20.04 Desktop Linux VM for the AMD64 architecture.
 ```
 
 + License
