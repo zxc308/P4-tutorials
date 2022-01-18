@@ -169,7 +169,7 @@ implementation or forwarding rules.
 
 3. `basic_tunnel.p4` might compile, and the control plane rules might be
 installed, but the switch might not process packets in the desired way. The
-`/tmp/p4s.<switch-name>.log` files contain detailed logs that describing how
+`logs/sX.log` files contain detailed logs that describing how
 each switch processes each packet. The output is detailed and can help pinpoint
 logic errors in your implementation.
 

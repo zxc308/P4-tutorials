@@ -66,7 +66,7 @@ bring up a network in Mininet to test its behavior.
 
 The message was not received because each switch is programmed with
 `source_routing.p4`, which drops all packets on arrival.  You can
-verify this by looking at `/tmp/p4s.s1.log`.  Your job is to extend
+verify this by looking at `logs/s1.log`.  Your job is to extend
 the P4 code so packets are delivered to their destination.
 
 ## Step 2: Implement source routing
@@ -123,7 +123,7 @@ There are several ways that problems might manifest:
    Do you have another instance of mininet running? Did the previous
    run of mininet crash?  if yes, check "Cleaning up Mininet" bellow.
 3. `source_routing.p4` compiles but the switch does not process
-   packets in the desired way. The `/tmp/p4s.<switch-name>.log`
+   packets in the desired way. The `logs/sX.log`
    files contain trace messages describing how each switch processes
    each packet. The output is detailed and can help pinpoint logic
    errors in your implementation.  The
