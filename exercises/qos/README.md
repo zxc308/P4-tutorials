@@ -78,7 +78,7 @@ missing piece.
 First we have to change the ipv4_t header by splitting the TOS field
 into DiffServ and ECN fields.  Remember to update the checksum block
 accordingly.  Then, in the egress control block we must compare the
-protocol in IP header with IP protocols. Based on the traffic classes 
+protocol in IP header with IP protocols. Based on the traffic classes
 and priority, the `diffserv` flag will be set.
 
 A complete `qos.p4` will contain the following components:
@@ -102,7 +102,7 @@ A complete `qos.p4` will contain the following components:
 
 Follow the instructions from Step 1. This time, when your message from
 `h1` is delivered to `h2`, you should see `tos` values change from 0x1
-to  0xb9 for UDP and 0xb1 for TCP. It depends upon the action you choose 
+to  0xb9 for UDP and 0xb1 for TCP. It depends upon the action you choose
 in Ingress processing.
 
 To easily track the `tos` values you may want to redirect the output
