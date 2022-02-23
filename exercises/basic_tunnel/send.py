@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
 import argparse
-import sys
-import socket
 import random
-import struct
-import argparse
+import socket
 
-from scapy.all import sendp, send, get_if_list, get_if_hwaddr, hexdump
-from scapy.all import Packet
-from scapy.all import Ether, IP, UDP, TCP
 from myTunnel_header import MyTunnel
+from scapy.all import IP, TCP, Ether, get_if_hwaddr, get_if_list, sendp
+
 
 def get_if():
     ifs=get_if_list()
