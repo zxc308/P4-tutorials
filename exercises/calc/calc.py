@@ -84,7 +84,7 @@ def main():
             if resp:
                 p4calc=resp[P4calc]
                 if p4calc:
-                    print((p4calc.result))
+                    print(p4calc.result)
                 else:
                     print("cannot find P4calc header in the packet")
             else:
