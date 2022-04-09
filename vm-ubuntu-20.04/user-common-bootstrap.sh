@@ -7,7 +7,7 @@ set -xe
 git clone https://github.com/mininet/mininet mininet
 cd mininet
 PATCH_DIR="${HOME}/patches"
-patch -p1 < "${PATCH_DIR}/mininet-dont-install-python2.patch" || echo "Errors while attempting to patch mininet, but continuing anyway ..."
+patch -p1 < "${PATCH_DIR}/mininet-dont-install-python2-2022-apr.patch" || echo "Errors while attempting to patch mininet, but continuing anyway ..."
 cd ..
 # TBD: Try without installing openvswitch, i.e. no '-v' option, to see
 # if everything still works well without it.
