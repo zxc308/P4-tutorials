@@ -179,7 +179,7 @@ sudo make install-strip
 sudo ldconfig
 # install-p4dev-v4.sh script does this here:
 move_usr_local_lib_python3_from_site_packages_to_dist_packages
-cd ../../..
+cd ..
 
 find /usr/lib /usr/local $HOME/.local | sort > $HOME/usr-local-5-after-behavioral-model.txt
 
