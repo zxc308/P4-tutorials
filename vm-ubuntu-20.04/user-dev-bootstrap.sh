@@ -173,7 +173,7 @@ cd behavioral-model
 git checkout ${BMV2_COMMIT}
 ./install_deps.sh
 ./autogen.sh
-./configure --enable-debugger --with-pi
+./configure --enable-debugger --with-pi --with-thrift
 make -j${NUM_CORES}
 sudo make install-strip
 sudo ldconfig
