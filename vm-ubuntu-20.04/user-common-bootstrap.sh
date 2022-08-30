@@ -17,11 +17,6 @@ sudo ./mininet/util/install.sh -nw
 
 find /usr/lib /usr/local $HOME/.local | sort > $HOME/usr-local-7-after-mininet-install.txt
 
-# --- Tutorials --- #
-git clone https://github.com/p4lang/tutorials
-sudo mv tutorials /home/p4
-sudo chown -R p4:p4 /home/p4/tutorials
-
 # --- Emacs --- #
 sudo cp p4_16-mode.el /usr/share/emacs/site-lisp/
 sudo mkdir /home/p4/.emacs.d/
