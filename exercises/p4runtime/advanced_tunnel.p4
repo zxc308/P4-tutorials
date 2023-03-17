@@ -104,8 +104,8 @@ control MyIngress(inout headers hdr,
                   inout metadata meta,
                   inout standard_metadata_t standard_metadata) {
 
-    counter(MAX_TUNNEL_ID, CounterType.packets_and_bytes) ingressTunnelCounter;
-    counter(MAX_TUNNEL_ID, CounterType.packets_and_bytes) egressTunnelCounter;
+    Counter(MAX_TUNNEL_ID, CounterType.Both) ingressTunnelCounter;
+    Counter(MAX_TUNNEL_ID, CounterType.Both) egressTunnelCounter;
 
     action drop() {
         mark_to_drop(standard_metadata);
