@@ -30,7 +30,7 @@ This folder contains various scripts used to run the code.
 
 
  ## Mininet
-Originally created by Bob Lantz, [Mininet](https://github.com/mininet/mininetmininet) is a very complete network emulation tool. Using Mininet, a user can quickly deploy a full network in minutes. As mentioned in [Oliveira et al.](https://ieeexplore.ieee.org/document/6860404), "the possibility of sharing results and tools at zero cost are positive factors that help scientists to boost their researches despite the limitations of the tool in relation to the performance fidelity between the simulated and the real environment."
+Originally created by Bob Lantz, [Mininet](https://github.com/mininet/mininet) is a very complete network emulation tool. Using Mininet, a user can quickly deploy a full network in minutes. As mentioned in [Oliveira et al.](https://ieeexplore.ieee.org/document/6860404), "the possibility of sharing results and tools at zero cost are positive factors that help scientists to boost their researches despite the limitations of the tool in relation to the performance fidelity between the simulated and the real environment."
 
 Some drawbacks of Mininet include line-rate fidelity and processing power, which are only of limited relevancy given the purpose of the technology. Mininet, much like P4, is supported by the [ONF](https://opennetworking.org/), ensuring its long-term support.
 
@@ -51,7 +51,7 @@ Several architectures are supported by P4. Since most are closed-source, Mininet
 
 * **simple_switch**. The main target for the software switch. Can execute most P4$_{14}$ and P4$_{16}$ programs. Uses the v1model architecture and can run on most general-purpose CPUs.
 * **simple_switch_grpc**. Based on the simple switch, but with support for TCP connections GRPC from a controller (uses the P4 Runtime API).
-* **psa_switch**. Based on the simple switch, but instead of using the more recent v1model, uses the PSA. 
+* **psa_switch**. Based on the simple switch, but instead of using the v1model architecture, uses the more recent Portable Switch Architecture (PSA). <u> Note </u>: the psa_switch implementation is incomplete, and many P4 programs will either not compile succcessfully, or not simulate correctly when executed using psa_switch.
 * **simple_router and l2_switch**. Implemented as a proof of concept and largely incomplete. Should not be used over the *simple_switch*.
 
 
@@ -66,7 +66,7 @@ Before executing, the following files are required:
 ### P4 File
 The P4 file defines the data-plane behavior and it is stored directly in the switch. Its structure is fixed while the switch is running, only allowing modifications to entries of its tables.
 
-An example of a simple P$ program can be found [here](../exercises/basic/solution/basic.p4).
+An example of a simple P4 program can be found [here](../exercises/basic/solution/basic.p4).
 
 This program contains 4 stages: 
 * Parser; 
@@ -85,7 +85,7 @@ The code block below illustrates a sample of the control-plane file(full file [h
 
 * **table**. Defines to which table the entry corresponds.
 * **match**. Defines the matching criteria.
-* **action_nam**. Defines which action is taken in a successful match. 
+* **action_name**. Defines which action is taken in a successful match. 
 * **action_params**. Defines the value for the action parameters.
 
 
@@ -157,7 +157,7 @@ In this file, the following elements are defined:
     * *runtime_cli*. Also defines the path for the control plane file. This file is directed at actions that are only supported by the switch_cli interface (such as setting up mirroring).
     
 * **links**. Defines the links between network nodes. The following list format is used: 
-    ```[Node1, Node2, Latency, Bandwidth]```, where nodes can be defined as ```<Hostname>```, for hosts, and ```<SwitchName>-<SwitchPort>``` for switches. Both *latency* and *bandwidth* are optional, where *latency* is an integer defined in milliseconds(ms) and *bandwidth* is a float defined in megabytes.
+    ```[Node1, Node2, Latency, Bandwidth]```, where nodes can be defined as ```<Hostname>```, for hosts, and ```<SwitchName>-<SwitchPort>``` for switches. Both *latency* and *bandwidth* are optional, where *latency* is an integer defined in milliseconds(ms) and *bandwidth* is a float defined in megabits per second (Mb/s).
 
 **Note**: IPs need not be attributed to switches, as they make use of the [Linux Networking Stack](https://github.com/mininet/mininet/wiki/FAQ#assign-macs).
 
