@@ -204,7 +204,7 @@ find /usr/lib /usr/local $HOME/.local | sort > $HOME/usr-local-6-after-p4c.txt
 git clone https://github.com/p4lang/ptf
 cd ptf
 git checkout ${PTF_COMMIT}
-sudo python3 setup.py install
+sudo pip3 install .
 cd ..
 
 find /usr/lib /usr/local $HOME/.local | sort > $HOME/usr-local-8-after-ptf-install.txt
