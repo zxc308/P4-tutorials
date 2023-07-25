@@ -145,7 +145,7 @@ cd ../..
 # package version 3.0.0, which gives errors on the `sudo pip3 install
 # .` command afterwards.  Fix this by forcing installation of a known
 # working version of Cython.
-${PIP_SUDO} pip3 install Cython==0.29.35
+sudo pip3 install Cython==0.29.35
 sudo pip3 install -rrequirements.txt
 GRPC_PYTHON_BUILD_WITH_CYTHON=1 sudo pip3 install .
 sudo ldconfig
