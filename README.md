@@ -12,12 +12,11 @@ you get started with P4 programming, organized into several modules:
 
 1. Introduction and Language Basics
 * [Basic Forwarding](./exercises/basic)
-Here's what you'll learn : 
+<small>Here's what you'll learn:</small>
 - IPv4 forwarding
-- setting up dev environment
+- Setting up dev environment
 - Understand control plane logic
 - Implement data plane logic
-
 This tutorial provides a step-by-step guide for implementing basic forwarding functionality in a P4 program, focusing on IPv4 forwarding. It covers setting up the development environment, understanding the control plane logic, implementing data plane logic, testing the solution, and troubleshooting common issues, all within the context of a P4-based network switch. 
 
 * [Basic Tunneling](./exercises/basic_tunnel)
