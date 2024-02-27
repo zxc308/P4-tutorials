@@ -12,7 +12,9 @@ you get started with P4 programming, organized into several modules:
 
 1. Introduction and Language Basics
 * [Basic Forwarding](./exercises/basic)
+<small>
 In this exercise, you'll learn to implement basic IPv4 packet forwarding using P4. By extending the provided `basic.p4` skeleton, you'll develop logic for updating MAC addresses, decrementing TTL values, and forwarding packets based on predefined rules. Through practical implementation and testing on a fat-tree topology in Mininet, you'll gain insights into designing and deploying data plane logic for network switches.
+</small>
 
 * [Basic Tunneling](./exercises/basic_tunnel)
 
