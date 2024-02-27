@@ -15,36 +15,39 @@ you get started with P4 programming, organized into several modules:
 <small>In this exercise, you'll learn to implement basic IPv4 packet forwarding using P4. By extending the provided `basic.p4` skeleton, you'll develop logic for updating MAC addresses, decrementing TTL values, and forwarding packets based on predefined rules. Through practical implementation and testing on a fat-tree topology in Mininet, you'll gain insights into designing and deploying data plane logic for network switches.</small>
 
 * [Basic Tunneling](./exercises/basic_tunnel)
-
+<br>
+<small>In this exercise, you enhance an IP router implemented in P4 by adding basic tunneling support, enabling encapsulation of IP packets for customized forwarding. By introducing a new tunnel header type, you modify the switch code to handle encapsulated packets and define forwarding rules based on destination IDs. Through static control plane entries, the switch routes encapsulated packets, showcasing P4's versatility in customizing packet processing and network functionality.</small>
 2. P4Runtime and the Control Plane
 * [P4Runtime](./exercises/p4runtime)
 
 3. Monitoring and Debugging
-* [Explicit Congestion Notification](./exercises/ecn)
+* [Explicit Congestion Notification](./exercises/ecn)<br>
+<small>
+In this tutorial, you'll enhance a basic L3 forwarding P4 program with Explicit Congestion Notification (ECN) support, enabling end-to-end notification of network congestion without packet drops. By modifying the `ecn.p4` file, you'll implement ECN logic such as updating the ECN flag based on queue length thresholds and configuring static rules for proper ECN handling, followed by testing the solution in Mininet to verify packet forwarding and ECN flag manipulation.</small>
 
 * [Multi-Hop Route Inspection](./exercises/mri)
-
+<small>This tutorial aims to augment basic L3 forwarding with a simplified version of In-Band Network Telemetry (INT) called Multi-Hop Route Inspection (MRI). It guides users through extending a skeleton P4 program, `mri.p4`, to append an ID and queue length to the header stack of every packet, enabling tracking of the packet's path and queue lengths.</small>
 
 4. Advanced Behavior
 * [Source Routing](./exercises/source_routing)
-
+<small>This exercise aims to implement source routing, where the source host specifies the route for each packet through a stack of output ports. After configuring the P4 program, `source_routing.p4`, packets should be routed according to the specified port numbers in the stack, enabling end-to-end delivery based on the predetermined path.</small>
 
 * [Calculator](./exercises/calc)
-
+<small>This tutorial guides you through implementing a basic calculator using a custom protocol header in P4. The P4 program, `calc.p4`, parses incoming calculator packets, performs the specified operation on the operands, and returns the result to the sender, enabling basic arithmetic calculations in a network switch.</small>
 
 * [Load Balancing](./exercises/load_balance)
-
+<small>This exercise guides you in implementing load balancing using Equal-Cost Multipath Forwarding in a P4 program named `load_balance.p4`. It utilizes a hash function to distribute packets between two destination hosts based on a 5-tuple hash, enabling efficient traffic distribution across the network.</small>
 
 * [Quality of Service](./exercises/qos)
-
+<small>This tutorial focuses on implementing Quality of Service (QoS) using Differentiated Services (Diffserv) in a P4 program named `qos.p4`. It extends basic L3 forwarding to classify and manage network traffic, providing QoS on modern IP networks by setting DiffServ flags based on traffic classes and priority.</small>
 
 
 5. Stateful Packet Processing
 * [Firewall](./exercises/firewall)
-
+<small>This exercise focuses on implementing a basic stateful firewall using a P4 program named `firewall.p4`. The firewall is designed to allow communication between internal and external hosts based on predefined rules, utilizing a bloom filter for stateful packet inspection and filtering.</small>
 
 * [Link Monitoring](./exercises/link_monitor)
-
+<small>This exercise focuses on implementing link monitoring within a network using P4 programming. By extending the basic IPv4 forwarding exercise, the program enables the measurement of link utilization by processing source-routed probe packets. Through the manipulation of probe packet headers and the maintenance of register arrays, the solution facilitates accurate monitoring of link utilization, which can be invaluable for network management and optimization.</small>
 
 
 ## Presentation
