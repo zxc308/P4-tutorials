@@ -12,16 +12,10 @@ you get started with P4 programming, organized into several modules:
 
 1. Introduction and Language Basics
 * [Basic Forwarding](./exercises/basic)
-<small>Here's what you'll learn:</small>
-- IPv4 forwarding
-- Setting up dev environment
-- Understand control plane logic
-- Implement data plane logic
-This tutorial provides a step-by-step guide for implementing basic forwarding functionality in a P4 program, focusing on IPv4 forwarding. It covers setting up the development environment, understanding the control plane logic, implementing data plane logic, testing the solution, and troubleshooting common issues, all within the context of a P4-based network switch. 
+ <small>What you will learn : IPv4 forwarding, Setting up dev environment, Understand control plane logic, Implement data plane logic </small>
 
 * [Basic Tunneling](./exercises/basic_tunnel)
-This exercise guides you through implementing basic tunneling functionality in a P4 program, enhancing an IP router to forward packets based on a custom encapsulation header. Through defining a new header type, updating the parser and control logic, and configuring forwarding rules, the switch can route packets using the encapsulation header, offering a fundamental understanding of tunneling protocols in P4-based networking.
-
+<small>What you will learn: Enhancing IP router, Updating parser and control logic, Configuring forwarding rules, Understanding networking protocols </small>
 
 2. P4Runtime and the Control Plane
 * [P4Runtime](./exercises/p4runtime)
