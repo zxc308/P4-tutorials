@@ -22,17 +22,31 @@ you get started with P4 programming, organized into several modules:
 
 3. Monitoring and Debugging
 * [Explicit Congestion Notification](./exercises/ecn)
+<small>What you will learn:</small>
 * [Multi-Hop Route Inspection](./exercises/mri)
+<small>What you will learn:</small>
 
 4. Advanced Behavior
 * [Source Routing](./exercises/source_routing)
+<small>What you will learn:</small>
+
 * [Calculator](./exercises/calc)
+<small>What you will learn:</small>
+
 * [Load Balancing](./exercises/load_balance)
+<small>What you will learn:</small>
+
 * [Quality of Service](./exercises/qos)
+<small>What you will learn:</small>
+
 
 5. Stateful Packet Processing
 * [Firewall](./exercises/firewall)
+<small>What you will learn:</small>
+
 * [Link Monitoring](./exercises/link_monitor)
+<small>What you will learn:</small>
+
 
 ## Presentation
 
