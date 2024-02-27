@@ -16,8 +16,10 @@ you get started with P4 programming, organized into several modules:
 
 * [Basic Tunneling](./exercises/basic_tunnel)<br>
 <small>In this exercise, you enhance an IP router implemented in P4 by adding basic tunneling support, enabling encapsulation of IP packets for customized forwarding. By introducing a new tunnel header type, you modify the switch code to handle encapsulated packets and define forwarding rules based on destination IDs. Through static control plane entries, the switch routes encapsulated packets, showcasing P4's versatility in customizing packet processing and network functionality.</small>
+
 2. P4Runtime and the Control Plane
-* [P4Runtime](./exercises/p4runtime)
+* [P4Runtime](./exercises/p4runtime)<br>
+<small>This exercise involves implementing a control plane using P4Runtime to send flow entries to switches for tunneling traffic between hosts. Students modify the provided P4 program and controller script to establish connections, push P4 programs, install tunnel ingress rules, and read tunnel counters, enhancing their understanding of P4Runtime and network forwarding logic.</small>
 
 3. Monitoring and Debugging
 * [Explicit Congestion Notification](./exercises/ecn)<br>
