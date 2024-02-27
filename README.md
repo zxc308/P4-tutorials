@@ -12,40 +12,39 @@ you get started with P4 programming, organized into several modules:
 
 1. Introduction and Language Basics
 * [Basic Forwarding](./exercises/basic)
- <small>What you will learn : IPv4 forwarding, Setting up dev environment, Understand control plane logic, Implement data plane logic </small>
+In this exercise, you'll learn to implement basic IPv4 packet forwarding using P4. By extending the provided `basic.p4` skeleton, you'll develop logic for updating MAC addresses, decrementing TTL values, and forwarding packets based on predefined rules. Through practical implementation and testing on a fat-tree topology in Mininet, you'll gain insights into designing and deploying data plane logic for network switches.
 
 * [Basic Tunneling](./exercises/basic_tunnel)
-<small>What you will learn: Enhancing IP router, Updating parser and control logic, Configuring forwarding rules, Understanding networking protocols </small>
 
 2. P4Runtime and the Control Plane
 * [P4Runtime](./exercises/p4runtime)
 
 3. Monitoring and Debugging
 * [Explicit Congestion Notification](./exercises/ecn)
-<small>What you will learn:</small>
+
 * [Multi-Hop Route Inspection](./exercises/mri)
-<small>What you will learn:</small>
+
 
 4. Advanced Behavior
 * [Source Routing](./exercises/source_routing)
-<small>What you will learn:</small>
+
 
 * [Calculator](./exercises/calc)
-<small>What you will learn:</small>
+
 
 * [Load Balancing](./exercises/load_balance)
-<small>What you will learn:</small>
+
 
 * [Quality of Service](./exercises/qos)
-<small>What you will learn:</small>
+
 
 
 5. Stateful Packet Processing
 * [Firewall](./exercises/firewall)
-<small>What you will learn:</small>
+
 
 * [Link Monitoring](./exercises/link_monitor)
-<small>What you will learn:</small>
+
 
 
 ## Presentation
