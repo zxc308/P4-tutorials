@@ -23,6 +23,8 @@ you get started with P4 programming, organized into several modules:
 
 4. Advanced Behavior
 * [Multicasting](./exercises/multicast)
+  <br> <small>This exercise involves writing a P4 program to enable a network switch to multicast packets to multiple output ports based on the destination MAC address. It requires the implementation of logic to handle multicast packets, including defining actions for packet forwarding and configuring the control plane to manage packet processing rules. Through practical implementation and testing in a Mininet environment, participants learn to enhance network traffic management and efficiency through multicast communication.</small>
+
 * [Source Routing](./exercises/source_routing)
 * [Calculator](./exercises/calc)
 * [Load Balancing](./exercises/load_balance)
