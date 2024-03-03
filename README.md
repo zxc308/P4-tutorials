@@ -26,6 +26,7 @@ you get started with P4 programming, organized into several modules:
 * [Calculator](./exercises/calc)
 * [Load Balancing](./exercises/load_balance)
 * [Quality of Service](./exercises/qos)
+* [Mirroring](./exercises/mirroring)
 
 5. Stateful Packet Processing
 * [Firewall](./exercises/firewall)
