@@ -22,6 +22,7 @@ you get started with P4 programming, organized into several modules:
 * [Multi-Hop Route Inspection](./exercises/mri)
 
 4. Advanced Behavior
+* [Multicasting](./exercises/multicast)
 * [Source Routing](./exercises/source_routing)
 * [Calculator](./exercises/calc)
 * [Load Balancing](./exercises/load_balance)
