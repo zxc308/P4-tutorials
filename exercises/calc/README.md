@@ -34,7 +34,6 @@ from the Mininet command prompt:
 
 ```
 mininet> h1 python3 calc.py
->
 ```
 
 3. The driver program will provide a new prompt, at which you can type
@@ -48,7 +47,6 @@ you should see an error message.
 ```
 > 1+1
 Didn't receive response
->
 ```
 
 ## Step 2: Implement Calculator
@@ -103,7 +101,6 @@ correct result:
 ```
 > 1+1
 2
->
 ```
 
 ## Relevant Documentation
