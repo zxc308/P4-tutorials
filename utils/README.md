@@ -235,7 +235,7 @@ class ExerciseTopo(Topo):
   #(... Omitted ...)#
 ```
 
-Below is shown how the switches are configured. Using the method *configureP4Switch* ensures the switch is created using *simple_switch_grpc*.
+Below is shown how the switches are configured. The method *configureP4Switch* creates the switch using *simple_switch_grpc*.
 
 If no program is specified, the switch follows the default implementation.
 
