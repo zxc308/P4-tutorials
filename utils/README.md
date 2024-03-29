@@ -150,11 +150,10 @@ In this file, the following elements are defined:
 
     * *route add*, which adds a static route to the default gateway (the switch).
     * *arp*, which manipulates the sytem ARP scache (adds an entry for the switch's MAC address).
-* **Switches**. Defines switch behavior. Three parameters can be inserted here:
+* **Switches**. Defines switch behavior. Two parameters can be inserted here:
     
     * *program*. Defines the program inserted into the switch (data plane). <u>Note</u>: If this parameter is not set, then the execution assumes the default P4 file (passed on startup).
     * *runtime_json*. Defines the path for the control plane file.
-    * *runtime_cli*. Also defines the path for the control plane file. This file is directed at actions that are only supported by the switch_cli interface (such as setting up mirroring).
     
 * **links**. Defines the links between network nodes. The following list format is used: 
     ```[Node1, Node2, Latency, Bandwidth]```, where nodes can be defined as ```<Hostname>```, for hosts, and ```<SwitchName>-<SwitchPort>``` for switches. Both *latency* and *bandwidth* are optional, where *latency* is an integer defined in milliseconds(ms) and *bandwidth* is a float defined in megabits per second (Mb/s).
@@ -236,7 +235,7 @@ class ExerciseTopo(Topo):
   #(... Omitted ...)#
 ```
 
-Below is shown how the switches are configured. Using the method *configureP4Switch* ensures the switch is created using the correct architecture, (*simple_switch* or *simple_switch_grpc*).
+Below is shown how the switches are configured. Using the method *configureP4Switch* ensures the switch is created using *simple_switch_grpc*.
 
 If no program is specified, the switch follows the default implementation.
 
@@ -306,7 +305,7 @@ def program_hosts(self):
 ```
 
 #### Programming the Switches
-Much like the hosts, the switches also have a runtime counterpart. The method *program_switches* divides execution according to the switch type (*simple_switch* or *simple_switch_grpc*) and runs the respective architecture-specific commands (Note: since the *simple_switch_grpc* extends the *simple_switch*, the configuration may make use of both cli and runtime methods). Below denotes the sub-branch for the configuration of the *simple_switch_grpc*. Most notably, this method makes use of the [control plane file](#the-control-plane-file).
+Much like the hosts, the switches also have a runtime counterpart. The method *program_switches* configures switches specifically for simple_switch_grpc, utilizing the [control plane file](#the-control-plane-file) for its configuration.
 
 ```python
 def program_switch_p4runtime(self, sw_name, sw_dict):

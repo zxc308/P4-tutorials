@@ -282,33 +282,15 @@ class ExerciseRunner:
                 runtime_json=runtime_json
             )
 
-    def program_switch_cli(self, sw_name, sw_dict):
-        """ This method will start up the CLI and use the contents of the
-            command files as input.
-        """
-        cli = 'simple_switch_CLI'
-        # get the port for this particular switch's thrift server
-        sw_obj = self.net.get(sw_name)
-        thrift_port = sw_obj.thrift_port
-
-        cli_input_commands = sw_dict['cli_input']
-        self.logger('Configuring switch %s with file %s' % (sw_name, cli_input_commands))
-        with open(cli_input_commands, 'r') as fin:
-            cli_outfile = '%s/%s_cli_output.log'%(self.log_dir, sw_name)
-            with open(cli_outfile, 'w') as fout:
-                subprocess.Popen([cli, '--thrift-port', str(thrift_port)],
-                                 stdin=fin, stdout=fout)
-
     def program_switches(self):
-        """ This method will program each switch using the BMv2 CLI and/or
-            P4Runtime, depending if any command or runtime JSON files were
-            provided for the switches.
+        """ This method will program each switch using the BMv2 P4Runtime,
+            depending if any runtime JSON files were provided for the switches.
         """
         for sw_name, sw_dict in self.switches.items():
-            if 'cli_input' in sw_dict:
-                self.program_switch_cli(sw_name, sw_dict)
             if 'runtime_json' in sw_dict:
                 self.program_switch_p4runtime(sw_name, sw_dict)
+            else:
+                self.logger('Warning: No runtime JSON configuration provided for switch %s.' % sw_name)
 
     def program_hosts(self):
         """ Execute any commands provided in the topology.json file on each Mininet host
