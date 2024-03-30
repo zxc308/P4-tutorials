@@ -87,7 +87,24 @@ parser MyParser(packet_in packet,
 *************************************************************************/
 
 control MyVerifyChecksum(inout headers hdr, inout metadata meta) {
-    apply {  }
+    apply { 
+        /*
+        Control function for checksum verification.
+       
+        This function is responsible for the MyVerifyChecksum control block in P4, 
+        which checks and drops IPv4 packets with incorrect checksums. It uses inout
+        headers hdr to manipulate packet headers and inout metadata meta to store 
+        metadata, such as a flag for checksum validation.
+
+        Parameters: 
+        - inout headers hdr: "hdr" is used to manipulate packet headers. 
+        - inout metadata meta: "meta" stores metadata during packet processing.
+        Note : inout indicates that the parameter is an input and an ouput
+
+        TODO: Implement the logic for verifying the checksum of IPv4 packets within 
+        the MyVerifyChecksum control block
+        */
+    }
 }
 
 
@@ -144,7 +161,26 @@ control MyIngress(inout headers hdr,
 control MyEgress(inout headers hdr,
                  inout metadata meta,
                  inout standard_metadata_t standard_metadata) {
-    apply {  }
+    apply { 
+        /*
+        Control function for egress processing.
+       
+        This function is responsible for handling outbound packet operations 
+        such as modifying headers, managing metadata, and making forwarding 
+        choices.
+
+        Parameters: 
+        - inout headers hdr: "hdr" is used to manipulate packet headers. 
+        - inout metadata meta: "meta" stores metadata during packet processing.
+        - inout standard_metadata_t standard_metadata: Mutable standard packet 
+          metadata accessible for modification in packet processing stages.
+        Note : inout indicates that the parameter is an input and an ouput.
+
+        TODO: Implement the logic to modify packet headers based on policy rules 
+        and determine the egress port for forwarding based on the destination IP 
+        addr.
+        */
+    }
 }
 
 /*************************************************************************
