@@ -99,10 +99,10 @@ control MyVerifyChecksum(inout headers hdr, inout metadata meta) {
         Parameters: 
         - inout headers hdr: "hdr" is used to manipulate packet headers. 
         - inout metadata meta: "meta" stores metadata during packet processing.
-        Note : inout indicates that the parameter is an input and an ouput
+        Note : inout indicates that the parameter is an input and an ouput.
 
         TODO: Implement the logic for verifying the checksum of IPv4 packets within 
-        the MyVerifyChecksum control block
+        the MyVerifyChecksum control block.
         */
     }
 }
