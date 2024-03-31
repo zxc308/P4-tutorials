@@ -91,10 +91,10 @@ control MyVerifyChecksum(inout headers hdr, inout metadata meta) {
         /*
         Control function for checksum verification.
        
-        This function is responsible for the MyVerifyChecksum control block in P4, 
-        which checks and drops IPv4 packets with incorrect checksums. It uses inout
-        headers hdr to manipulate packet headers and inout metadata meta to store 
-        metadata, such as a flag for checksum validation.
+        This function is responsible for checking checksums in input 
+        packet headers. It uses inoutheaders hdr to manipulate packet 
+        headers and inout metadata meta to store metadata, such as a flag 
+        for checksum validation.
 
         Parameters: 
         - inout headers hdr: "hdr" is used to manipulate packet headers. 
