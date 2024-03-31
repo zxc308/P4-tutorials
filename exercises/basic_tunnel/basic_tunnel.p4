@@ -165,9 +165,10 @@ control MyEgress(inout headers hdr,
         /*
         Control function for egress processing.
        
-        This function is responsible for handling outbound packet operations 
-        such as modifying headers, managing metadata, and making forwarding 
-        choices.
+        This function is responsible to determine the set
+        of destination ports (and number of instances on each port)
+        to which the packet should be sent.
+
 
         Parameters: 
         - inout headers hdr: "hdr" is used to manipulate packet headers. 
