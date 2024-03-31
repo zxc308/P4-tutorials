@@ -105,7 +105,7 @@ virtual machine or install several dependencies.
 
 - There are two user accounts:
   - Username: vagrant | Password: vagrant (This is the default account)
-  - Username: p4 | Password: p4 (This account is expected to use)
+  - Username: p4 | Password: p4 (Usage of this account is expected)
 
 *Note*: Before running the `vagrant up` command, make sure you have enabled virtualization in your environment; otherwise you may get a "VT-x is disabled in the BIOS for both all CPU modes" error. Check [this](https://stackoverflow.com/questions/33304393/vt-x-is-disabled-in-the-bios-for-both-all-cpu-modes-verr-vmx-msr-all-vmx-disabl) for enabling it in virtualbox and/or BIOS for different system configurations.
 
