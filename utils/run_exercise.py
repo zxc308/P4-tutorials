@@ -305,12 +305,13 @@ class ExerciseRunner:
             provided for the switches.
         """
         for sw_name, sw_dict in self.switches.items():
+            if 'cli_input' not in sw_dict and 'runtime_json' not in sw_dict:
+                self.logger('Warning: No control plane file provided for switch %s.' % sw_name)
+                return
             if 'cli_input' in sw_dict:
                 self.program_switch_cli(sw_name, sw_dict)
-            elif 'runtime_json' in sw_dict:
+            if 'runtime_json' in sw_dict:
                 self.program_switch_p4runtime(sw_name, sw_dict)
-            else:
-                self.logger('Warning: No control plane file provided for switch %s.' % sw_name)
 
     def program_hosts(self):
         """ Execute any commands provided in the topology.json file on each Mininet host
