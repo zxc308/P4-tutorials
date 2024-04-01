@@ -307,7 +307,7 @@ class ExerciseRunner:
         for sw_name, sw_dict in self.switches.items():
             if 'cli_input' not in sw_dict and 'runtime_json' not in sw_dict:
                 self.logger('Warning: No control plane file provided for switch %s.' % sw_name)
-                return
+                continue
             if 'cli_input' in sw_dict:
                 self.program_switch_cli(sw_name, sw_dict)
             if 'runtime_json' in sw_dict:
