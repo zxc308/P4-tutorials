@@ -64,6 +64,11 @@ Thank you for your interest in contributing to the P4 Compiler tutorials reposit
 ## Reporting Issues
 If you find any bugs or have recommendations for improvements, please ffeel free to [open an issue](https://github.com/p4lang/tutorials/issues) with a detailed explanation of changes.
 
+## Contact
+- For further assistance or questions regarding contributions, reach out to us in our [community chat](https://p4-lang.slack.com/) or by Joining our slack channel [here](https://join.slack.com/t/p4-lang/shared_invite/zt-a9pe96br-Th73ueaBAwJw1ZbD_z1Rpg) .
+- To ask general inquiries about P4, use the [P4 forum](https://forum.p4.org/).
+- For other communication channels click [here](https://p4.org/join/).
+
 Thank you for contributing to [P4 tutorials](https://github.com/p4lang/tutorials)! We look forward to your contributions.
 
 ---
