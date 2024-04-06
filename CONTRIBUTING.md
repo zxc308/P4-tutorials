@@ -55,7 +55,7 @@ Thank you for your interest in contributing to the P4 Compiler tutorials reposit
 - Once approved, your PR will be merged into the `master` branch.
 
 ## Finding a Task
-- Check out the issues that have specifically been labelled as [help wanted](https://github.com/p4lang/tutorials/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
+- Check out the issues that have specifically been labeled as [help wanted](https://github.com/p4lang/tutorials/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
 - Have a look at the README.md Can it be improved? Do you see any typos? You may initiate a PR.
 
 ## Reporting Issues
