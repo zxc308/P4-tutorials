@@ -46,10 +46,7 @@ Thank you for your interest in contributing to the P4 Compiler tutorials reposit
 
 ## Submitting a Pull Request
 
-- Navigate to your forked repository on GitHub.
-- Create a new pull request (PR) targeting the `master` branch of the p4 tutorial repository.
-- Provide a clear title and description for your PR, explaining the purpose of your changes.
-- Ensure that your PR follows our code [guidelines](https://github.com/p4lang/p4c/blob/main/docs/CodingStandardPhilosophy.md).
+- Follow the steps outlined in [GitHub's documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request)
 
 ## Code Review
 
