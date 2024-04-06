@@ -8,7 +8,7 @@ Thank you for your interest in contributing to the P4 Compiler tutorials reposit
 - Fork the repository and clone it locally.
   
   ```
-  git clone https://github.com/<your_username>/tutorials.git
+  git clone https://github.com/<your_github_username>/tutorials.git
   ```
   
 - Create a new branch for your contributions
