@@ -55,14 +55,14 @@ Thank you for your interest in contributing to the P4 Compiler tutorials reposit
 - Once approved, your PR will be merged into the `master` branch.
 
 ## Finding a Task
-- Check out the issues that have specifically been [help wanted](https://github.com/p4lang/tutorials/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
+- Check out the issues that have specifically been labelled as [help wanted](https://github.com/p4lang/tutorials/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
 - Have a look at the README.md Can it be improved? Do you see any typos? You may initiate a PR.
 
 ## Reporting Issues
-If you find any bugs or have recommendations for improvements, please ffeel free to [open an issue](https://github.com/p4lang/tutorials/issues) with a detailed explanation of changes.
+If you find any bugs or have recommendations for improvements, please feel free to [open an issue](https://github.com/p4lang/tutorials/issues) with a detailed explanation of changes.
 
 ## Contact
-- For further assistance or questions regarding contributions, reach out to us in our [community chat](https://p4-lang.slack.com/) or by Joining our slack channel [here](https://join.slack.com/t/p4-lang/shared_invite/zt-a9pe96br-Th73ueaBAwJw1ZbD_z1Rpg) .
+- For further assistance or questions regarding contributions, reach out to us by Joining our slack channel [here](https://join.slack.com/t/p4-lang/shared_invite/zt-a9pe96br-Th73ueaBAwJw1ZbD_z1Rpg) .
 - To ask general inquiries about P4, use the [P4 forum](https://forum.p4.org/).
 - For other communication channels click [here](https://p4.org/join/).
 
