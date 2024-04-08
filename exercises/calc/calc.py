@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-
 import re
 
 from scapy.all import (
@@ -39,15 +38,15 @@ class OpParseError(Exception):
 # Token class for representing parsed tokens
 class Token:
     def __init__(self, type, value=None):
-        self.type = type  
-        self.value = value  
+        self.type = type
+        self.value = value
 
 # Parser function for parsing number literals
 def num_parser(s, i, ts):
     pattern = "^\s*([0-9]+)\s*"
     match = re.match(pattern,s[i:])
     if match:
-        ts.append(Token('num', match.group(1)))  
+        ts.append(Token('num', match.group(1)))
         return i + match.end(), ts
     raise NumParseError('Expected number literal.')
 
@@ -56,7 +55,7 @@ def op_parser(s, i, ts):
     pattern = "^\s*([-+&|^])\s*"
     match = re.match(pattern,s[i:])
     if match:
-        ts.append(Token('num', match.group(1)))  
+        ts.append(Token('num', match.group(1)))
         return i + match.end(), ts
     raise NumParseError("Expected binary operator '-', '+', '&', '|', or '^'.")
 
@@ -75,7 +74,7 @@ def main():
     iface = 'eth0'
 
     while True:
-        s = input('> ')  
+        s = input('> ')
         if s == "quit":
             break
         print(s)
@@ -101,4 +100,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()  # Call the main function
+    main()
