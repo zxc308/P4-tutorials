@@ -43,9 +43,16 @@ def encodeIPv4(ip_addr_string):
 def decodeIPv4(encoded_ip_addr):
     return socket.inet_ntoa(encoded_ip_addr)
     
-ipv6_pattern = re.compile('([a-f0-9:]+:+)+[a-f0-9]+')
+ipv6_pattern = re.compile(r'([a-f0-9]+:+)+[a-f0-9]+')
+
 def matchesIPv6(ip_addr_string):
-    return ipv6_pattern.match(ip_addr_string) is not None
+    if not ipv6_pattern.match(ip_addr_string):
+        return False  
+    try:
+        socket.inet_pton(socket.AF_INET6, ip_addr_string)
+        return True
+    except socket.error:
+        return False 
 
 def encodeIPv6(ip_addr_string):
     return socket.inet_pton(socket.AF_INET6, ip_addr_string)
