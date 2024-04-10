@@ -42,8 +42,6 @@ def encodeIPv4(ip_addr_string):
 
 def decodeIPv4(encoded_ip_addr):
     return socket.inet_ntoa(encoded_ip_addr)
-    
-ipv6_pattern = re.compile(r'([a-f0-9]+:+)+[a-f0-9]+')
 
 def matchesIPv6(ip_addr_string):
     if not ipv6_pattern.match(ip_addr_string):
