@@ -44,13 +44,11 @@ def decodeIPv4(encoded_ip_addr):
     return socket.inet_ntoa(encoded_ip_addr)
 
 def matchesIPv6(ip_addr_string):
-    if not ipv6_pattern.match(ip_addr_string):
-        return False  
     try:
         socket.inet_pton(socket.AF_INET6, ip_addr_string)
         return True
     except socket.error:
-        return False 
+        return False
 
 def encodeIPv6(ip_addr_string):
     return socket.inet_pton(socket.AF_INET6, ip_addr_string)
