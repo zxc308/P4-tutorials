@@ -103,7 +103,7 @@ def encode(x, bitwidth):
     return encoded_bytes
 
 def decode(enc_val):
-    decode_functions = [decodeIPv4, decodeMac, decodeNum, decodeIPv6]
+    decode_functions = [decodeIPv6, decodeIPv4, decodeMac, decodeNum]
     for func in decode_functions:
         try:
             return func(enc_val)
@@ -111,7 +111,6 @@ def decode(enc_val):
             pass
     raise Exception("Not compatible with the encoded value format")
     
-
 if __name__ == '__main__':
     # TODO These tests should be moved out of main eventually
     mac = "aa:bb:cc:dd:ee:ff"
