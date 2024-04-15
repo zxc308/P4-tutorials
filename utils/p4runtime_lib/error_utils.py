@@ -37,7 +37,7 @@ class P4RuntimeErrorFormatException(Exception):
 def parseGrpcErrorBinaryDetails(grpc_error):
     # Check if grpc_error is None or not an instance of grpc.RpcError
     if not grpc_error or not isinstance(grpc_error, grpc.RpcError):
-        raise P4RuntimeErrorFormatException("Invalid gRPC error object")
+        raise P4RuntimeErrorFormatException(f"Invalid gRPC error object: {grpc_error}")
         
     if grpc_error.code() != grpc.StatusCode.UNKNOWN:
         return None
