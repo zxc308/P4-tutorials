@@ -220,6 +220,8 @@ Congratulations, your implementation works! Move on to [Link Monitoring](../link
 
 ## Relevant Documentation
 
+Documentation on the Usage of Gateway (gw) and ARP Commands in topology.json is [here](https://vscode.dev/github/Abhinavcode13/tutorials/blob/update/arp-gw-documentation/exercises/basic/README.md#L175)
+
 The documentation for P4_16 and P4Runtime is available [here](https://p4.org/specs/)
 
 All excercises in this repository use the v1model architecture, the documentation for which is available at:
