@@ -139,9 +139,15 @@ if __name__ == '__main__':
     assert(not matchesIPv4('1000.0.0.1'))
     assert(not matchesIPv4('10001'))
 
+    assert(matchesIPv6('2001:0db8:85a3:0000:0000:8a2e:0370:7334'))
+    assert(not matchesIPv6('2001:0db8:85a3:0000:0000:8a2e:0370'))
+    assert(not matchesIPv6('2001:0db8:85a3:0000:0000:8a2e::7334'))
+    assert(not matchesIPv6('2001:0db8:85a3::8a2e:0370:7334'))
+
     # Test generic encoding function
     assert(encode(mac, 6 * 8) == enc_mac)
-    assert(encode(ip, 4 * 8) == enc_ip)
+    assert(encode(ip0, 4 * 8) == enc_ip)
+    assert(encode(ip1, 16 * 8) == enc_ipv6)
     assert(encode(num, 5 * 8) == enc_num)
     assert(encode((num,), 5 * 8) == enc_num)
     assert(encode([num], 5 * 8) == enc_num)
