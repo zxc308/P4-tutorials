@@ -142,7 +142,7 @@ if __name__ == '__main__':
     assert(matchesIPv6('2001:0db8:85a3:0000:0000:8a2e:0370:7334'))
     assert(not matchesIPv6('241.54.113.65'))
     assert(not matchesIPv6('::1::2'))
-    assert(not matchesIPv6('241.54.113.65'))
+    assert(not matchesIPv6('192.168.1.1'))
 
     # Test generic encoding function
     assert(encode(mac, 6 * 8) == enc_mac)
