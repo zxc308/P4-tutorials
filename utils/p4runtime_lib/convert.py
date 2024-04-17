@@ -146,7 +146,7 @@ if __name__ == '__main__':
 
     # Test generic encoding function
     assert(encode(mac, 6 * 8) == enc_mac)
-    assert(encode(ip0, 4 * 8) == enc_ip)
+    assert(encode(ip0, 4 * 8) == enc_ipv4)
     assert(encode(ip1, 16 * 8) == enc_ipv6)
     assert(encode(num, 5 * 8) == enc_num)
     assert(encode((num,), 5 * 8) == enc_num)
