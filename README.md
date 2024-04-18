@@ -120,7 +120,6 @@ There are instructions and scripts in another Github repository that can, starti
 
 We value and welcome new contributions. To get started, kindly look at our [Contribution Guidelines](CONTRIBUTING.md).
 
-
 # Older tutorials
 
 Multiple live tutorial classes have been given using the example code
