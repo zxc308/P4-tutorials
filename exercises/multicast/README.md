@@ -20,13 +20,7 @@ data plane logic of your P4 program.
 We will use the star topology for this exercise. It is a single switch that
 connects four hosts as follow:
 
-                h1       h2
-                 \      /
-                  \    /
-                    s1
-                  /    \
-                 /      \
-               h3        h4
+![topology](./topo.png)
 
 Our P4 program will be written for the V1Model architecture implemented on
 P4.org's bmv2 software switch. The architecture file for the V1Model can be
@@ -155,7 +149,14 @@ these instances:
 make stop
 ```
 
+## Next Steps
+
+Congratulations, your implementation works! Move on to [Firewall](../firewall).
+
+
 ## Relevant Documentation
+
+Documentation on the Usage of Gateway (gw) and ARP Commands in topology.json is [here](https://github.com/p4lang/tutorials/tree/master/exercises/basic#the-use-of-gateway-gw-and-arp-commands-in-topologyjson)
 
 The documentation for P4_16 and P4Runtime is available [here](https://p4.org/specs/)
 
