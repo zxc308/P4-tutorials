@@ -139,7 +139,7 @@ the `p4runtime_lib` directory. Here is a summary of each of the files in the dir
 Follow the instructions from Step 1. If your Mininet network is still running,
 you will just need to run the following in your second shell:
 ```bash
-./my_controller.py
+./mycontroller.py
 ```
 
 You should start to see ICMP replies in your Mininet prompt, and you should start to
@@ -177,7 +177,7 @@ make clean
 To run the reference solution, you should run the following command from the
 `~/tutorials/P4D2_2017_Fall/exercises/p4runtime` directory:
 ```bash
-solution/my_controller.py
+solution/mycontroller.py
 ```
 
 
@@ -188,6 +188,8 @@ Congratulations, your implementation works! Move onto the next assignment
 
 
 ## Relevant Documentation
+
+Documentation on the Usage of Gateway (gw) and ARP Commands in topology.json is [here](https://github.com/p4lang/tutorials/tree/master/exercises/basic#the-use-of-gateway-gw-and-arp-commands-in-topologyjson)
 
 The documentation for P4_16 and P4Runtime is available [here](https://p4.org/specs/)
 

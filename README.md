@@ -1,5 +1,15 @@
 # P4 Tutorial
 
+* [Introduction](#introduction)
+* [Presentation](#presentation)
+* [P4 Documentation](#p4-documentation)
+* [Obtaining required software](#obtaining-required-software)
+     * [To build the virtual machine](#to-build-the-virtual-machine)
+     * [Accessing the VM](#accessing-the-vm)
+     * [To install P4 development tools on an existing system](#to-install-p4-development-tools-on-an-existing-system)
+* [How to Contribute](#how-to-contribute)
+* [Older tutorials](#older-tutorials)
+
 If you are reading this while not attending a live P4 tutorial class,
 see [below](#older-tutorials) for links to information about recently
 given live classes.
@@ -74,18 +84,38 @@ then we've already provided you with a virtual machine that has all of
 the required software installed. Ask an instructor for a USB stick with
 the VM image.
 
-Otherwise, to complete the exercises, you will need to either build a
+Otherwise, to complete the [exercises](https://github.com/p4lang/tutorials/tree/master/exercises), you will need to either build a
 virtual machine or install several dependencies.
-
 
 ### To build the virtual machine
 
-- Install [Vagrant](https://vagrantup.com) and [VirtualBox](https://virtualbox.org)
-- Clone the repository
-- Before proceeding, ensure that your system has at least 12 Gbytes of free disk space, otherwise the installation can fail in unpredictable ways.
-- `cd vm-ubuntu-20.04`
-- `vagrant up` - The time for this step to complete depends upon your computer and Internet access speeds, but for example with a 2015 MacBook pro and 50 Mbps download speed, it took a little less than 20 minutes.  It requires a reliable Internet connection throughout the entire process.
-- When the machine reboots, you should have a graphical desktop machine with the required software pre-installed.  There are two user accounts on the VM, `vagrant` (password `vagrant`) and `p4` (password `p4`).  The account `p4` is the one you are expected to use.
+#### Requirements
+
+- [Vagrant](https://vagrantup.com)
+- [VirtualBox](https://virtualbox.org)
+- At least 12 GB of free disk space, otherwise the installation can fail in unpredictable ways.
+
+#### Installation Steps
+
+1. Install Vagrant and VirtualBox on your system.
+2. Clone the repository
+3. Navigate to the cloned directory :
+   
+   ```
+   cd vm-ubuntu-20.04
+   ```
+4. Start the virtual machine using Vagrant:
+   ```
+   vagrant up
+   ```
+   *Note* : The time for this step depends on your computer and Internet speed. On a 2015 MacBook Pro with a 50 Mbps download speed, it took approximately 20 minutes. Ensure a stable Internet connection throughout the process.
+
+### Accessing the VM
+
+
+- There are two user accounts:
+  - Username: vagrant | Password: vagrant (This is the default account)
+  - Username: p4 | Password: p4 (Usage of this account is expected)
 
 *Note*: Before running the `vagrant up` command, make sure you have enabled virtualization in your environment; otherwise you may get a "VT-x is disabled in the BIOS for both all CPU modes" error. Check [this](https://stackoverflow.com/questions/33304393/vt-x-is-disabled-in-the-bios-for-both-all-cpu-modes-verr-vmx-msr-all-vmx-disabl) for enabling it in virtualbox and/or BIOS for different system configurations.
 
@@ -96,6 +126,9 @@ You will need the script to execute to completion before you can see the `p4` lo
 
 There are instructions and scripts in another Github repository that can, starting from a freshly installed Ubuntu 20.04 or 22.04 Linux system with enough RAM and free disk space, install all of the necessary P4 development tools to run the exercises in this repository.  You can find those instructions and scripts [here](https://github.com/jafingerhut/p4-guide/blob/master/bin/README-install-troubleshooting.md) (note that you must clone a copy of that entire repository in order for its install scripts to work).
 
+# How to Contribute
+
+We value and welcome new contributions. To get started, kindly look at our [Contribution Guidelines](CONTRIBUTING.md).
 
 # Older tutorials
 
@@ -113,7 +146,7 @@ such a link.
 
 ## ACM SIGCOMM August 2019 Tutorial on Programming the Network Data Plane
 
-https://p4.org/events/2019-08-23-p4-tutorial/
+You can find more information about the ACM SIGCOMM August 2019 Tutorial on Programming the Network Data Plane [here](https://p4.org/events/2019-08-23-p4-tutorial/)
 
 The page linked above has a link to download a pre-built VM image used
 for this class, as well as instructions to build one yourself from a
@@ -122,7 +155,7 @@ particular branch of this repository.
 
 ## P4 Developer Day, April 2019
 
-https://p4.org/events/2019-04-30-p4-developer-day/
+You can find more information about the P4 Developer Day held in April 2019 [here](https://p4.org/events/2019-04-30-p4-developer-day/)
 
 Both a beginner and advanced class were taught at this event.  The
 page linked above contains instructions to download and install a
@@ -131,7 +164,5 @@ pre-built Linux VM that was used during the classes.
 
 ## P4 Developer Day, November 2017
 
-* [YouTube
-  videos](https://www.youtube.com/watch?v=3DJeqS_dl_o&list=PLf7HGRMAlJBzGC58GcYpimyIs7D0nuSoo)
-  - This link plays the first welcome video of a series of 6 videos of
-  tutorials given at this event.
+This [link](https://www.youtube.com/watch?v=3DJeqS_dl_o&list=PLf7HGRMAlJBzGC58GcYpimyIs7D0nuSoo) plays the first welcome video of a 
+series of 6 videos of tutorials given at this event.
