@@ -99,12 +99,16 @@ virtual machine or install several dependencies.
 
 1. Install Vagrant and VirtualBox on your system.
 2. Clone the repository
-3. Navigate to the cloned directory :
+   
+   ```
+   git clone https://github.com/<your_github_username>/tutorials.git
+   ```
+4. Navigate to the cloned directory :
    
    ```
    cd vm-ubuntu-20.04
    ```
-4. Start the virtual machine using Vagrant:
+5. Start the virtual machine using Vagrant:
    ```
    vagrant up
    ```
