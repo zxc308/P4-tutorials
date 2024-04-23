@@ -101,7 +101,7 @@ virtual machine or install several dependencies.
 2. Clone the repository
    
    ```
-   git clone https://github.com/<your_github_username>/tutorials.git
+   https://github.com/p4lang/tutorials.git
    ```
 4. Navigate to the cloned directory :
    
