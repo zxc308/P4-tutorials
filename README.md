@@ -101,14 +101,14 @@ virtual machine or install several dependencies.
 2. Clone the repository
    
    ```
-   https://github.com/p4lang/tutorials.git
+   git clone https://github.com/p4lang/tutorials.git
    ```
-4. Navigate to the cloned directory :
+3. Navigate to the cloned directory :
    
    ```
    cd vm-ubuntu-20.04
    ```
-5. Start the virtual machine using Vagrant:
+4. Start the virtual machine using Vagrant:
    ```
    vagrant up
    ```
