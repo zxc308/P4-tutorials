@@ -22,7 +22,16 @@ from .convert import encode
 
 
 class P4InfoHelper(object):
+    """
+    Helper class to work with P4Info protobuf objects.
+    """
     def __init__(self, p4_info_filepath):
+        """
+        Initialize the P4InfoHelper object.
+
+        Parameters:
+            p4_info_filepath (str): Filepath to the P4Info file.
+        """
         p4info = p4info_pb2.P4Info()
         # Load the p4info file into a skeleton P4Info object
         with open(p4_info_filepath) as p4info_f:
@@ -30,6 +39,17 @@ class P4InfoHelper(object):
         self.p4info = p4info
 
     def get(self, entity_type, name=None, id=None):
+        """
+        Retrieve an entity from the P4Info object based on its name or ID.
+
+        Parameters:
+            entity_type (str): Type of entity to retrieve (e.g., 'tables', 'actions', 'match_fields').
+            name (str): Name of the entity.
+            id (int): ID of the entity.
+
+        Returns:
+            The protobuf object representing the entity.
+        """
         if name is not None and id is not None:
             raise AssertionError("name or id must be None")
 
@@ -48,12 +68,42 @@ class P4InfoHelper(object):
             raise AttributeError("Could not find id %r of type %s" % (id, entity_type))
 
     def get_id(self, entity_type, name):
+        """
+        Get the ID of an entity based on its name.
+
+        Parameters:
+            entity_type (str): Type of entity to retrieve (e.g., 'tables', 'actions', 'match_fields').
+            name (str): Name of the entity.
+
+        Returns:
+            int: ID of the entity.
+        """
         return self.get(entity_type, name=name).preamble.id
 
     def get_name(self, entity_type, id):
+        """
+        Get the name of an entity based on its ID.
+
+        Parameters:
+            entity_type (str): Type of entity to retrieve (e.g., 'tables', 'actions', 'match_fields').
+            id (int): ID of the entity.
+
+        Returns:
+            str: Name of the entity.
+        """
         return self.get(entity_type, id=id).preamble.name
 
     def get_alias(self, entity_type, id):
+        """
+        Get the alias of an entity based on its ID.
+
+        Parameters:
+            entity_type (str): Type of entity to retrieve (e.g., 'tables', 'actions', 'match_fields').
+            id (int): ID of the entity.
+
+        Returns:
+            str: Alias of the entity.
+        """
         return self.get(entity_type, id=id).preamble.alias
 
     def __getattr__(self, attr):
@@ -74,6 +124,17 @@ class P4InfoHelper(object):
         raise AttributeError("%r object has no attribute %r" % (self.__class__, attr))
 
     def get_match_field(self, table_name, name=None, id=None):
+        """
+        Get a match field from a table based on its name or ID.
+
+        Parameters:
+            table_name (str): Name of the table containing the match field.
+            name (str): Name of the match field.
+            id (int): ID of the match field.
+
+        Returns:
+            The protobuf object representing the match field.
+        """
         for t in self.p4info.tables:
             pre = t.preamble
             if pre.name == table_name:
@@ -165,6 +226,20 @@ class P4InfoHelper(object):
                         action_name=None,
                         action_params=None,
                         priority=None):
+        """
+        Build a TableEntry protobuf object.
+
+        Parameters:
+            table_name (str): Name of the table.
+            match_fields (dict): Dictionary of match field names and values.
+            default_action (bool): Whether this is a default action.
+            action_name (str): Name of the action.
+            action_params (dict): Dictionary of action parameter names and values.
+            priority (int): Priority of the table entry.
+
+        Returns:
+            p4runtime_pb2.TableEntry: The built TableEntry object.
+        """                    
         table_entry = p4runtime_pb2.TableEntry()
         table_entry.table_id = self.get_tables_id(table_name)
 
@@ -201,6 +276,17 @@ class P4InfoHelper(object):
         return mc_entry
 
     def buildCloneSessionEntry(self, clone_session_id, replicas, packet_length_bytes=0):
+        """
+        Build a CloneSessionEntry protobuf object.
+
+        Parameters:
+            clone_session_id (int): ID of the clone session.
+            replicas (list): List of dictionaries containing replica information.
+            packet_length_bytes (int): Length of the packet in bytes.
+
+        Returns:
+            p4runtime_pb2.PacketReplicationEngineEntry: The built CloneSessionEntry object.
+        """
         clone_entry = p4runtime_pb2.PacketReplicationEngineEntry()
         clone_entry.clone_session_entry.session_id = clone_session_id
         clone_entry.clone_session_entry.packet_length_bytes = packet_length_bytes
