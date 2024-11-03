@@ -4,10 +4,10 @@
 set -xe
 
 #Src
-BMV2_COMMIT="a8e2947aefe660d11df53ff44854d112d545db38"  # 2024-Aug-01
-PI_COMMIT="05cb92564af77ae4826565cbde84e3fd4960c6bd"    # 2024-Aug-01
-P4C_COMMIT="a7d6e351c016843cab60fb62aa233c1279512edd"   # 2024-Aug-01
-PTF_COMMIT="c554f83685186be4cfa9387eb5d6d700d2bbd7c0"   # 2024-Aug-01
+BMV2_COMMIT="28b736caabca7a4c9ff23e3b947354bd55191372"  # 2024-Nov-01
+PI_COMMIT="2bb40f7ab800b91b26f3aed174bbbfc739a37ffa"    # 2024-Nov-01
+P4C_COMMIT="09b4e63270dd2a7e44fcaaadfb92f7ca543f9880"   # 2024-Nov-01
+PTF_COMMIT="c554f83685186be4cfa9387eb5d6d700d2bbd7c0"   # 2024-Nov-01
 PROTOBUF_COMMIT="v3.18.1"
 GRPC_COMMIT="tags/v1.43.2"
 
@@ -203,7 +203,7 @@ git checkout ${P4C_COMMIT}
 git submodule update --init --recursive
 mkdir -p build
 cd build
-cmake .. -DENABLE_TEST_TOOLS=ON
+cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_TEST_TOOLS=ON
 # The command 'make -j${NUM_CORES}' works fine for the others, but
 # with 2 GB of RAM for the VM, there are parts of the p4c build where
 # running 2 simultaneous C++ compiler runs requires more than that
