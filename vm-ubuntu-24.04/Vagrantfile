@@ -5,7 +5,7 @@ Vagrant.configure(2) do |config|
   config.vm.box = "bento/ubuntu-24.04"
   config.vm.synced_folder '.', '/vagrant', disabled: true
   config.vm.hostname = "p4"
-  config.vm.define "dev", primary: true, autostart: false do |dev|
+  config.vm.define "dev", primary: true do |dev|
     dev.vm.provider "virtualbox" do |v|
       v.name = "P4 Tutorial Development" + Time.now.strftime(" %Y-%m-%d")
     end
