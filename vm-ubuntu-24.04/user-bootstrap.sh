@@ -26,6 +26,3 @@ cd ~
 sudo mv .vim /home/p4/.vim
 sudo chown -R p4:p4 /home/p4/.vim
 sudo chown p4:p4 /home/p4/.vimrc
-
-# Do this last!
-sudo reboot
