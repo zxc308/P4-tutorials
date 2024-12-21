@@ -1,5 +1,19 @@
 #!/bin/bash
 
+# Copyright 2024 Andy Fingerhut
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # Remember the current directory when the script was started:
 INSTALL_DIR="${PWD}"
 
@@ -10,33 +24,8 @@ THIS_SCRIPT_DIR_ABSOLUTE=`readlink -f "${THIS_SCRIPT_DIR_MAYBE_RELATIVE}"`
 # Print script commands and exit on errors.
 set -xe
 
-# --- Emacs --- #
-if [ -r /usr/share/emacs/site-lisp/p4_16-mode.el ]
-then
-    echo "Found existing file /usr/share/emacs/site-lisp/p4_16-mode.el   Assuming Emacs P4 files have already been set up before."
-else
-    sudo cp ${THIS_SCRIPT_DIR_ABSOLUTE}/p4_16-mode.el /usr/share/emacs/site-lisp/
-    mkdir -p $HOME/.emacs.d/
-    echo "(autoload 'p4_16-mode' \"p4_16-mode.el\" \"P4 Syntax.\" t)" > init.el
-    echo "(add-to-list 'auto-mode-alist '(\"\\.p4\\'\" . p4_16-mode))" | tee -a init.el
-    mv init.el $HOME/.emacs.d/
-    ln -s /usr/share/emacs/site-lisp/p4_16-mode.el $HOME/.emacs.d/p4_16-mode.el
-fi
-
-# --- Vim --- #
-if [ -d $HOME/.vim ]
-then
-    echo "Found existing directory $HOME/.vim   Assuming Vim P4 files have already been set up before."
-else
-    cd ~
-    mkdir -p .vim
-    cd .vim
-    mkdir -p ftdetect
-    mkdir -p syntax
-    echo "au BufRead,BufNewFile *.p4      set filetype=p4" >> ftdetect/p4.vim
-    echo "set bg=dark" >> ~/.vimrc
-    cp ${THIS_SCRIPT_DIR_ABSOLUTE}/p4.vim syntax/p4.vim
-fi
+${THIS_SCRIPT_DIR_ABSOLUTE}/setup-emacs.sh
+${THIS_SCRIPT_DIR_ABSOLUTE}/setup-vim.sh
 
 # Remove unused directories, if they exist.
 for dirname in Documents Music Pictures Public Templates Videos
