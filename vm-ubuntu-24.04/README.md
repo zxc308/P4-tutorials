@@ -39,9 +39,11 @@ Log in as user p4 (password p4).  Create a terminal window.
 In that terminal, run these commands:
 
 ```bash
+cd
 git clone https://github.com/p4lang/tutorials
-cd tutorials/vm-ubuntu-24.04
-./install.sh |& tee log.txt
+mkdir src
+cd src
+../tutorials/vm-ubuntu-24.04/install.sh |& tee log.txt
 ```
 
 *Note* that installing these tools can take several hours, depending
@@ -51,5 +53,5 @@ running this script, which removes some binary files that are not
 needed to run the tools:
 
 ```bash
-./clean.sh
+../tutorials/vm-ubuntu-24.04/clean.sh
 ```
