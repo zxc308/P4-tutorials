@@ -11,22 +11,32 @@ THIS_SCRIPT_DIR_ABSOLUTE=`readlink -f "${THIS_SCRIPT_DIR_MAYBE_RELATIVE}"`
 set -xe
 
 # --- Emacs --- #
-sudo cp ${THIS_SCRIPT_DIR_ABSOLUTE}/p4_16-mode.el /usr/share/emacs/site-lisp/
-mkdir -p $HOME/.emacs.d/
-echo "(autoload 'p4_16-mode' \"p4_16-mode.el\" \"P4 Syntax.\" t)" > init.el
-echo "(add-to-list 'auto-mode-alist '(\"\\.p4\\'\" . p4_16-mode))" | tee -a init.el
-mv init.el $HOME/.emacs.d/
-ln -s /usr/share/emacs/site-lisp/p4_16-mode.el $HOME/.emacs.d/p4_16-mode.el
+if [ -r /usr/share/emacs/site-lisp/p4_16-mode.el ]
+then
+    echo "Found existing file /usr/share/emacs/site-lisp/p4_16-mode.el   Assuming Emacs P4 files have already been set up before."
+else
+    sudo cp ${THIS_SCRIPT_DIR_ABSOLUTE}/p4_16-mode.el /usr/share/emacs/site-lisp/
+    mkdir -p $HOME/.emacs.d/
+    echo "(autoload 'p4_16-mode' \"p4_16-mode.el\" \"P4 Syntax.\" t)" > init.el
+    echo "(add-to-list 'auto-mode-alist '(\"\\.p4\\'\" . p4_16-mode))" | tee -a init.el
+    mv init.el $HOME/.emacs.d/
+    ln -s /usr/share/emacs/site-lisp/p4_16-mode.el $HOME/.emacs.d/p4_16-mode.el
+fi
 
 # --- Vim --- #
-cd ~
-mkdir -p .vim
-cd .vim
-mkdir -p ftdetect
-mkdir -p syntax
-echo "au BufRead,BufNewFile *.p4      set filetype=p4" >> ftdetect/p4.vim
-echo "set bg=dark" >> ~/.vimrc
-cp ${THIS_SCRIPT_DIR_ABSOLUTE}/p4.vim syntax/p4.vim
+if [ -d $HOME/.vim ]
+then
+    echo "Found existing directory $HOME/.vim   Assuming Vim P4 files have already been set up before."
+else
+    cd ~
+    mkdir -p .vim
+    cd .vim
+    mkdir -p ftdetect
+    mkdir -p syntax
+    echo "au BufRead,BufNewFile *.p4      set filetype=p4" >> ftdetect/p4.vim
+    echo "set bg=dark" >> ~/.vimrc
+    cp ${THIS_SCRIPT_DIR_ABSOLUTE}/p4.vim syntax/p4.vim
+fi
 
 # Remove unused directories, if they exist.
 for dirname in Documents Music Pictures Public Templates Videos
