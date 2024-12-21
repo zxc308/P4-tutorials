@@ -9,13 +9,17 @@ set -xe
 
 apt-get update
 
-KERNEL=$(uname -r)
-DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
+#KERNEL=$(uname -r)
+#DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
+apt-get -y upgrade
 apt-get install -y --no-install-recommends --fix-missing\
   git \
-  linux-headers-$KERNEL \
-  ubuntu-desktop-minimal \
   vim
+
+apt-get install -y \
+  ubuntu-desktop-minimal
+
+#  linux-headers-$KERNEL \
 
 # These are probably installed by install-p4dev-v8.sh script, probably
 # because they are a dependency of something else that script does
