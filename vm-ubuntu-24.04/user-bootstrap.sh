@@ -11,7 +11,7 @@ THIS_SCRIPT_DIR_ABSOLUTE=`readlink -f "${THIS_SCRIPT_DIR_MAYBE_RELATIVE}"`
 set -xe
 
 # --- Emacs --- #
-cp ${THIS_SCRIPT_DIR_ABSOLUTE}/p4_16-mode.el /usr/share/emacs/site-lisp/
+sudo cp ${THIS_SCRIPT_DIR_ABSOLUTE}/p4_16-mode.el /usr/share/emacs/site-lisp/
 mkdir $HOME/.emacs.d/
 echo "(autoload 'p4_16-mode' \"p4_16-mode.el\" \"P4 Syntax.\" t)" > init.el
 echo "(add-to-list 'auto-mode-alist '(\"\\.p4\\'\" . p4_16-mode))" | tee -a init.el
