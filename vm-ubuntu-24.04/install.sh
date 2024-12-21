@@ -26,3 +26,5 @@ ${THIS_SCRIPT_DIR_ABSOLUTE}/install-p4dev-v8.sh
 
 /bin/cp -p "${INSTALL_DIR}/p4setup.bash" "${HOME}/p4setup.bash"
 echo "source ~/p4setup.bash" | tee -a ~/.bashrc
+
+${THIS_SCRIPT_DIR_ABSOLUTE}/install-debug-utils.sh
