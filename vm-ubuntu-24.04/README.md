@@ -41,7 +41,7 @@ In that terminal, run these commands:
 ```bash
 git clone https://github.com/p4lang/tutorials
 cd tutorials/vm-ubuntu-24.04
-./install.sh
+./install.sh |& tee log.txt
 ```
 
 *Note* that installing these tools can take several hours, depending
