@@ -25,6 +25,13 @@ if [ -r /usr/share/emacs/site-lisp/p4_16-mode.el ]
 then
     echo "Found existing file /usr/share/emacs/site-lisp/p4_16-mode.el   Assuming Emacs P4 files have already been set up before."
 else
+    # Installing the emacs package causes the postfix package to be
+    # installed, which if you do not do it like this, causes
+    # interactive questions to be given to the user.  Avoid those
+    # interactive questions by installing it as follows.
+    echo "postfix postfix/main_mailer_type select No configuration" | sudo debconf-set-selections
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install --assume-yes postfix
+
     sudo apt-get install -y emacs
     sudo cp ${THIS_SCRIPT_DIR_ABSOLUTE}/p4_16-mode.el /usr/share/emacs/site-lisp/
     mkdir -p $HOME/.emacs.d/
