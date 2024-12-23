@@ -1,46 +1,43 @@
 #!/bin/bash
 
+# Copyright 2024 Andy Fingerhut
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # Print commands and exit on errors
 set -xe
 
-# Other editors some people might like to use, but let them install
-# this software themselves if they prefer them:
-# VSCode
-
 apt-get update
-
-KERNEL=$(uname -r)
-DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
-apt-get install -y --no-install-recommends --fix-missing\
+apt-get -y upgrade
+apt-get install -y \
   git \
-  linux-headers-$KERNEL \
-  ubuntu-desktop-minimal \
-  vim
+  ubuntu-desktop-minimal
 
 # These are probably installed by install-p4dev-v8.sh script, probably
 # because they are a dependency of something else that script does
 # explicitly install.
 
+#KERNEL=$(uname -r)
+#  linux-headers-$KERNEL \
 #  libboost-filesystem-dev \
 #  libboost-program-options-dev \
 #  libboost-test-dev \
 #  libevent-dev \
 #  libffi-dev \
 #  libjudy-dev \
+#  libpython3-dev \
 #  python3-dev \
 #  python3-setuptools \
-
-# Are these needed to be installed?  Try it without installing them.
-
-#  ca-certificates \
-#  emacs \
-#  iproute2 \
-#  libpcap-dev \
-#  libpython3-dev \
-#  tcpdump \
-#  wget \
-#  xterm \
-#  xcscope-el \
 
 # Add user account named 'p4'
 useradd -m -d /home/p4 -s /bin/bash p4
