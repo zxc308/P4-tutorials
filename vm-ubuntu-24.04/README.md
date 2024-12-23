@@ -7,14 +7,21 @@ have a system with an ARM CPU, e.g. Apple Silicon Macs.
 The section below for creating a VM without Vagrant works on all of
 those systems.
 
+Building a VM using Vagrant, and the instructions for creating a VM,
+are specific to [VirtualBox](https://virtualbox.org), which you must
+install first in order to use it.
+
 
 ## Creating the VM using Vagrant
 
-+ Below are the steps to create a brand new VM using Vagrant:
-  + Install [Vagrant](https://developer.hashicorp.com/vagrant/docs/installation) on your system if it's not already installed.
-  + In a terminal window, change to this `vm-ubuntu-24.04` directory
-    inside the `tutorials` directory.
-  + Run the command below in the terminal.
+Below are the steps to create a brand new VM using Vagrant.
+
++ Install
+  [Vagrant](https://developer.hashicorp.com/vagrant/docs/installation)
+  on your system if it is not already installed.
++ In a terminal window, change to this `vm-ubuntu-24.04` directory
+  inside the `tutorials` directory.
++ Run the command below in the terminal.
 
 ```bash
 vagrant up
@@ -22,6 +29,7 @@ vagrant up
 
 Skip the next section, and proceed to the section titled "Installing
 open source P4 development tools on the VM".
+
 
 ## Creating the VM using VirtualBox, without Vagrant
 
