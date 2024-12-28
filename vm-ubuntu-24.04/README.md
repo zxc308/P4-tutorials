@@ -1,48 +1,40 @@
-# Creating a Virtual Machine (VM)
+# Ways to install open source P4 development tools
 
-You can use a program called Vagrant to create the VM if your system
-has an Intel or AMD 64-bit processor.  This is not supported if you
-have a system with an ARM CPU, e.g. Apple Silicon Macs.
++ Create a new virtual machine (VM) running Ubuntu Linux on a Windows,
+  macOS, or Linux system
+  + using VirtualBox and Vagrant
+  + using VirtualBox and an ISO disk image with an Ubuntu Desktop Linux installer
+  + using VirtualBox and an ISO disk image with an Ubuntu Server Linux installer
 
-The section below for creating a VM without Vagrant works on all of
-those systems.
+| Your host system | Using VirtualBox and Vagrant | Using VirtualBox and ISO installer for Ubuntu Desktop | Using VirtualBox and ISO installer for Ubuntu Server |
+| ---------------- | ---------------------------- | ----------------------------------------------------- | ---------------------------------------------------- |
+| Windows or Linux system with 64-bit Intel or AMD processor | works | works | works |
+| macOS system with 64-bit Intel processor | works | works | works |
+| macOS system with Apple Silicon CPU | not supported as of 2024-Dec-28 | no ISO installer for Ubuntu Desktop exists for ARM64 CPUs as of 2024-Dec-28 | works with VirtualBox 7.1.0 or later, and ISO installer for Ubuntu for ARM64 CPUs |
 
-Building a VM using Vagrant, and the instructions for creating a VM,
-are specific to [VirtualBox](https://virtualbox.org), which you must
-install first in order to use it.
+There are many other ways that will work, e.g. start up a new Ubuntu
+Linux virtual machine on a cloud service like Amazon Web Services,
+Google Cloud, or Microsoft Azure.  Or install Ubuntu Linux on a bare
+metal system.  Details of these other methods are not documented here.
 
-
-## Creating the VM using Vagrant
-
-Below are the steps to create a brand new VM using Vagrant.
-
-+ Install
-  [Vagrant](https://developer.hashicorp.com/vagrant/docs/installation)
-  on your system if it is not already installed.
-+ In a terminal window, change to this `vm-ubuntu-24.04` directory
-  inside the `tutorials` directory.
-+ Run the command below in the terminal.
-
-```bash
-vagrant up
-```
-
-Skip the next section, and proceed to the section titled "Installing
-open source P4 development tools on the VM".
+All of the detailed instructions below require first installing
+[VirtualBox](https://virtualbox.org) on your host system first.
 
 
-## Creating the VM using VirtualBox, without Vagrant
+# Creating a VM using VirtualBox and Vagrant
 
-TODO
+Follow the steps [here](README-create-vm-using-vagrant.md).
 
-```bash
-sudo apt-get install git
-```
+
+# Creating a VM using VirtualBox and an ISO installer disk image
+
+Follow the steps
+[here](README-create-vm-using-iso-installer.md).
 
 
 # Installing open source P4 development tools on the VM
 
-Log in as user p4 (password p4).  Create a terminal window.
+Log in as user `p4` (password `p4`).  Create a terminal window.
 
 In that terminal, run these commands:
 
