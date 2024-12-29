@@ -47,7 +47,7 @@ chmod 440 /etc/sudoers.d/99_p4
 usermod -aG vboxsf p4
 
 # Note that a system installed starting similar to Ubuntu Server, and
-# than the package ubuntu-desktop-minimal is installed, might end up
+# then the package ubuntu-desktop-minimal is installed, might end up
 # with two different system services running on it, which can
 # significantly increase the boot time, e.g. by 2 minutes.
 
