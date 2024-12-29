@@ -471,6 +471,11 @@ pip -V  || echo "No such command in PATH: pip"
 pip2 -V || echo "No such command in PATH: pip2"
 pip3 -V || echo "No such command in PATH: pip3"
 
+# Modify sudoers configuration file so that this user can run any
+# command via sudo without having to enter a password.
+echo "${USER} ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers.d/99_${USER}
+sudo chmod 440 /etc/sudoers.d/99_${USER}
+
 # On new systems if you have never checked repos you should do that first
 
 # Install a few packages (vim is not strictly necessary -- installed for
@@ -484,31 +489,6 @@ then
     sudo dnf -y update
     sudo dnf -y install git vim
 fi
-
-# Run a child process in the background that will keep sudo
-# credentials fresh.  The hope is that after a user enters their
-# password once, they will not need to do so again for the entire
-# duration of running this install script.
-
-# However, since it runs in the background, do _not_ start it until
-# after the first command in this script that uses 'sudo', so the
-# foreground 'sudo' command will cause the password prompt to be
-# waited for, if it is needed.
-"${THIS_SCRIPT_DIR_ABSOLUTE}/keep-sudo-credentials-fresh.sh" &
-CHILD_PROCESS_PID=$!
-
-set +x
-clean_up() {
-    echo "Killing child process"
-    kill ${CHILD_PROCESS_PID}
-    # Invalidate the user's cached credentials
-    sudo --reset-timestamp
-    exit
-}
-set -x
-
-# Kill the child process
-trap clean_up SIGHUP SIGINT SIGTERM
 
 # Install pkg-config here, as it is required for p4lang/PI
 # installation to succeed.
@@ -1197,28 +1177,28 @@ DISK_USED_END=`get_used_disk_space_in_mbytes`
 set +x
 echo "All disk space utilizations below are in MBytes:"
 echo ""
-echo  "DISK_USED_START                ${DISK_USED_START}"
-echo  "DISK_USED_AFTER_AUTOTOOLS      ${DISK_USED_AFTER_AUTOTOOLS}"
-echo  "DISK_USED_BEFORE_GRPC_CLEANUP  ${DISK_USED_BEFORE_GRPC_CLEANUP}"
-echo  "DISK_USED_AFTER_GRPC           ${DISK_USED_AFTER_GRPC}"
-echo  "DISK_USED_BEFORE_PI_CLEANUP    ${DISK_USED_BEFORE_PI_CLEANUP}"
-echo  "DISK_USED_AFTER_PI             ${DISK_USED_AFTER_PI}"
-echo  "DISK_USED_BEFORE_BMV2_CLEANUP  ${DISK_USED_BEFORE_BMV2_CLEANUP}"
-echo  "DISK_USED_AFTER_BMV2           ${DISK_USED_AFTER_BMV2}"
-echo  "DISK_USED_BEFORE_P4C_CLEANUP   ${DISK_USED_BEFORE_P4C_CLEANUP}"
-echo  "DISK_USED_AFTER_P4C            ${DISK_USED_AFTER_P4C}"
-echo  "DISK_USED_AFTER_MININET        ${DISK_USED_AFTER_MININET}"
-echo  "DISK_USED_END                  ${DISK_USED_END}"
+echo "DISK_USED_START                ${DISK_USED_START}"
+echo "DISK_USED_AFTER_AUTOTOOLS      ${DISK_USED_AFTER_AUTOTOOLS}"
+echo "DISK_USED_BEFORE_GRPC_CLEANUP  ${DISK_USED_BEFORE_GRPC_CLEANUP}"
+echo "DISK_USED_AFTER_GRPC           ${DISK_USED_AFTER_GRPC}"
+echo "DISK_USED_BEFORE_PI_CLEANUP    ${DISK_USED_BEFORE_PI_CLEANUP}"
+echo "DISK_USED_AFTER_PI             ${DISK_USED_AFTER_PI}"
+echo "DISK_USED_BEFORE_BMV2_CLEANUP  ${DISK_USED_BEFORE_BMV2_CLEANUP}"
+echo "DISK_USED_AFTER_BMV2           ${DISK_USED_AFTER_BMV2}"
+echo "DISK_USED_BEFORE_P4C_CLEANUP   ${DISK_USED_BEFORE_P4C_CLEANUP}"
+echo "DISK_USED_AFTER_P4C            ${DISK_USED_AFTER_P4C}"
+echo "DISK_USED_AFTER_MININET        ${DISK_USED_AFTER_MININET}"
+echo "DISK_USED_END                  ${DISK_USED_END}"
 
 DISK_USED_MAX=`max_of_list ${DISK_USED_START} ${DISK_USED_AFTER_AUTOTOOLS} ${DISK_USED_BEFORE_GRPC_CLEANUP} ${DISK_USED_AFTER_GRPC} ${DISK_USED_BEFORE_PI_CLEANUP} ${DISK_USED_AFTER_PI} ${DISK_USED_BEFORE_BMV2_CLEANUP} ${DISK_USED_AFTER_BMV2} ${DISK_USED_BEFORE_P4C_CLEANUP} ${DISK_USED_AFTER_P4C} ${DISK_USED_AFTER_MININET} ${DISK_USED_END}`
-echo  "DISK_USED_MAX                  ${DISK_USED_MAX}"
-echo  "DISK_USED_MAX - DISK_USED_START : $((${DISK_USED_MAX}-${DISK_USED_START})) MBytes"
+echo "DISK_USED_MAX                  ${DISK_USED_MAX}"
+echo "DISK_USED_MAX - DISK_USED_START : $((${DISK_USED_MAX}-${DISK_USED_START})) MBytes"
 set -x
 
 cd "${INSTALL_DIR}"
 DETS="install-details"
 mkdir -p "${DETS}"
-mv usr-local-*.txt pip3-list-2b-before-grpc-pip3.txt "${DETS}"
+mv usr-local-*.txt "${DETS}"
 
 P4GUIDE_BIN="${THIS_SCRIPT_DIR_ABSOLUTE}"
 
@@ -1256,5 +1236,3 @@ echo "----------------------------------------------------------------------"
 echo "CONSIDER READING WHAT IS ABOVE"
 echo "----------------------------------------------------------------------"
 set -x
-
-clean_up
