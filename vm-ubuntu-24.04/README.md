@@ -1,10 +1,13 @@
 # Ways to install open source P4 development tools
 
-+ Create a new virtual machine (VM) running Ubuntu Linux on a Windows,
-  macOS, or Linux system
-  + using VirtualBox and Vagrant
-  + using VirtualBox and an ISO disk image with an Ubuntu Desktop Linux installer
-  + using VirtualBox and an ISO disk image with an Ubuntu Server Linux installer
+Detailed steps are given later to create a new virtual machine (VM)
+running Ubuntu Linux on a Windows, macOS, or Linux system in one of
+these ways, listed in order from fewest steps required, to most steps
+required:
+
++ using VirtualBox and Vagrant
++ using VirtualBox and an ISO disk image with an Ubuntu Desktop Linux installer
++ using VirtualBox and an ISO disk image with an Ubuntu Server Linux installer
 
 | Your host system | Using VirtualBox and Vagrant | Using VirtualBox and ISO installer for Ubuntu Desktop | Using VirtualBox and ISO installer for Ubuntu Server |
 | ---------------- | ---------------------------- | ----------------------------------------------------- | ---------------------------------------------------- |
@@ -18,7 +21,7 @@ Google Cloud, or Microsoft Azure.  Or install Ubuntu Linux on a bare
 metal system.  Details of these other methods are not documented here.
 
 All of the detailed instructions below require first installing
-[VirtualBox](https://virtualbox.org) on your host system first.
+[VirtualBox](https://virtualbox.org) on your host system.
 
 
 # Creating a VM using VirtualBox and Vagrant
