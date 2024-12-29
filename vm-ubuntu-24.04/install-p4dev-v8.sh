@@ -410,7 +410,6 @@ echo "  + nanomsg version 1.0.0"
 echo "  + nnpy latest version available via 'pip install'"
 echo "+ p4c: github.com/p4lang/p4c latest version"
 echo "+ ptf: github.com/p4lang/ptf latest version"
-echo "+ tutorials: github.com/p4lang/tutorials latest version"
 echo "+ Mininet: github.com/mininet/mininet latest version as of 2024-Sep-18"
 echo "+ Python packages: protobuf ${PROTOBUF_VERSION_FOR_PIP}, grpcio - a recent version auto-selected by pip3"
 echo "+ Python packages: scapy (2.5.0), psutil, crcmod"
@@ -1120,24 +1119,6 @@ set +x
 echo "end install miscellaneous packages:"
 set -x
 date
-
-cd "${INSTALL_DIR}"
-set +x
-echo "------------------------------------------------------------"
-echo "Installing p4lang/tutorials"
-echo "start install tutorials:"
-set -x
-date
-
-git clone https://github.com/p4lang/tutorials
-cd tutorials
-git log -n 1
-
-set +x
-echo "end install tutorials:"
-set -x
-date
-
 
 cd "${INSTALL_DIR}"
 debug_dump_many_install_files ${INSTALL_DIR}/usr-local-9-after-miscellaneous-install.txt
