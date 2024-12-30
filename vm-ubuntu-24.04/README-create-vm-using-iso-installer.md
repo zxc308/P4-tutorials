@@ -4,19 +4,22 @@
 
 Download the `.iso` file that installs the version of Linux that you
 are interested in.  An Internet search for terms like these works for
-me.  Use "amd64" for a host system with 64-bit Intel/AMD CPU, or
-"arm64" for an Apple Silicon Mac.
-
-Example search terms:
+me.  You should only pay attention to search results that are on the
+ubuntu.com web site.
 
 + If your system has a 64-bit Intel or AMD CPU
-  + Ubuntu 24.04 amd64
+  + Search terms: Ubuntu 24.04 amd64
+  + Names of files I found on 2024-Dec-30:
+    + ubuntu-24.04.1-desktop-amd64.iso
+    + ubuntu-24.04.1-live-server-amd64.iso
 + If you have an Apple Silicon Mac:
-  + Ubuntu 24.04 arm64
+  + Search terms: Ubuntu 24.04 arm64
+  + Names of files I found on 2024-Dec-30:
+    + ubuntu-24.04.1-live-server-arm64.iso
 
-An installer for Desktop Linux leads to fewer steps you need to do in
+An installer for Ubuntu Desktop leads to fewer steps you need to do in
 order to get a GUI Desktop.  As of 2024, I have only been able to find
-Server Linux installers for arm64 systems.  It is not difficult to
+Ubuntu Server installers for arm64 systems.  It is not difficult to
 install that, and then later install the GUI Desktop.
 
 
@@ -31,16 +34,17 @@ minutes total time to create a new VM where you install Linux from an
 
 A nice thing about VirtualBox is that once you create a VM for the
 operating system you want, if you have enough free disk space to keep
-around that original VM, it is very quick (30 seconds or less) to
-create a copy of that VM, and then install a bunch of software on that
-copy.  As long as you leave the original VM there, it will not change,
-and you can create copies of it whenever you want to try experimenting
-with it.  Did you accidentally mess up the state of that VM's
-system-wide configuration files, or install some weird combination of
-software that seems to conflict with each other?  You can abandon that
-VM image, deleting it whenever you no longer find its contents useful,
-and create more clones of the original base OS for further
-experiments.
+around that original VM (which I typically include "base OS" somewhere
+in its name), it is very quick (30 seconds or less) to create a copy
+of the base OS VM, and then install a bunch of software on that copy.
+As long as you leave the original base OS VM there, it will not
+change, and you can create copies of it whenever you want to try
+experimenting with it.  Did you accidentally mess up the state of some
+VM's system-wide configuration files, or install some weird
+combination of software that seems to conflict with each other?  You
+can abandon that VM image, deleting it whenever you no longer find its
+contents useful, and create more clones of the original base OS VM for
+further experiments.
 
 In the VirtualBox GUI window:
 
