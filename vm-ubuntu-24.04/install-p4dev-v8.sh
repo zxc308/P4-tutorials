@@ -470,11 +470,6 @@ pip -V  || echo "No such command in PATH: pip"
 pip2 -V || echo "No such command in PATH: pip2"
 pip3 -V || echo "No such command in PATH: pip3"
 
-# Modify sudoers configuration file so that this user can run any
-# command via sudo without having to enter a password.
-echo "${USER} ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers.d/99_${USER}
-sudo chmod 440 /etc/sudoers.d/99_${USER}
-
 # On new systems if you have never checked repos you should do that first
 
 # Install a few packages (vim is not strictly necessary -- installed for

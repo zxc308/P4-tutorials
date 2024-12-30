@@ -24,6 +24,11 @@ THIS_SCRIPT_DIR_ABSOLUTE=`readlink -f "${THIS_SCRIPT_DIR_MAYBE_RELATIVE}"`
 # Print script commands and exit on errors.
 set -xe
 
+# Modify sudoers configuration file so that this user can run any
+# command via sudo without having to enter a password.
+echo "${USER} ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers.d/99_${USER}
+sudo chmod 440 /etc/sudoers.d/99_${USER}
+
 ${THIS_SCRIPT_DIR_ABSOLUTE}/setup-emacs.sh
 ${THIS_SCRIPT_DIR_ABSOLUTE}/setup-vim.sh
 
