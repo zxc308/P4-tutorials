@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 BUILD_DIR = build
 PCAP_DIR = pcaps
 LOG_DIR = logs
@@ -32,10 +33,10 @@ endif
 all: run
 
 run: build
-	sudo python3 $(RUN_SCRIPT) -t $(TOPO) $(run_args)
+	sudo PATH=$(PATH) ${P4_EXTRA_SUDO_OPTS} python3 $(RUN_SCRIPT) -t $(TOPO) $(run_args)
 
 stop:
-	sudo mn -c
+	sudo PATH=$(PATH) `which mn` -c
 
 build: dirs $(compiled_json)
 
