@@ -23,6 +23,12 @@ Linux virtual machine on a cloud service like Amazon Web Services,
 Google Cloud, or Microsoft Azure.  Or install Ubuntu Linux on a bare
 metal system.  Details of these other methods are not documented here.
 
+The `install.sh` script mentioned later will work on several supported
+versions of Ubuntu Linux, even if you do not install the Ubuntu GNOME
+desktop, but note that there are portions of the tutorials,
+e.g. `xterm` commands, and `wireshark`, that require a graphical
+desktop.
+
 All of the detailed instructions below require first installing
 [VirtualBox](https://virtualbox.org) on your host system.
 

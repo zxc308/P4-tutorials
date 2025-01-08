@@ -22,13 +22,44 @@ THIS_SCRIPT_FILE_MAYBE_RELATIVE="$0"
 THIS_SCRIPT_DIR_MAYBE_RELATIVE="${THIS_SCRIPT_FILE_MAYBE_RELATIVE%/*}"
 THIS_SCRIPT_DIR_ABSOLUTE=`readlink -f "${THIS_SCRIPT_DIR_MAYBE_RELATIVE}"`
 
+print_usage() {
+    1>&2 echo "usage: $0 [ latest | <date> ]"
+    1>&2 echo ""
+    1>&2 echo "Dates supported:"
+    1>&2 echo "    2025-Jan-01"
+}
+
+if [ $# -eq 0 ]
+then
+    VERSION="2025-Jan-01"
+    echo "No version specified.  Defaulting to ${VERSION}"
+elif [ $# -eq 1 ]
+then
+    VERSION="$1"
+else
+    print_usage
+    exit 1
+fi
+
+case ${VERSION} in
+    2025-Jan-01)
+	# 2025-Jan-01 versions:
+	export INSTALL_BEHAVIORAL_MODEL_SOURCE_VERSION="7ca39eda3529347e4ba66f1976351b0087294bf8"
+	export INSTALL_PI_SOURCE_VERSION="2bb40f7ab800b91b26f3aed174bbbfc739a37ffa"
+	export INSTALL_P4C_SOURCE_VERSION="1dc0afae2207f4bb9f5ab45f105ed569cc1ac89b"
+	export INSTALL_PTF_SOURCE_VERSION="c554f83685186be4cfa9387eb5d6d700d2bbd7c0"
+	;;
+    latest)
+	echo "Using the latest version of all p4lang repository source code."
+	;;
+    *)
+	print_usage
+	exit 1
+	;;
+esac
+
 ${THIS_SCRIPT_DIR_ABSOLUTE}/user-bootstrap.sh
 
-# 2025-Jan-01 versions:
-export INSTALL_BEHAVIORAL_MODEL_SOURCE_VERSION="7ca39eda3529347e4ba66f1976351b0087294bf8"
-export INSTALL_PI_SOURCE_VERSION="2bb40f7ab800b91b26f3aed174bbbfc739a37ffa"
-export INSTALL_P4C_SOURCE_VERSION="1dc0afae2207f4bb9f5ab45f105ed569cc1ac89b"
-export INSTALL_PTF_SOURCE_VERSION="c554f83685186be4cfa9387eb5d6d700d2bbd7c0"
 
 ${THIS_SCRIPT_DIR_ABSOLUTE}/install-p4dev-v8.sh
 
