@@ -1,3 +1,6 @@
+
+[comment]: # (SPDX-License-Identifier:  Apache-2.0)
+
 ## Creating the VM using VirtualBox and Vagrant
 
 + Install
