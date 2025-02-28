@@ -108,15 +108,12 @@ for a list of virtual machine images that you can download, then use
 VirtualBox's File->Import Appliance menu item to add the virtual
 machine to those on your system.
 
+There is one user account:
++ Username: p4 | Password: p4
+
 ### To build a virtual machine with the P4 development tools.
 
 See the instructions [here](vm-ubuntu-24.04/README.md).
-
-### Accessing the VM
-
-+ There are two user accounts:
-  + Username: p4 | Password: p4 (Usage of this account is expected)
-  + Username: vagrant | Password: vagrant (There is no need to use this account)
 
 ### To install P4 development tools on an existing system
 
