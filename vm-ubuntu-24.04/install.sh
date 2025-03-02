@@ -28,11 +28,12 @@ print_usage() {
     1>&2 echo "Dates supported:"
     1>&2 echo "    2025-Jan-01"
     1>&2 echo "    2025-Feb-01"
+    1>&2 echo "    2025-Mar-01"
 }
 
 if [ $# -eq 0 ]
 then
-    VERSION="2025-Feb-01"
+    VERSION="2025-Mar-01"
     echo "No version specified.  Defaulting to ${VERSION}"
 elif [ $# -eq 1 ]
 then
@@ -54,6 +55,12 @@ case ${VERSION} in
 	export INSTALL_PI_SOURCE_VERSION="c3abb96d61f91e4f641aecd7ba2e784870c35290"
 	export INSTALL_P4C_SOURCE_VERSION="2776b1948529bc7e8ccfb2f6ea2a9c1ab1f68796"
 	export INSTALL_PTF_SOURCE_VERSION="c554f83685186be4cfa9387eb5d6d700d2bbd7c0"
+	;;
+    2025-Mar-01)
+	export INSTALL_BEHAVIORAL_MODEL_SOURCE_VERSION="d12eefc7bc19fb4da615b1b45c1235899f2e4fb1"
+	export INSTALL_PI_SOURCE_VERSION="17802cfd67218a26307c0ea69fe520751ca6ab64"
+	export INSTALL_P4C_SOURCE_VERSION="3ffac66ee232f2ab9d1860751dde94725d3b1af8"
+	export INSTALL_PTF_SOURCE_VERSION="77a5ba448f3db54b45a03a6235b7cec8c8c7d093"
 	;;
     latest)
 	echo "Using the latest version of all p4lang repository source code."

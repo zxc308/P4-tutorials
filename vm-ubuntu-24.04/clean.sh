@@ -23,7 +23,7 @@ cd p4c
 /bin/rm -fr build
 cd ..
 
-/bin/rm usr-local-*.txt pip3-list-2b-*.txt
+/bin/rm usr-local-*.txt pip3-list-2b-*.txt $HOME/.ssh/*
 
 sudo apt autoremove
 sudo apt clean
