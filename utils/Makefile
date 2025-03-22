@@ -1,4 +1,7 @@
+# SPDX-FileCopyrightText: 2017 Contributors to the P4 Project
+#
 # SPDX-License-Identifier: Apache-2.0
+
 BUILD_DIR = build
 PCAP_DIR = pcaps
 LOG_DIR = logs
