@@ -1,6 +1,3 @@
-
-[comment]: # (SPDX-License-Identifier:  Apache-2.0)
-
 # Introduction
 
 Detailed steps are given later to create a new virtual machine (VM)

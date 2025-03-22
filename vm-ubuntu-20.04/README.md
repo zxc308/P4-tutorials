@@ -1,6 +1,3 @@
-
-[comment]: # (SPDX-License-Identifier:  Apache-2.0)
-
 # Creating the VM
 
 This directory is here only for historical reference.  The scripts

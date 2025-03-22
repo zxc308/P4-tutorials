@@ -1,6 +1,3 @@
-
-[comment]: # (SPDX-License-Identifier:  Apache-2.0)
-
 # Implementing a Control Plane using P4Runtime
 
 ## Introduction

@@ -1,6 +1,3 @@
-
-[comment]: # (SPDX-License-Identifier:  Apache-2.0)
-
 # Implementing QOS
 
 ## Introduction

@@ -1,6 +1,3 @@
-
-[comment]: # (SPDX-License-Identifier:  Apache-2.0)
-
 # Create VM using ISO installer
 
 ## Finding the Linux installer image you want
