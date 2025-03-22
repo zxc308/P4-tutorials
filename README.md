@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2015 Contributors to the P4 Project
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 # P4 Tutorial
 
 * [Introduction](#introduction)

@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2024 Contributors to the P4 Project
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 # P4 Utils
 
 This folder contains various scripts used to run the code.

@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2024 Contributors to the P4 Project
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 # Creating a VM using VirtualBox and an ISO disk image with an Ubuntu Desktop Linux 24.04 installer
 
 In the initial boot menu, the default choice "Try or Install Ubuntu"

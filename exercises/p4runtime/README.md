@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2017 Contributors to the P4 Project
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 # Implementing a Control Plane using P4Runtime
 
 ## Introduction

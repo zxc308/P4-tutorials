@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2021 Contributors to the P4 Project
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 # Creating a VM image for distribution to others
 
 If you want to run `p4c` tests, see the next section on how to do so,

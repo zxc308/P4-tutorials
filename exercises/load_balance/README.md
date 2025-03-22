@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2017 Contributors to the P4 Project
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 # Load Balancing
 
 In this exercise, you will implement a form of load balancing based on
