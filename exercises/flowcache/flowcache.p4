@@ -23,6 +23,8 @@ const int CPU_PORT_CLONE_SESSION_ID = 57;
 
 const int FL_PACKET_IN = 1;
 
+const bit<32> CONTROL_PKT = 1;
+
 #define CPU_PORT 510
 
 /*************************************************************************
@@ -170,6 +172,9 @@ control MyVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
 control MyIngress(inout headers_t hdr,
                   inout metadata_t meta,
                   inout standard_metadata_t standard_metadata){
+
+    counter(CONTROL_PKT, CounterType.packets_and_bytes) ingressPktOutCounter;
+
     action send_to_controller_with_details(
         PuntReason_t       punt_reason,
         ControllerOpcode_t opcode)
@@ -204,8 +209,6 @@ control MyIngress(inout headers_t hdr,
         send_copy_to_controller(PuntReason_t.FLOW_UNKNOWN,
             ControllerOpcode_t.NO_OP);
         drop_packet();
-        // TODO: Update per-ingress-port packet counter for number of
-        // packets received with unknown SMAC.
     }
     table flow_cache {
         key = {
@@ -223,20 +226,10 @@ control MyIngress(inout headers_t hdr,
         size = 65536;
     }
 
-    table dbgPacketOutHdr {
-        key = {
-            hdr.packet_out.opcode : exact;
-            // TODO  find another field
-            //hdr.packet_out.reserved1 : exact;
-        }
-        actions = { NoAction; }
-        const default_action = NoAction;
-    }
-
     apply {
         if (hdr.packet_out.isValid()) {
             // Process packet from controller
-            dbgPacketOutHdr.apply();
+            ingressPktOutCounter.count((bit<32>)0);
             switch (hdr.packet_out.opcode) {
                 ControllerOpcode_t.SEND_TO_PORT_IN_OPERAND0: {
                     standard_metadata.egress_spec = (PortId_t) hdr.packet_out.operand0;
@@ -267,32 +260,9 @@ control MyIngress(inout headers_t hdr,
 control MyEgress(inout headers_t hdr,
                  inout metadata_t meta,
                  inout standard_metadata_t standard_metadata){
-    table debug_egress_standard_metadata {
-        key = {
-            standard_metadata.ingress_port : exact;
-            standard_metadata.egress_spec : exact;
-            standard_metadata.egress_port : exact;
-            standard_metadata.instance_type : exact;
-            standard_metadata.packet_length : exact;
-            //standard_metadata.enq_timestamp : exact;
-            //standard_metadata.enq_qdepth : exact;
-            //standard_metadata.deq_timedelta : exact;
-            //standard_metadata.deq_qdepth : exact;
-            //standard_metadata.ingress_global_timestamp : exact;
-            //standard_metadata.egress_global_timestamp : exact;
-            //standard_metadata.mcast_grp : exact;
-            //standard_metadata.egress_rid : exact;
-            //standard_metadata.checksum_error : exact;
-            //standard_metadata.parser_error : exact;
-            //standard_metadata.priority : exact;
-        }
-        actions = { NoAction; }
-        const default_action = NoAction();
-        size = 0;
-    }
-    action drop_packet() {
-        mark_to_drop(standard_metadata);
-    }
+
+    counter(CONTROL_PKT, CounterType.packets_and_bytes) egressPktInCounter;
+
     action prepend_packet_in_hdr (
         PuntReason_t punt_reason,
         PortId_t ingress_port)
@@ -301,9 +271,9 @@ control MyEgress(inout headers_t hdr,
         hdr.packet_in.input_port = (PortIdToController_t) ingress_port;
         hdr.packet_in.punt_reason = punt_reason;
         hdr.packet_in.opcode = ControllerOpcode_t.NO_OP;
+        egressPktInCounter.count((bit<32>)0);
     }
     apply {
-        debug_egress_standard_metadata.apply();
         if (standard_metadata.egress_port == CPU_PORT) {
             prepend_packet_in_hdr(meta.punt_reason, meta.ingress_port);
         } else {
