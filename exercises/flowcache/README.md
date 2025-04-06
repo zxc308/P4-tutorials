@@ -118,14 +118,15 @@ seen by your P4 parser.
 The `mycontroller.py` file is a basic controller plane that does the following:
 1. Establishes a gRPC connection to the switches for the P4Runtime service.
 2. Pushes the P4 program to each switch.
-3. Writes tunnel ingress and tunnel egress rules for two tunnels between h1 and h2.
-4. Reads tunnel ingress and egress counters every 2 seconds.
+3. Receives `PacketIn` messages and generates flow rules to provide connectivity among all hosts.
+4. Sends `PacketOut` messages to forward the packets to their destination while the corresponding flow rules are not yet installed.
+5. Handles the `IdleTimeoutNotification`.
+6. Reads `PacketIn` and `PacketOut` ingress and egress counters periodically.
 
 It also contains comments marked with `TODO` which indicate the functionality
 that you need to implement.
 
-Your job will be to write the tunnel transit rule in the `writeTunnelRules` function
-that will match on tunnel ID and forward packets to the next hop.
+Your job will be to write functions that will handle the `PacketIn`, `PacketOut` and idle timeout mechanismes.
 
 ![topology](../basic_tunnel/topo.png)
 
@@ -167,13 +168,8 @@ IDs rather than the table names. You can use the P4Info helper to translate thes
 into entry names.
 
 Also, you may want to think about the following:
-- What assumptions about the topology are baked into your implementation? How would you
-need to change it for a more realistic network?
+`TODO`
 
-- Why are the byte counters different between the ingress and egress counters?
-
-- What is the TTL in the ICMP replies? Why is it the value that it is?
-Hint: The default TTL is 64 for packets sent by the hosts.
 
 If you are interested, you can find the protocol buffer and gRPC definitions here:
 - [P4Runtime](https://github.com/p4lang/p4runtime/blob/main/proto/p4/v1/p4runtime.proto)
