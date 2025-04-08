@@ -23,7 +23,7 @@ const int CPU_PORT_CLONE_SESSION_ID = 57;
 
 const int FL_PACKET_IN = 1;
 
-const bit<32> CONTROL_PKT = 1;
+const bit<32> NUMBER_OF_HOSTS = 3;
 
 #define CPU_PORT 510
 
@@ -81,6 +81,7 @@ enum bit<8> PuntReason_t {
 
 @controller_header("packet_out")
 header packet_out_header_h {
+    //TODO remove for exercise
     ControllerOpcode_t   opcode;
     bit<8>  reserved1;
     bit<32> operand0;
@@ -88,6 +89,7 @@ header packet_out_header_h {
 
 @controller_header("packet_in")
 header packet_in_header_h {
+    //TODO remove for exercise
     PortIdToController_t input_port;
     PuntReason_t         punt_reason;
     ControllerOpcode_t   opcode;
@@ -173,7 +175,7 @@ control MyIngress(inout headers_t hdr,
                   inout metadata_t meta,
                   inout standard_metadata_t standard_metadata){
 
-    counter(CONTROL_PKT, CounterType.packets_and_bytes) ingressPktOutCounter;
+    counter(NUMBER_OF_HOSTS, CounterType.packets_and_bytes) ingressPktOutCounter;
 
     action send_to_controller_with_details(
         PuntReason_t       punt_reason,
@@ -221,7 +223,7 @@ control MyIngress(inout headers_t hdr,
             drop_packet;
             flow_unknown;
         }
-        support_timeout = true;
+        support_timeout = true; //TODO remove for exercise
         default_action = flow_unknown();
         size = 65536;
     }
@@ -229,7 +231,7 @@ control MyIngress(inout headers_t hdr,
     apply {
         if (hdr.packet_out.isValid()) {
             // Process packet from controller
-            ingressPktOutCounter.count((bit<32>)0);
+            ingressPktOutCounter.count((bit<32>)hdr.ipv4.dstAddr[5:0]);
             switch (hdr.packet_out.opcode) {
                 ControllerOpcode_t.SEND_TO_PORT_IN_OPERAND0: {
                     standard_metadata.egress_spec = (PortId_t) hdr.packet_out.operand0;
@@ -261,7 +263,7 @@ control MyEgress(inout headers_t hdr,
                  inout metadata_t meta,
                  inout standard_metadata_t standard_metadata){
 
-    counter(CONTROL_PKT, CounterType.packets_and_bytes) egressPktInCounter;
+    counter(NUMBER_OF_HOSTS, CounterType.packets_and_bytes) egressPktInCounter;
 
     action prepend_packet_in_hdr (
         PuntReason_t punt_reason,
@@ -271,7 +273,7 @@ control MyEgress(inout headers_t hdr,
         hdr.packet_in.input_port = (PortIdToController_t) ingress_port;
         hdr.packet_in.punt_reason = punt_reason;
         hdr.packet_in.opcode = ControllerOpcode_t.NO_OP;
-        egressPktInCounter.count((bit<32>)0);
+        egressPktInCounter.count((bit<32>)hdr.ipv4.dstAddr[5:0]);
     }
     apply {
         if (standard_metadata.egress_port == CPU_PORT) {
