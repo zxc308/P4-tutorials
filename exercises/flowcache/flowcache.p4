@@ -201,11 +201,13 @@ control MyIngress(inout headers_t hdr,
     action cached_action (
         PortId_t port,
         bit<1> decrement_ttl,
-        bit<6> new_dscp)
+        bit<6> new_dscp,
+        macAddr_t dst_eth_addr)
     {
         standard_metadata.egress_spec = port;
         hdr.ipv4.ttl = (decrement_ttl == 1) ? (hdr.ipv4.ttl |-| 1) : hdr.ipv4.ttl;
         hdr.ipv4.diffserv[7:2] = new_dscp;
+        hdr.ethernet.dstAddr = dst_eth_addr;
     }
     action flow_unknown () {
         send_copy_to_controller(PuntReason_t.FLOW_UNKNOWN,

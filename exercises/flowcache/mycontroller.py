@@ -4,6 +4,7 @@ import argparse
 import os
 import sys
 import asyncio
+import traceback
 
 from collections import deque
 from collections import Counter
@@ -32,6 +33,9 @@ global_data['CPU_PORT'] = 510
 global_data['CPU_PORT_CLONE_SESSION_ID'] = 57
 global_data['NUM_PORTS'] = 3
 global_data['index'] = 0
+global_data["10.0.1.1"] = "08:00:00:00:01:11"
+global_data["10.0.2.2"] = "08:00:00:00:02:22"
+global_data["10.0.3.3"] = "08:00:00:00:03:33"
 
 def ipv4_to_int(addr):
     """Take an argument 'addr' containing an IPv4 address written as a
@@ -119,7 +123,7 @@ def writeCloneSession(sw, clone_session_id, replicas):
     clone_entry = global_data['p4info_helper'].buildCloneSessionEntry(clone_session_id, replicas, 0)
     sw.WritePREEntry(clone_entry)
 
-def addFlowRule( ingress_sw, src_ip_addr, dst_ip_addr, protocol, port, new_dscp, decrement_ttl_bool):
+def addFlowRule( ingress_sw, src_ip_addr, dst_ip_addr, protocol, port, new_dscp, decrement_ttl_bool, dst_eth_addr):
     """
     Install flow rule in flow cache table
 
@@ -130,7 +134,7 @@ def addFlowRule( ingress_sw, src_ip_addr, dst_ip_addr, protocol, port, new_dscp,
     :param port: The output port to which the packet will be forwarded.
     :param decrement_ttl: The updated TTL value for the IP.
     :param new_dscp: The new DSCP value for the IP.
-
+    :param dst_eth_addr: the destination Ethernet address to write in the rule
     """
 
     if decrement_ttl_bool:
@@ -150,7 +154,9 @@ def addFlowRule( ingress_sw, src_ip_addr, dst_ip_addr, protocol, port, new_dscp,
             "port":           port,
             "decrement_ttl":  x,
             "new_dscp":       new_dscp,
+            "dst_eth_addr":   dst_eth_addr
         },
+        #TODO remove for the exercise
         idle_timeout_ns = 3
         )
     ingress_sw.WriteTableEntry(table_entry)
@@ -173,18 +179,8 @@ async def readTableRules(p4info_helper, sw):
             entry = entity.table_entry
             # TODO For extra credit, you can use the p4info_helper to translate
             #      the IDs in the entry to names
-            table_name = p4info_helper.get_tables_name(entry.table_id)
-            print('%s: ' % table_name, end=' ')
-            for m in entry.match:
-                print(p4info_helper.get_match_field_name(table_name, m.field_id), end=' ')
-                print('%r' % (p4info_helper.get_match_field_value(m),), end=' ')
-            action = entry.action.action
-            action_name = p4info_helper.get_actions_name(action.action_id)
-            print('->', action_name, end=' ')
-            for p in action.params:
-                print(p4info_helper.get_action_param_name(action_name, p.param_id), end=' ')
-                print('%r' % p.value, end=' ')
-            print()
+            print(entry)
+            print('-----')
 
 async def printCounter(p4info_helper, sw, counter_name, index):
     """
@@ -238,10 +234,10 @@ async def process_packet(message):
             if pktinfo['metadata']['punt_reason'] == global_data['punt_reason_name2int']['FLOW_UNKNOWN']:
                 flow_hash = src_ip_addr ^ dst_ip_addr ^ ip_proto
                 dest_port_int = 1 + (flow_hash % global_data['NUM_PORTS']) - pktinfo['metadata']['input_port']
-                print(dest_port_int)
                 decrement_ttl_bool = True
                 new_dscp_int = 5
                 global_data['index'] = int(pkt[IP].dst.split('.')[3])
+                dst_eth_addr = global_data[ip_da_str]
                 metadatas = [{ "value": 0, "bitwidth": 8 }, { "value": 3, "bitwidth": 32}]
                 sendPacketOut(message["sw"], payload, metadatas)
                 addFlowRule(message["sw"],
@@ -250,7 +246,8 @@ async def process_packet(message):
                             ip_proto,
                             dest_port_int,
                             new_dscp_int,
-                            decrement_ttl_bool)
+                            decrement_ttl_bool,
+                            dst_eth_addr)
 
                 print("For flow (SA=%s, DA=%s, proto=%d)"
                             " added table entry to send packets"
@@ -267,17 +264,32 @@ async def process_notif(notif_queue):
                 await printCounter(global_data ['p4info_helper'], notif["sw"], 'MyIngress.ingressPktOutCounter', global_data['index'])
                 await printCounter(global_data ['p4info_helper'], notif["sw"], 'MyEgress.egressPktInCounter', global_data['index'])
                 await readTableRules(global_data ['p4info_helper'], notif["sw"])
-            elif notif["type"] == "idle-notif":
-                print(notif["idle"])
+            '''elif notif["type"] == "idle-notif":
+                print(notif["idle"])'''
 
             notif_queue.task_done()
 
 async def packet_in_handler(notif_queue,sw):
     #TODO remove for exercise
-    packet_in = await asyncio.to_thread(sw.PacketIn)
-    print(f"Received packet: {packet_in.packet}")
-    message = {"type": "packet-in", "sw": sw, "packet-in": packet_in}
-    await notif_queue.put(message)
+    while True:
+        try:
+            packet_in = await asyncio.to_thread(sw.PacketIn)
+            print(f"Received packet: {packet_in.packet}")
+            message = {"type": "packet-in", "sw": sw, "packet-in": packet_in}
+            await notif_queue.put(message)
+
+        except grpc.RpcError as e:
+            print(f"[gRPC Error in packet_in_handler for {sw.name}]")
+            printGrpcError(e)
+
+            if e.code() == grpc.StatusCode.UNKNOWN:
+                print(f"Unknown gRPC error from {sw.name}. Retrying...")
+            await asyncio.sleep(2)
+
+        except Exception as e:
+            print(f"[Unexpected Error in packet_in_handler for {sw.name}]: {e}")
+            traceback.print_exc()
+            await asyncio.sleep(2)
 
 async def idle_time_handler(notif_queue,sw):
     #TODO remove for exercise
@@ -354,23 +366,19 @@ async def main(p4info_file_path, bmv2_file_path):
                         " run of the controller."
                         "" % (global_data['CPU_PORT_CLONE_SESSION_ID']))
 
-        '''
-        # TODO Uncomment the following two lines to read table entries from s1 and s2
-        readTableRules(p4info_helper, s1)
-        readTableRules(p4info_helper, s2)'''
         notif_queue = asyncio.Queue()
 
         pkt_s1 = asyncio.create_task(packet_in_handler(notif_queue, s1))
         pkt_s2 = asyncio.create_task(packet_in_handler(notif_queue, s2))
         pkt_s3 = asyncio.create_task(packet_in_handler(notif_queue, s3))
 
-        idle_notif_s1 = asyncio.create_task(idle_time_handler(notif_queue, s1))
+        '''idle_notif_s1 = asyncio.create_task(idle_time_handler(notif_queue, s1))
         idle_notif_s2 = asyncio.create_task(idle_time_handler(notif_queue, s2))
-        idle_notif_s3 = asyncio.create_task(idle_time_handler(notif_queue, s3))
+        idle_notif_s3 = asyncio.create_task(idle_time_handler(notif_queue, s3))'''
 
-        asyncio.create_task(process_notif(notif_queue))
+        proc_notif = asyncio.create_task(process_notif(notif_queue))
 
-        await asyncio.gather(pkt_s1,pkt_s2,pkt_s3)
+        await asyncio.gather(pkt_s1,pkt_s2,pkt_s3, proc_notif)
         #await asyncio.gather(pkt_s1,pkt_s2,pkt_s3,idle_notif_s1, idle_notif_s2, idle_notif_s3)
 
     except KeyboardInterrupt:
