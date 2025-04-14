@@ -67,7 +67,7 @@ for `h1`, `h11`, `h2`, `h22`, respectively:
    iperf -s -u
    ```
 
-**Note:** Since, we are intentionally creating traffic, its important to have a synchronized and simultaneous flow of packets, which will be done via 6th and 7th step.<br> Hence, at first, type both(6th & 7th) commands together in the respective Xterm windows and later press the Enter button (h1 and then h11) immediately for both Xterm windows, to clog up the traffic effectively.
+**Note:** Since, we are intentionally creating traffic, its important to have a synchronized and simultaneous flow of packets, which will be done via 6th and 7th step.<br> Hence, at first, type both (6th & 7th) commands together in the respective Xterm windows and later press the Enter button (h1 and then h11) immediately for both Xterm windows, to clog up the traffic effectively.
 
    
 6. In `h1`'s XTerm, send one packet per second to `h2` using send.py
