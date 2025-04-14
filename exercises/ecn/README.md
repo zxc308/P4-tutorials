@@ -67,7 +67,7 @@ for `h1`, `h11`, `h2`, `h22`, respectively:
    iperf -s -u
    ```
 
-**Note:** Since, we are intentionally creating traffic, its important to have a synchronized and simultaneous flow of packets, which will be done via 6th and 7th step.<br> Hence, at first, type both (6th & 7th) commands together in the respective Xterm windows and later press the Enter button (h1 and then h11) immediately for both Xterm windows, to clog up the traffic effectively.
+**Note:** Since we want packets sent by `h1` to at least sometimes experience long packet queues in switch `s1`, its important to have a synchronized and simultaneous flow of packets, which will be done via 6th and 7th step.<br> Hence, at first, type both (6th & 7th) commands together in the respective Xterm windows and later press the Enter button (`h1` and then `h11`) immediately for both Xterm windows, to clog up the traffic effectively.
 
    
 6. In `h1`'s XTerm, send one packet per second to `h2` using send.py
@@ -187,11 +187,13 @@ There are several ways that problems might manifest:
    and the logs show that the queue length was not high enough to set
    the ECN bit.  Then either lower the threshold in the p4 code or
    reduce the link bandwidth in `topology.json`
-5. When running the traffic from `h1` to `h2` at 1 packet/second (send.py), note that this flow only lasts for 30 seconds. Therefore, it is crucial to start the high-rate traffic from h11 to 
-   h22 within **10 seconds** after starting the h1 to h2 flow.<br>  
-   If you wait the full 30 seconds (or close to it) before starting the high-rate traffic, the h1 to h2 flow will have already finished. In that case, it will not experience queuing delay, which    could significantly change the expected results of your experiment i.e. tos value will remain `0x1`, and would never hit the expected `0x3` spike.<br>
-   To overcome this issue, use a larger duration value (e.g., 60) when calling send.py, to make the h1→h2 flow last longer and increase the chance of overlapping with congestion from the high- 
-   rate flow i.e.    
+5. When running the traffic from `h1` to `h2` at 1 packet/second (send.py), note that this flow only lasts for 30 seconds. Therefore, it is crucial to start the high-rate traffic from `h11` to 
+   `h22` within **10 seconds** after starting the `h1` to `h2` flow.<br>  
+   If you wait the full 30 seconds (or close to it) before starting the high-rate traffic, the `h1` to `h2` flow will have already finished. In that case, it will not experience queuing delay, 
+   which could significantly change the expected results of your experiment i.e. `tos` value will remain `0x1`, and would never hit the expected `0x3` spike.
+   
+   To overcome this issue, use a larger duration value (e.g., 60) when calling `send.py`, to make the `h1` → `h2` flow last longer and increase the chance of overlapping with congestion from the 
+   high-rate flow i.e.    
    ```bash
    ./send.py 10.0.2.2 "P4 is cool" 60
    ```
