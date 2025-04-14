@@ -158,7 +158,7 @@ and just print the `tos` values `grep tos h2.log` in a separate window
 
 ### Food for thought
 
-How can we let the user configure the threshold?
+How can we let the user configure the threshold? (lookout in the top segment of p4 code or search for ECN_THRESHOLD )
 
 ### Troubleshooting
 
@@ -183,6 +183,9 @@ There are several ways that problems might manifest:
    and the logs show that the queue length was not high enough to set
    the ECN bit.  Then either lower the threshold in the p4 code or
    reduce the link bandwidth in `topology.json`
+5. When running the traffic from `h1` to `h2` at 1 packet/second (send.py), note that this flow only lasts for 30 seconds. Therefore, it is crucial to start the high-rate traffic from h11 to 
+   h22 within **10 seconds** after starting the h1 to h2 flow.<br>  
+   If you wait the full 30 seconds (or close to it) before starting the high-rate traffic, the h1 to h2 flow will have already finished. In that case, it will not experience queuing delay, which    could significantly change the expected results of your experiment i.e. tos value will remain `0x1`, and would never hit the expected `0x3`spike.
 
 #### Cleaning up Mininet
 
