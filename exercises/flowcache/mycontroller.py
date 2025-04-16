@@ -10,8 +10,6 @@ from collections import deque
 from collections import Counter
 from scapy.all import *
 
-import google.protobuf.text_format
-
 import grpc
 
 # Import P4Runtime lib from parent utils dir
@@ -36,6 +34,28 @@ global_data['index'] = 0
 global_data["10.0.1.1"] = "08:00:00:00:01:11"
 global_data["10.0.2.2"] = "08:00:00:00:02:22"
 global_data["10.0.3.3"] = "08:00:00:00:03:33"
+
+# The lookup table is defined to simplify reachability and provide connectivity
+# among hosts.  In a real-world scenario, however, you should use an algorithm
+# to solve this problem more effectively.
+
+lookup_table = {
+    "s1": {
+        "10.0.1.1": 1,
+        "10.0.2.2": 2,
+        "10.0.3.3": 3
+    },
+    "s2": {
+        "10.0.2.2": 1,
+        "10.0.1.1": 2,
+        "10.0.3.3": 3
+    },
+    "s3": {
+        "10.0.3.3": 1,
+        "10.0.1.1": 2,
+        "10.0.2.2": 3
+    }
+}
 
 def ipv4_to_int(addr):
     """Take an argument 'addr' containing an IPv4 address written as a
@@ -160,7 +180,7 @@ def addFlowRule( ingress_sw, src_ip_addr, dst_ip_addr, protocol, port, new_dscp,
         idle_timeout_ns = 3
         )
     ingress_sw.WriteTableEntry(table_entry)
-    print("Installed ingress tunnel rule on %s" % ingress_sw.name)
+    print("Installed ingress rule on %s" % ingress_sw.name)
 
 def sendPacketOut(sw ,payload, metadatas):
     #TODO remove for exercise
@@ -193,13 +213,26 @@ async def printCounter(p4info_helper, sw, counter_name, index):
     :param counter_name: the name of the counter from the P4 program
     :param index: the counter index (in our case, first 6 bits of the IP)
     """
-    for response in sw.ReadCounters(p4info_helper.get_counters_id(counter_name), index):
-        for entity in response.entities:
-            counter = entity.counter_entry
-            print("%s %s %d: %d packets (%d bytes)" % (
-                sw.name, counter_name, index,
-                counter.data.packet_count, counter.data.byte_count
-            ))
+    try:
+        for response in sw.ReadCounters(p4info_helper.get_counters_id(counter_name), index):
+            for entity in response.entities:
+                counter = entity.counter_entry
+                print("%s %s %d: %d packets (%d bytes)" % (
+                    sw.name, counter_name, index,
+                    counter.data.packet_count, counter.data.byte_count
+                ))
+    except grpc.RpcError as e:
+           print(f"[gRPC Error in printCounter for {sw.name}]")
+           printGrpcError(e)
+
+           if e.code() == grpc.StatusCode.UNKNOWN:
+            print(f"Unknown gRPC error from {sw.name}. Retrying...")
+           await asyncio.sleep(2)
+
+    except Exception as e:
+           print(f"[Unexpected Error in printCounter for {sw.name}]: {e}")
+           traceback.print_exc()
+           await asyncio.sleep(2)
 
 async def process_packet(message):
         payload = message["packet-in"].packet.payload
@@ -232,8 +265,10 @@ async def process_packet(message):
                 print("IPv4 DA %08x (type %s)"
                       "" % (dst_ip_addr, type(dst_ip_addr)))
             if pktinfo['metadata']['punt_reason'] == global_data['punt_reason_name2int']['FLOW_UNKNOWN']:
-                flow_hash = src_ip_addr ^ dst_ip_addr ^ ip_proto
-                dest_port_int = 1 + (flow_hash % global_data['NUM_PORTS']) - pktinfo['metadata']['input_port']
+                #flow_hash = src_ip_addr ^ dst_ip_addr ^ ip_proto
+                #dest_port_int = (1 + (flow_hash % global_data['NUM_PORTS']) - pktinfo['metadata']['input_port'])
+                dest_port_int = lookup_table[message["sw"].name][ip_da_str]
+                print(dest_port_int)
                 decrement_ttl_bool = True
                 new_dscp_int = 5
                 global_data['index'] = int(pkt[IP].dst.split('.')[3])
@@ -261,8 +296,8 @@ async def process_notif(notif_queue):
 
             if notif["type"] == "packet-in":
                 await process_packet(notif)
-                await printCounter(global_data ['p4info_helper'], notif["sw"], 'MyIngress.ingressPktOutCounter', global_data['index'])
-                await printCounter(global_data ['p4info_helper'], notif["sw"], 'MyEgress.egressPktInCounter', global_data['index'])
+                #await printCounter(global_data ['p4info_helper'], notif["sw"], 'MyIngress.ingressPktOutCounter', global_data ['index'])
+                #await printCounter(global_data ['p4info_helper'], notif["sw"], 'MyEgress.egressPktInCounter', global_data ['index'])
                 await readTableRules(global_data ['p4info_helper'], notif["sw"])
             '''elif notif["type"] == "idle-notif":
                 print(notif["idle"])'''
