@@ -23,7 +23,7 @@ const int CPU_PORT_CLONE_SESSION_ID = 57;
 
 const int FL_PACKET_IN = 1;
 
-const bit<32> NUMBER_OF_HOSTS = 3;
+const bit<32> NUMBER_OF_HOSTS = 4;
 
 #define CPU_PORT 510
 

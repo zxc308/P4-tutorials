@@ -268,8 +268,7 @@ async def process_packet(message):
                 dest_port_int = lookup_table[message["sw"].name][ip_da_str]
                 decrement_ttl_bool = True
                 new_dscp_int = 5
-                # The counter indices start from 0, so a packet with a destination ending in 1 will be counted at index 0.
-                global_data['index'] = int(pkt[IP].dst.split('.')[3]) - 1
+                global_data['index'] = int(pkt[IP].dst.split('.')[3])
                 dst_eth_addr = global_data[ip_da_str]
                 metadatas = [{ "value": 0, "bitwidth": 8 }, { "value": 3, "bitwidth": 32}]
                 sendPacketOut(message["sw"], payload, metadatas)
@@ -297,8 +296,8 @@ async def process_notif(notif_queue):
                 await printCounter(global_data ['p4info_helper'], notif["sw"], 'MyIngress.ingressPktOutCounter', global_data ['index'])
                 await printCounter(global_data ['p4info_helper'], notif["sw"], 'MyEgress.egressPktInCounter', global_data ['index'])
                 await readTableRules(global_data ['p4info_helper'], notif["sw"])
-            '''elif notif["type"] == "idle-notif":
-                print(notif["idle"])'''
+            elif notif["type"] == "idle-notif":
+                print(notif["idle"])
 
             notif_queue.task_done()
 
@@ -325,6 +324,7 @@ async def packet_in_handler(notif_queue,sw):
             await asyncio.sleep(2)
 
 async def idle_time_handler(notif_queue,sw):
+    print("DENTRO")
     #TODO remove for exercise
     idle_notif = await asyncio.to_thread(sw.IdleTimeoutNotification)
     message = {"type": "idle-notif", "sw": sw, "idle": idle_notif}
@@ -405,14 +405,14 @@ async def main(p4info_file_path, bmv2_file_path):
         pkt_s2 = asyncio.create_task(packet_in_handler(notif_queue, s2))
         pkt_s3 = asyncio.create_task(packet_in_handler(notif_queue, s3))
 
-        '''idle_notif_s1 = asyncio.create_task(idle_time_handler(notif_queue, s1))
+        idle_notif_s1 = asyncio.create_task(idle_time_handler(notif_queue, s1))
         idle_notif_s2 = asyncio.create_task(idle_time_handler(notif_queue, s2))
-        idle_notif_s3 = asyncio.create_task(idle_time_handler(notif_queue, s3))'''
+        idle_notif_s3 = asyncio.create_task(idle_time_handler(notif_queue, s3))
 
         proc_notif = asyncio.create_task(process_notif(notif_queue))
 
-        await asyncio.gather(pkt_s1,pkt_s2,pkt_s3, proc_notif)
-        #await asyncio.gather(pkt_s1,pkt_s2,pkt_s3,idle_notif_s1, idle_notif_s2, idle_notif_s3)
+        #await asyncio.gather(pkt_s1,pkt_s2,pkt_s3, proc_notif)
+        await asyncio.gather(pkt_s1,pkt_s2,pkt_s3,idle_notif_s1, idle_notif_s2, idle_notif_s3, proc_notif)
 
     except KeyboardInterrupt:
         print(" Shutting down.")
