@@ -265,13 +265,11 @@ async def process_packet(message):
                 print("IPv4 DA %08x (type %s)"
                       "" % (dst_ip_addr, type(dst_ip_addr)))
             if pktinfo['metadata']['punt_reason'] == global_data['punt_reason_name2int']['FLOW_UNKNOWN']:
-                #flow_hash = src_ip_addr ^ dst_ip_addr ^ ip_proto
-                #dest_port_int = (1 + (flow_hash % global_data['NUM_PORTS']) - pktinfo['metadata']['input_port'])
                 dest_port_int = lookup_table[message["sw"].name][ip_da_str]
-                print(dest_port_int)
                 decrement_ttl_bool = True
                 new_dscp_int = 5
-                global_data['index'] = int(pkt[IP].dst.split('.')[3])
+                # The counter indices start from 0, so a packet with a destination ending in 1 will be counted at index 0.
+                global_data['index'] = int(pkt[IP].dst.split('.')[3]) - 1
                 dst_eth_addr = global_data[ip_da_str]
                 metadatas = [{ "value": 0, "bitwidth": 8 }, { "value": 3, "bitwidth": 32}]
                 sendPacketOut(message["sw"], payload, metadatas)
@@ -296,8 +294,8 @@ async def process_notif(notif_queue):
 
             if notif["type"] == "packet-in":
                 await process_packet(notif)
-                #await printCounter(global_data ['p4info_helper'], notif["sw"], 'MyIngress.ingressPktOutCounter', global_data ['index'])
-                #await printCounter(global_data ['p4info_helper'], notif["sw"], 'MyEgress.egressPktInCounter', global_data ['index'])
+                await printCounter(global_data ['p4info_helper'], notif["sw"], 'MyIngress.ingressPktOutCounter', global_data ['index'])
+                await printCounter(global_data ['p4info_helper'], notif["sw"], 'MyEgress.egressPktInCounter', global_data ['index'])
                 await readTableRules(global_data ['p4info_helper'], notif["sw"])
             '''elif notif["type"] == "idle-notif":
                 print(notif["idle"])'''
