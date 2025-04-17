@@ -111,7 +111,7 @@ CPU port for your P4 program to process.  The controller metadata
 header, if any, will always be the _first_ header of the packet as
 seen by your P4 parser.
 
-## Step 2: Implement Tunnel Forwarding
+## Step 2: Implement flowcache control messages handling
 
 The `mycontroller.py` file is a basic controller plane that does the following:
 1. Establishes a gRPC connection to the switches for the P4Runtime service.
