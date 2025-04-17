@@ -1,8 +1,6 @@
 
 [comment]: # (SPDX-License-Identifier:  Apache-2.0)
 
-# WORK IN PROGRESS
-
 ## Introduction
 
 The goal of this exercise is to write a P4 program that implements the `PacketIn` and `PacketOut` mechanisms, along with an idle timeout mechanism for table entries. The control plane uses P4Runtime to configure and manage the data plane. The P4 program `flowcache.p4` contains one ingress table (`flow_cache`) and two counters (`ingressPktOutCounter`, `egressPktInCounter`).
@@ -167,9 +165,6 @@ You might notice that the rules that are printed by `mycontroller.py` contain th
 IDs rather than the table names. You can use the P4Info helper to translate these IDs
 into entry names.
 
-Also, you may want to think about the following:
-`TODO`
-
 
 If you are interested, you can find the protocol buffer and gRPC definitions here:
 - [P4Runtime](https://github.com/p4lang/p4runtime/blob/main/proto/p4/v1/p4runtime.proto)
@@ -191,12 +186,10 @@ To run the reference solution, you should run the following command from the
 solution/mycontroller.py
 ```
 
-
 ## Next Steps
 
 Congratulations, your implementation works! Move onto the next assignment
 [Explicit Congestion Notification](../ecn)
-
 
 ## Relevant Documentation
 

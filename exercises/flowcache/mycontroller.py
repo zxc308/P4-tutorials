@@ -22,8 +22,7 @@ import p4runtime_lib.helper
 from p4runtime_lib.switch import ShutdownAllSwitchConnections
 import p4runtime_sh.p4runtime as shp4rt
 
-SWITCH_TO_HOST_PORT = 1
-SWITCH_TO_SWITCH_PORT = 2
+NSEC_PER_SEC = 1000 * 1000 * 1000
 
 global_data = {}
 
@@ -57,7 +56,7 @@ lookup_table = {
     }
 }
 
-def ipv4_to_int(addr):
+def ipv4ToInt(addr):
     """Take an argument 'addr' containing an IPv4 address written as a
     string in dotted decimal notation, e.g. '10.1.2.3', and convert it
     to an integer."""
@@ -68,7 +67,7 @@ def ipv4_to_int(addr):
     # to add a separate check for that here.
     return int.from_bytes(bytes(bytes_), byteorder='big')
 
-def decode_packet_in_metadata(pktin_info, packet):
+def decodePacketInMetadata(pktin_info, packet):
     pktin_field_to_val = {}
     for md in packet.metadata:
         md_id_int = md.metadata_id
@@ -78,10 +77,10 @@ def decode_packet_in_metadata(pktin_info, packet):
         pktin_field_to_val[md_field_info['name']] = md_val_int
     ret = {'metadata': pktin_field_to_val,
            'payload': packet.payload}
-    print("decode_packet_in_metadata: ret=%s" % (ret))
+    print("decodePacketInMetadata: ret=%s" % (ret))
     return ret
 
-def serializable_enum_dict(p4info_data, name):
+def serializableEnumDict(p4info_data, name):
     type_info = p4info_data.type_info
     name_to_int = {}
     int_to_name = {}
@@ -90,11 +89,11 @@ def serializable_enum_dict(p4info_data, name):
         int_val = int.from_bytes(member.value, byteorder='big')
         name_to_int[name] = int_val
         int_to_name[int_val] = name
-    print("serializable_enum_dict: name='%s' name_to_int=%s int_to_name=%s"
+    print("serializableEnumDict: name='%s' name_to_int=%s int_to_name=%s"
                   "" % (name, name_to_int, int_to_name))
     return name_to_int, int_to_name
 
-def decode_packet_in_metadata(pktin_info, packet):
+def decodePacketInMetadata(pktin_info, packet):
     pktin_field_to_val = {}
     for md in packet.metadata:
         md_id_int = md.metadata_id
@@ -104,15 +103,15 @@ def decode_packet_in_metadata(pktin_info, packet):
         pktin_field_to_val[md_field_info['name']] = md_val_int
     ret = {'metadata': pktin_field_to_val,
            'payload': packet.payload}
-    print("decode_packet_in_metadata: ret=%s" % (ret))
+    print("decodePacketInMetadata: ret=%s" % (ret))
     return ret
 
-def get_obj(p4info_obj_map, obj_type, name):
+def getObj(p4info_obj_map, obj_type, name):
     key = (obj_type, name)
     return p4info_obj_map.get(key, None)
 
-def controller_packet_metadata_dict_key_id(p4info_obj_map, name):
-    cpm_info = get_obj(p4info_obj_map, "controller_packet_metadata", name)
+def controllerPacketMetadataDictKeyId(p4info_obj_map, name):
+    cpm_info = getObj(p4info_obj_map, "controller_packet_metadata", name)
     assert cpm_info != None
     ret = {}
     for md in cpm_info.metadata:
@@ -120,7 +119,7 @@ def controller_packet_metadata_dict_key_id(p4info_obj_map, name):
         ret[md.id] = {'id': md.id, 'name': md.name, 'bitwidth': md.bitwidth}
     return ret
 
-def make_p4info_obj_map(p4info_data):
+def makeP4infoObjMap(p4info_data):
     p4info_obj_map = {}
     suffix_count = Counter()
     for obj_type in ["tables", "action_profiles", "actions", "counters",
@@ -176,15 +175,13 @@ def addFlowRule( ingress_sw, src_ip_addr, dst_ip_addr, protocol, port, new_dscp,
             "new_dscp":       new_dscp,
             "dst_eth_addr":   dst_eth_addr
         },
-        #TODO remove for the exercise
-        idle_timeout_ns = 3
+        # TODO: Add idle timeout
         )
     ingress_sw.WriteTableEntry(table_entry)
     print("Installed ingress rule on %s" % ingress_sw.name)
 
 def sendPacketOut(sw ,payload, metadatas):
-    #TODO remove for exercise
-    sw.PacketOut(payload, metadatas)
+    # TODO: Implement the function logic to send a packet-out message
 
 async def readTableRules(p4info_helper, sw):
     """
@@ -234,7 +231,7 @@ async def printCounter(p4info_helper, sw, counter_name, index):
            traceback.print_exc()
            await asyncio.sleep(2)
 
-async def process_packet(message):
+async def processPacket(message):
         payload = message["packet-in"].packet.payload
         packet = message["packet-in"].packet
         print("Received %d PacketIn messages" % (len(payload)))
@@ -243,10 +240,10 @@ async def process_packet(message):
             pkt = Ether(payload)
             ip_proto = pkt[IP].proto
             ip_sa_str = pkt[IP].src
-            src_ip_addr = ipv4_to_int(ip_sa_str)
+            src_ip_addr = ipv4ToInt(ip_sa_str)
             ip_da_str = pkt[IP].dst
-            dst_ip_addr = ipv4_to_int(ip_da_str)
-            pktinfo = decode_packet_in_metadata(global_data['cpm_packetin_id2data'], packet)
+            dst_ip_addr = ipv4ToInt(ip_da_str)
+            pktinfo = decodePacketInMetadata(global_data['cpm_packetin_id2data'], packet)
             debug_packetin = False
             if debug_packetin:
                 i += 1
@@ -287,12 +284,12 @@ async def process_packet(message):
                             "" % (ip_sa_str, ip_da_str, ip_proto,
                                   dest_port_int, new_dscp_int))
 
-async def process_notif(notif_queue):
+async def processNotif(notif_queue):
         while True:
             notif = await notif_queue.get()
 
             if notif["type"] == "packet-in":
-                await process_packet(notif)
+                await processPacket(notif)
                 await printCounter(global_data ['p4info_helper'], notif["sw"], 'MyIngress.ingressPktOutCounter', global_data ['index'])
                 await printCounter(global_data ['p4info_helper'], notif["sw"], 'MyEgress.egressPktInCounter', global_data ['index'])
                 await readTableRules(global_data ['p4info_helper'], notif["sw"])
@@ -301,17 +298,13 @@ async def process_notif(notif_queue):
 
             notif_queue.task_done()
 
-async def packet_in_handler(notif_queue,sw):
-    #TODO remove for exercise
+async def packetInHandler(notif_queue,sw):
     while True:
         try:
-            packet_in = await asyncio.to_thread(sw.PacketIn)
-            print(f"Received packet: {packet_in.packet}")
-            message = {"type": "packet-in", "sw": sw, "packet-in": packet_in}
-            await notif_queue.put(message)
+           # TODO: Implement the function logic to handle a packet-in message
 
         except grpc.RpcError as e:
-            print(f"[gRPC Error in packet_in_handler for {sw.name}]")
+            print(f"[gRPC Error in packetInHandler for {sw.name}]")
             printGrpcError(e)
 
             if e.code() == grpc.StatusCode.UNKNOWN:
@@ -319,16 +312,12 @@ async def packet_in_handler(notif_queue,sw):
             await asyncio.sleep(2)
 
         except Exception as e:
-            print(f"[Unexpected Error in packet_in_handler for {sw.name}]: {e}")
+            print(f"[Unexpected Error in packetInHandler for {sw.name}]: {e}")
             traceback.print_exc()
             await asyncio.sleep(2)
 
-async def idle_time_handler(notif_queue,sw):
-    print("DENTRO")
-    #TODO remove for exercise
-    idle_notif = await asyncio.to_thread(sw.IdleTimeoutNotification)
-    message = {"type": "idle-notif", "sw": sw, "idle": idle_notif}
-    await notif_queue.put(message)
+async def idleTimeHandler(notif_queue,sw):
+    # TODO: Implement the function logic to handle idle timeout notification
 
 def printGrpcError(e):
     print("gRPC Error:", e.details(), end=' ')
@@ -379,13 +368,13 @@ async def main(p4info_file_path, bmv2_file_path):
                                        bmv2_json_file_path=bmv2_file_path)
         print("Installed P4 Program using SetForwardingPipelineConfig on s3")
 
-        global_data['p4info_obj_map'] = make_p4info_obj_map(p4info_helper.p4info)
+        global_data['p4info_obj_map'] = makeP4infoObjMap(p4info_helper.p4info)
         global_data['cpm_packetin_id2data'] = \
-        controller_packet_metadata_dict_key_id(global_data['p4info_obj_map'],
+        controllerPacketMetadataDictKeyId(global_data['p4info_obj_map'],
                                                    "packet_in")
 
         global_data['punt_reason_name2int'], global_data['punt_reason_int2name'] = \
-                serializable_enum_dict(p4info_helper.p4info, 'PuntReason_t')
+                serializableEnumDict(p4info_helper.p4info, 'PuntReason_t')
 
         try:
             replicas = [{ "egress_port": global_data['CPU_PORT'], "instance": 1 }]
@@ -401,17 +390,16 @@ async def main(p4info_file_path, bmv2_file_path):
 
         notif_queue = asyncio.Queue()
 
-        pkt_s1 = asyncio.create_task(packet_in_handler(notif_queue, s1))
-        pkt_s2 = asyncio.create_task(packet_in_handler(notif_queue, s2))
-        pkt_s3 = asyncio.create_task(packet_in_handler(notif_queue, s3))
+        pkt_s1 = asyncio.create_task(packetInHandler(notif_queue, s1))
+        pkt_s2 = asyncio.create_task(packetInHandler(notif_queue, s2))
+        pkt_s3 = asyncio.create_task(packetInHandler(notif_queue, s3))
 
-        idle_notif_s1 = asyncio.create_task(idle_time_handler(notif_queue, s1))
-        idle_notif_s2 = asyncio.create_task(idle_time_handler(notif_queue, s2))
-        idle_notif_s3 = asyncio.create_task(idle_time_handler(notif_queue, s3))
+        idle_notif_s1 = asyncio.create_task(idleTimeHandler(notif_queue, s1))
+        idle_notif_s2 = asyncio.create_task(idleTimeHandler(notif_queue, s2))
+        idle_notif_s3 = asyncio.create_task(idleTimeHandler(notif_queue, s3))
 
-        proc_notif = asyncio.create_task(process_notif(notif_queue))
+        proc_notif = asyncio.create_task(processNotif(notif_queue))
 
-        #await asyncio.gather(pkt_s1,pkt_s2,pkt_s3, proc_notif)
         await asyncio.gather(pkt_s1,pkt_s2,pkt_s3,idle_notif_s1, idle_notif_s2, idle_notif_s3, proc_notif)
 
     except KeyboardInterrupt:
