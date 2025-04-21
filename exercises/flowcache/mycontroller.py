@@ -180,6 +180,15 @@ def addFlowRule( ingress_sw, src_ip_addr, dst_ip_addr, protocol, port, new_dscp,
     ingress_sw.WriteTableEntry(table_entry)
     print("Installed ingress rule on %s" % ingress_sw.name)
 
+def PacketOutMetadataList(opcode, reserved1, operand0):
+    # This function does not use the generated contents of the P4Info
+    # file to map PacketOut metadata fields to indices.  If you change
+    # the PacketOut metadata format in the P4 program, this code must
+    # be manually updated to match.
+    return [{"value": opcode, "bitwidth": 8},
+            {"value": reserved1, "bitwidth": 8},
+            {"value": operand0, "bitwidth": 32}]
+
 def sendPacketOut(sw ,payload, metadatas):
     # TODO: Implement the function logic to send a packet-out message
 
@@ -234,7 +243,7 @@ async def printCounter(p4info_helper, sw, counter_name, index):
 async def processPacket(message):
         payload = message["packet-in"].packet.payload
         packet = message["packet-in"].packet
-        print("Received %d PacketIn messages" % (len(payload)))
+        print("Received PacketIn message of length %d bytes from switch %s")
         if len(payload) > 0:
             i = 0
             pkt = Ether(payload)
@@ -375,7 +384,8 @@ async def main(p4info_file_path, bmv2_file_path):
 
         global_data['punt_reason_name2int'], global_data['punt_reason_int2name'] = \
                 serializableEnumDict(p4info_helper.p4info, 'PuntReason_t')
-
+        global_data['controller_opcode_name2int'], global_data['controller_opcode_int2name'] = \
+                serializableEnumDict(p4info_helper.p4info, 'ControllerOpcode_t')
         try:
             replicas = [{ "egress_port": global_data['CPU_PORT'], "instance": 1 }]
             writeCloneSession(s1, global_data['CPU_PORT_CLONE_SESSION_ID'], replicas)
